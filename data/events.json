@@ -1,9 +1,297 @@
 {
-  "_meta": {
-    "file": "events",
-    "title": "뉴스·재해 이벤트",
-    "plannedPhase": 7,
-    "schemaVersion": 1
-  },
-  "params": {}
+ "_meta": {
+  "file": "events",
+  "title": "극한 기상·뉴스·재해 이벤트",
+  "plannedPhase": 1,
+  "schemaVersion": 1
+ },
+ "params": {
+  "weather": {
+   "heatwaveAdvisoryTmax": {
+    "value": 33,
+    "unit": "°C",
+    "range": [
+     30,
+     36
+    ],
+    "tag": "SRC",
+    "source": "기상청 폭염일수 정의(일최고기온 33°C 이상)",
+    "note": "2일 연속이면 폭염주의보로 본다. 현행 특보는 체감온도 기준이나 습도 보정 전 단계라 기온 기준을 쓴다."
+   },
+   "heatwaveWarningTmax": {
+    "value": 35,
+    "unit": "°C",
+    "range": [
+     33,
+     38
+    ],
+    "tag": "SRC",
+    "source": "기상청 폭염경보 기준(35°C 이상 2일 이상)",
+    "note": "체감온도 대신 일최고기온 적용."
+   },
+   "coldwaveAdvisoryTmin": {
+    "value": -12,
+    "unit": "°C",
+    "range": [
+     -20,
+     -5
+    ],
+    "tag": "SRC",
+    "source": "기상청 한파일수 정의(아침 최저기온 −12°C 이하)",
+    "note": "2일 연속이면 한파주의보."
+   },
+   "coldwaveWarningTmin": {
+    "value": -15,
+    "unit": "°C",
+    "range": [
+     -25,
+     -10
+    ],
+    "tag": "SRC",
+    "source": "기상청 한파경보 기준(−15°C 이하 2일 이상)",
+    "note": ""
+   },
+   "heavySnowAdvisoryCm": {
+    "value": 5,
+    "unit": "cm",
+    "range": [
+     3,
+     10
+    ],
+    "tag": "SRC",
+    "source": "기상청 대설주의보 기준(24시간 신적설 5 cm 이상)",
+    "note": ""
+   },
+   "heavySnowWarningCm": {
+    "value": 20,
+    "unit": "cm",
+    "range": [
+     10,
+     30
+    ],
+    "tag": "SRC",
+    "source": "기상청 대설경보 기준(24시간 신적설 20 cm 이상, 산지 30 cm)",
+    "note": "산지 구분 없이 20 cm 적용."
+   },
+   "heavyRainDailyMm": {
+    "value": 110,
+    "unit": "mm",
+    "range": [
+     60,
+     200
+    ],
+    "tag": "EST",
+    "source": "기상청 호우주의보 기준(12시간 110 mm 이상)",
+    "note": "시간 해상도 강수 모델이 없어 일강수량 110 mm를 대용 기준으로 쓴다."
+   },
+   "jangmaStartDoy": {
+    "jeju": {
+     "value": 170,
+     "unit": "doy",
+     "range": [
+      150,
+      200
+     ],
+     "tag": "SRC",
+     "source": "기상청 장마 평년값(1991–2020): 제주 6월 19일",
+     "note": ""
+    },
+    "south": {
+     "value": 174,
+     "unit": "doy",
+     "range": [
+      150,
+      200
+     ],
+     "tag": "SRC",
+     "source": "기상청 장마 평년값(1991–2020): 남부 6월 23일",
+     "note": ""
+    },
+    "central": {
+     "value": 176,
+     "unit": "doy",
+     "range": [
+      150,
+      200
+     ],
+     "tag": "SRC",
+     "source": "기상청 장마 평년값(1991–2020): 중부 6월 25일",
+     "note": ""
+    }
+   },
+   "jangmaEndDoy": {
+    "jeju": {
+     "value": 201,
+     "unit": "doy",
+     "range": [
+      180,
+      230
+     ],
+     "tag": "SRC",
+     "source": "기상청 장마 평년값(1991–2020): 제주 7월 20일",
+     "note": ""
+    },
+    "south": {
+     "value": 205,
+     "unit": "doy",
+     "range": [
+      180,
+      230
+     ],
+     "tag": "EST",
+     "source": "기상청 장마 평년값(1991–2020): 남부 7월 24일",
+     "note": "종료일은 학습 지식 기반(시작일·제주 종료일은 검색으로 확인)."
+    },
+    "central": {
+     "value": 207,
+     "unit": "doy",
+     "range": [
+      180,
+      230
+     ],
+     "tag": "EST",
+     "source": "기상청 장마 평년값(1991–2020): 중부 7월 26일",
+     "note": "종료일은 학습 지식 기반."
+    }
+   },
+   "jangmaDateSd": {
+    "value": 6,
+    "unit": "d",
+    "range": [
+     2,
+     12
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "해마다 장마 시작·종료일이 흔들리는 폭. 실제 시작일이 6월 중순–7월 초에 분포하는 것에 맞춘 추정."
+   },
+   "typhoonMonthlyCount": {
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0.3,
+     1,
+     1.2,
+     0.8,
+     0.1,
+     0,
+     0
+    ],
+    "unit": "개/월",
+    "range": [
+     0,
+     3
+    ],
+    "tag": "SRC",
+    "source": "기상청 태풍발생현황 통계(평년 1991–2020), 우리나라 영향 태풍 수: 6월 0.3, 7월 1.0, 8월 1.2, 9월 0.8, 10월 0.1 (연 3.4)",
+    "note": "지점별 발생 확률 = 이 값 × 지점 가중치(typhoonWeight) ÷ 그 달 일수."
+   },
+   "typhoonRainMeanMm": {
+    "value": 80,
+    "unit": "mm",
+    "range": [
+     30,
+     200
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "태풍 영향 첫날 강수량 평균(지점 가중치로 가감). 실제는 0–400 mm로 편차가 매우 크다."
+   },
+   "typhoonWindFactor": {
+    "value": 3,
+    "unit": "-",
+    "range": [
+     1.5,
+     5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "태풍 영향일 일평균 풍속 배율."
+   },
+   "typhoonGustFactor": {
+    "value": 2.2,
+    "unit": "-",
+    "range": [
+     1.5,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일평균 풍속 대비 최대순간풍속 배율(태풍일). 평상시는 1.8."
+   },
+   "hailAnnualDays": {
+    "inland": {
+     "value": 0.6,
+     "unit": "d/년",
+     "range": [
+      0,
+      3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "우박 관측일수. 국내 지점 연 0–2일 수준이라는 일반 지식에 따른 추정."
+    },
+    "coastal": {
+     "value": 0.4,
+     "unit": "d/년",
+     "range": [
+      0,
+      3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "해안은 대류 불안정이 약해 내륙보다 드물다고 본 추정."
+    },
+    "highland": {
+     "value": 1.2,
+     "unit": "d/년",
+     "range": [
+      0,
+      4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "산지에서 더 잦다."
+    },
+    "island": {
+     "value": 0.5,
+     "unit": "d/년",
+     "range": [
+      0,
+      3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "제주: 내륙과 해안의 중간으로 본 추정."
+    }
+   },
+   "hailMonthlyWeight": {
+    "values": [
+     0.03,
+     0.03,
+     0.07,
+     0.1,
+     0.2,
+     0.15,
+     0.03,
+     0.03,
+     0.06,
+     0.15,
+     0.1,
+     0.05
+    ],
+    "unit": "-",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "우박의 계절 분포: 대기가 불안정한 늦봄–초여름과 가을에 집중(합 1)."
+   }
+  }
+ }
 }

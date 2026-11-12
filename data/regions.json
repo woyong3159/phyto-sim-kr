@@ -1,9 +1,1520 @@
 {
-  "_meta": {
-    "file": "regions",
-    "title": "지역",
-    "plannedPhase": 1,
-    "schemaVersion": 1
-  },
-  "params": {}
+ "_meta": {
+  "file": "regions",
+  "title": "지역(기상청 ASOS 대표 지점)",
+  "plannedPhase": 1,
+  "schemaVersion": 1
+ },
+ "params": {
+  "stations": [
+   {
+    "id": "seoul",
+    "name": "서울",
+    "group": "수도권",
+    "kmaStationNo": 108,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.57,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.97,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 86,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.22,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "incheon",
+    "name": "인천",
+    "group": "수도권",
+    "kmaStationNo": 112,
+    "climateClass": "coastal",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.48,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.62,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 68,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.24,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "suwon",
+    "name": "수원",
+    "group": "수도권",
+    "kmaStationNo": 119,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.27,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.99,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 34,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.22,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "icheon",
+    "name": "이천",
+    "group": "수도권",
+    "kmaStationNo": 203,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.26,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.48,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 78,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.22,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "chuncheon",
+    "name": "춘천",
+    "group": "강원 영서",
+    "kmaStationNo": 101,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.9,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.74,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 76,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.2,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "wonju",
+    "name": "원주",
+    "group": "강원 영서",
+    "kmaStationNo": 114,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.34,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.95,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 149,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.22,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "cheorwon",
+    "name": "철원",
+    "group": "강원 영서",
+    "kmaStationNo": 95,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 38.15,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.3,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 154,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.18,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "daegwallyeong",
+    "name": "대관령",
+    "group": "강원 고랭지",
+    "kmaStationNo": 100,
+    "climateClass": "highland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.68,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.72,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 773,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.3,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "taebaek",
+    "name": "태백",
+    "group": "강원 고랭지",
+    "kmaStationNo": 216,
+    "climateClass": "highland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.17,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.99,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 715,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.32,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "gangneung",
+    "name": "강릉",
+    "group": "강원 영동",
+    "kmaStationNo": 105,
+    "climateClass": "coastal",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 37.75,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.89,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 26,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.35,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "sokcho",
+    "name": "속초",
+    "group": "강원 영동",
+    "kmaStationNo": 90,
+    "climateClass": "coastal",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 38.25,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.56,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 18,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.32,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "cheongju",
+    "name": "청주",
+    "group": "충청",
+    "kmaStationNo": 131,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 36.64,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.44,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 57,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.28,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "chungju",
+    "name": "충주",
+    "group": "충청",
+    "kmaStationNo": 127,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 36.97,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.95,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 115,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.26,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "daejeon",
+    "name": "대전",
+    "group": "충청",
+    "kmaStationNo": 133,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 36.37,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.37,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 69,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.3,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "cheonan",
+    "name": "천안",
+    "group": "충청",
+    "kmaStationNo": 232,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 36.78,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.12,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 21,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.26,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "seosan",
+    "name": "서산",
+    "group": "충청",
+    "kmaStationNo": 129,
+    "climateClass": "coastal",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 36.78,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.49,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 29,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.28,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "buyeo",
+    "name": "부여",
+    "group": "충청",
+    "kmaStationNo": 236,
+    "climateClass": "inland",
+    "jangmaZone": "central",
+    "lat": {
+     "value": 36.27,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.92,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 11,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.3,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "jeonju",
+    "name": "전주",
+    "group": "호남",
+    "kmaStationNo": 146,
+    "climateClass": "inland",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 35.84,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.12,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 62,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.38,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "gwangju",
+    "name": "광주",
+    "group": "호남",
+    "kmaStationNo": 156,
+    "climateClass": "inland",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 35.17,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.89,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 72,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.45,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "mokpo",
+    "name": "목포",
+    "group": "호남",
+    "kmaStationNo": 165,
+    "climateClass": "coastal",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 34.82,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.38,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 38,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.52,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "yeosu",
+    "name": "여수",
+    "group": "호남",
+    "kmaStationNo": 168,
+    "climateClass": "coastal",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 34.74,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 127.74,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 65,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.6,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "daegu",
+    "name": "대구",
+    "group": "영남",
+    "kmaStationNo": 143,
+    "climateClass": "inland",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 35.88,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.65,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 54,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.42,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "andong",
+    "name": "안동",
+    "group": "영남",
+    "kmaStationNo": 136,
+    "climateClass": "inland",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 36.57,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.71,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 140,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.34,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "pohang",
+    "name": "포항",
+    "group": "영남",
+    "kmaStationNo": 138,
+    "climateClass": "coastal",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 36.03,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 129.38,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 4,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.5,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "busan",
+    "name": "부산",
+    "group": "영남",
+    "kmaStationNo": 159,
+    "climateClass": "coastal",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 35.1,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 129.03,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 70,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.6,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "jinju",
+    "name": "진주",
+    "group": "영남",
+    "kmaStationNo": 192,
+    "climateClass": "inland",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 35.16,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.04,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 30,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.52,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "miryang",
+    "name": "밀양",
+    "group": "영남",
+    "kmaStationNo": 288,
+    "climateClass": "inland",
+    "jangmaZone": "south",
+    "lat": {
+     "value": 35.49,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 128.74,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 11,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.5,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "jeju",
+    "name": "제주",
+    "group": "제주",
+    "kmaStationNo": 184,
+    "climateClass": "island",
+    "jangmaZone": "jeju",
+    "lat": {
+     "value": 33.51,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.53,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 20,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.75,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   },
+   {
+    "id": "seogwipo",
+    "name": "서귀포",
+    "group": "제주",
+    "kmaStationNo": 189,
+    "climateClass": "island",
+    "jangmaZone": "jeju",
+    "lat": {
+     "value": 33.25,
+     "unit": "°N",
+     "range": [
+      33,
+      39
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 일장·태양고도 계산에만 쓰이며 0.05° 오차의 영향은 일장 1분 미만."
+    },
+    "lon": {
+     "value": 126.57,
+     "unit": "°E",
+     "range": [
+      124,
+      132
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 위치(학습 지식). 태양 남중 시각 보정에 사용."
+    },
+    "elevation": {
+     "value": 49,
+     "unit": "m",
+     "range": [
+      0,
+      1000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관측소 대략 표고(학습 지식). 청천 일사 상한 계산에 사용(영향 2% 미만)."
+    },
+    "typhoonWeight": {
+     "value": 0.8,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전국 영향 태풍 1개가 이 지점에 뚜렷한 비바람을 줄 확률. 제주·남해안 > 영남·호남 내륙 > 충청 > 수도권·영서 순의 지리적 경향을 반영한 추정."
+    }
+   }
+  ]
+ }
 }

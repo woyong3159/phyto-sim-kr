@@ -1,7 +1,7 @@
 {
   "name": "phyto-sim-kr",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,8 @@
     "fflate": "^0.8.3",
     "idb": "^8.0.4",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "recharts": "^3.10.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.0",
@@ -27,6 +28,7 @@
     "fake-indexeddb": "^6.2.8",
     "typescript": "^7.0.2",
     "vite": "^8.3.8",
+    "vite-node": "^6.0.0",
     "vite-plugin-pwa": "^2.0.0",
     "vite-plugin-singlefile": "^2.3.4",
     "vitest": "^5.1.0"

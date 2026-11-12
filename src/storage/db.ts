@@ -78,6 +78,21 @@ export async function listSnapshots(db: Db, saveId: string): Promise<SnapshotRec
   return db.getAll('snapshots', IDBKeyRange.bound([saveId, 0], [saveId, Number.MAX_SAFE_INTEGER]));
 }
 
+/** 일 단위 원장(작기 전체 보존). 같은 날을 다시 계산하면 같은 값으로 덮어쓴다. */
+export async function putDailyRows(db: Db, saveId: string, rows: { day: number; data: unknown }[]): Promise<void> {
+  if (!rows.length) return;
+  const tx = db.transaction('ledgerDaily', 'readwrite');
+  for (const r of rows) void tx.store.put({ saveId, day: r.day, data: r.data });
+  await tx.done;
+}
+
+export async function getDailyRows<T>(db: Db, saveId: string, fromDay: number, toDay: number): Promise<T[]> {
+  const from = Math.max(0, fromDay);
+  if (toDay < from) return [];
+  const rows = await db.getAll('ledgerDaily', IDBKeyRange.bound([saveId, from], [saveId, toDay]));
+  return rows.map((r) => r.data as T);
+}
+
 export async function kvGet<T>(db: Db, key: string): Promise<T | undefined> {
   return (await db.get('kv', key)) as T | undefined;
 }

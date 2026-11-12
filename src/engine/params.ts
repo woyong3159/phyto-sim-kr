@@ -4,8 +4,10 @@
 export const PARAM_TAGS = ['SRC', 'EST', 'CAL', 'USER'] as const;
 export type ParamTag = (typeof PARAM_TAGS)[number];
 
+/** 단일 값은 value, 월별 12개처럼 한 묶음인 값은 values 를 쓴다(출처·태그는 묶음 단위). */
 export interface Param {
-  value: number;
+  value?: number;
+  values?: number[];
   unit: string;
   range: [min: number, max: number];
   tag: ParamTag;
@@ -23,13 +25,14 @@ export function validateParam(path: string, p: unknown): string[] {
   const errs: string[] = [];
   if (p === null || typeof p !== 'object') return [`${path}: 객체가 아님`];
   const o = p as Record<string, unknown>;
-  if (typeof o.value !== 'number' || !Number.isFinite(o.value)) errs.push(`${path}: value가 유한한 숫자가 아님`);
+  const vals: unknown[] = Array.isArray(o.values) ? o.values : [o.value];
+  if (vals.length === 0 || vals.some((v) => typeof v !== 'number' || !Number.isFinite(v))) errs.push(`${path}: value(s)가 유한한 숫자가 아님`);
   if (typeof o.unit !== 'string') errs.push(`${path}: unit 누락`);
   const r = o.range;
   if (!Array.isArray(r) || r.length !== 2 || typeof r[0] !== 'number' || typeof r[1] !== 'number' || r[0] > r[1]) {
     errs.push(`${path}: range는 [min, max] 형식이어야 함`);
-  } else if (typeof o.value === 'number' && (o.value < r[0] || o.value > r[1])) {
-    errs.push(`${path}: value(${o.value})가 range 밖`);
+  } else {
+    for (const v of vals) if (typeof v === 'number' && (v < r[0] || v > r[1])) errs.push(`${path}: value(${v})가 range 밖`);
   }
   if (typeof o.tag !== 'string' || !(PARAM_TAGS as readonly string[]).includes(o.tag)) errs.push(`${path}: tag는 SRC|EST|CAL|USER`);
   if (typeof o.source !== 'string') errs.push(`${path}: source 누락`);
@@ -42,7 +45,7 @@ export function validateParam(path: string, p: unknown): string[] {
 }
 
 function isParamLike(v: unknown): boolean {
-  return v !== null && typeof v === 'object' && 'value' in (v as object) && 'tag' in (v as object);
+  return v !== null && typeof v === 'object' && ('value' in (v as object) || 'values' in (v as object)) && 'tag' in (v as object);
 }
 
 /** 데이터 파일 안의 모든 파라미터를 재귀적으로 검사한다. */

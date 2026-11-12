@@ -14,11 +14,9 @@ import {
   replay,
   runTo,
   stepHour,
-  type SimConfig,
   type UserAction,
 } from '../../src/engine';
-
-const config: SimConfig = { seed: 'test-seed-1', startDate: '2026-09-01' };
+import { config, world, worldOf } from './helpers';
 
 describe('rng — 결정론적 난수(N2, N3)', () => {
   it('같은 seed는 같은 수열을 만든다', () => {
@@ -82,8 +80,8 @@ describe('rng — 결정론적 난수(N2, N3)', () => {
 
 describe('time — 시계와 달력', () => {
   it('1스텝 = 1시간', () => {
-    const s0 = createInitialState(config);
-    expect(stepHour(s0, config, []).hour).toBe(1);
+    const s0 = createInitialState(world);
+    expect(stepHour(s0, world, []).hour).toBe(1);
   });
 
   it('달력 계산: 자정 넘김, 월말, 윤년', () => {
@@ -91,13 +89,13 @@ describe('time — 시계와 달력', () => {
     expect(calendarAt(config, 23)).toMatchObject({ day: 1, hourOfDay: 23, dayIndex: 0 });
     expect(calendarAt(config, 24)).toMatchObject({ day: 2, hourOfDay: 0, dayIndex: 1 });
     expect(calendarAt(config, 30 * 24)).toMatchObject({ month: 10, day: 1 });
-    expect(calendarAt({ seed: 'x', startDate: '2028-02-28' }, 24)).toMatchObject({ month: 2, day: 29, dayOfYear: 60 });
-    expect(calendarAt({ seed: 'x', startDate: '2026-12-31' }, 24)).toMatchObject({ year: 2027, month: 1, day: 1, dayOfYear: 1 });
+    expect(calendarAt({ ...config, startDate: '2028-02-28' }, 24)).toMatchObject({ month: 2, day: 29, dayOfYear: 60 });
+    expect(calendarAt({ ...config, startDate: '2026-12-31' }, 24)).toMatchObject({ year: 2027, month: 1, day: 1, dayOfYear: 1 });
   });
 
   it('잘못된 시작일은 거부한다', () => {
-    expect(() => calendarAt({ seed: 'x', startDate: '2026-02-30' }, 0)).toThrow();
-    expect(() => calendarAt({ seed: 'x', startDate: '2026/02/01' }, 0)).toThrow();
+    expect(() => calendarAt({ ...config, startDate: '2026-02-30' }, 0)).toThrow();
+    expect(() => calendarAt({ ...config, startDate: '2026/02/01' }, 0)).toThrow();
   });
 });
 
@@ -108,27 +106,27 @@ describe('결정론과 이벤트 소싱(N3)', () => {
   ];
 
   it('같은 seed + 같은 조치 → 지문이 같은 상태', () => {
-    const a = replay(config, actions, 24 * 120);
-    const b = replay(config, actions, 24 * 120);
+    const a = replay(world, actions, 24 * 120);
+    const b = replay(world, actions, 24 * 120);
     expect(fingerprint(a)).toBe(fingerprint(b));
     expect(a).toEqual(b);
   });
 
   it('스냅샷에서 이어 계산한 결과 = 처음부터 계산한 결과', () => {
-    const full = replay(config, actions, 24 * 60);
-    const snapshot = JSON.parse(JSON.stringify(replay(config, actions, 24 * 21)));
-    const resumed = runTo(snapshot, config, actions, 24 * 60);
+    const full = replay(world, actions, 24 * 60);
+    const snapshot = JSON.parse(JSON.stringify(replay(world, actions, 24 * 21)));
+    const resumed = runTo(snapshot, world, actions, 24 * 60);
     expect(fingerprint(resumed)).toBe(fingerprint(full));
   });
 
   it('seed가 다르면 상태가 다르다', () => {
-    expect(fingerprint(replay(config, [], 24))).not.toBe(fingerprint(replay({ ...config, seed: 'other' }, [], 24)));
+    expect(fingerprint(replay(world, [], 24))).not.toBe(fingerprint(replay(worldOf({ seed: 'other' }), [], 24)));
   });
 
   it('스텝은 입력 상태를 바꾸지 않는다(순수 함수)', () => {
-    const s0 = createInitialState(config);
+    const s0 = createInitialState(world);
     const before = JSON.stringify(s0);
-    stepHour(s0, config, []);
+    stepHour(s0, world, []);
     expect(JSON.stringify(s0)).toBe(before);
   });
 
@@ -144,13 +142,13 @@ describe('엔진 구조', () => {
     expect(ids).toEqual(['control', 'crop', 'economy', 'events', 'greenhouse', 'labor', 'ledger', 'market', 'physiology', 'protection', 'report', 'rootzone', 'time', 'weather']);
   });
 
-  it('시계는 스텝의 마지막에 전진한다', () => {
-    expect(STEP_ORDER[STEP_ORDER.length - 1]!.id).toBe('time');
+  it('시계가 전진한 뒤, 맨 마지막에 다음 시각의 외기를 준비한다', () => {
+    expect(STEP_ORDER.slice(-2).map((m) => m.id)).toEqual(['time', 'weather']);
   });
 
-  it('엔진은 UI·브라우저에 의존하지 않는다(N6) — Math.random·Date.now도 금지', () => {
+  it('엔진은 UI·브라우저에 의존하지 않는다(N6) — Math.random·Date.now·기기마다 다를 수 있는 수학 함수도 금지', () => {
     const dir = join(__dirname, '../../src/engine');
-    const banned = [/from ['"]react/, /\bdocument\./, /\bwindow\./, /\bnavigator\./, /\bindexedDB\b/, /Math\.random\s*\(/, /Date\.now\s*\(/, /from ['"]\.\.\/(ui|storage|sim|pwa)/];
+    const banned = [/Math\.(exp|expm1|log|log10|log2|log1p|pow|sin|cos|tan|asin|acos|atan|atan2|sinh|cosh|tanh|cbrt|hypot)\s*\(/, /\*\*/, /from ['"]react/, /\bdocument\./, /\bwindow\./, /\bnavigator\./, /\bindexedDB\b/, /Math\.random\s*\(/, /Date\.now\s*\(/, /from ['"]\.\.\/(ui|storage|sim|pwa)/];
     for (const f of readdirSync(dir, { recursive: true }) as string[]) {
       if (!f.endsWith('.ts')) continue;
       const code = readFileSync(join(dir, f), 'utf8')

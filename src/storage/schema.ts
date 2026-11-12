@@ -3,9 +3,11 @@
  * 원칙: 세이브는 절대 지우지 않는다. 구조가 바뀌면 SAVE_SCHEMA_VERSION을 올리고
  * MIGRATIONS에 "이전 버전 → 다음 버전" 변환을 추가한다.
  */
-import type { SimConfig, SimState, UserAction } from '../engine';
+import type { EventType, SimConfig, SimState, UserAction } from '../engine';
 
-export const SAVE_SCHEMA_VERSION = 1;
+export const SAVE_SCHEMA_VERSION = 2;
+/** v1(Phase 0) 세이브에는 지역이 없었다. 옮겨올 때 넣는 기본 지역. */
+export const DEFAULT_REGION_ID = 'buyeo';
 export const EXPORT_FORMAT = 'phyto-sim-kr-save';
 
 export type ObservationMode = 'god' | 'realistic';
@@ -23,6 +25,13 @@ export interface SaveRecord {
   /** 마지막으로 저장된 게임 시각(h). */
   hour: number;
   observationMode: ObservationMode;
+  /** 화면·실행 설정(시뮬레이션 결과에는 영향을 주지 않는다). */
+  prefs: SavePrefs;
+}
+
+export interface SavePrefs {
+  /** 사건 종류별 자동 일시정지. 값이 없으면 켜짐으로 본다. */
+  autoPause: Partial<Record<EventType, boolean>>;
 }
 
 export interface SnapshotRecord {
@@ -44,7 +53,14 @@ export interface ExportBundle {
 type Migration = (old: Record<string, unknown>) => Record<string, unknown>;
 
 /** key = 변환 전 버전. 예) 1: v1 → v2 */
-export const MIGRATIONS: Record<number, Migration> = {};
+export const MIGRATIONS: Record<number, Migration> = {
+  // v1 → v2 (Phase 1): 지역과 자동 일시정지 설정 추가
+  1: (old) => {
+    const config = { ...(old.config as Record<string, unknown>) };
+    if (typeof config.regionId !== 'string') config.regionId = DEFAULT_REGION_ID;
+    return { ...old, config, prefs: { autoPause: {} } };
+  },
+};
 
 export class SaveVersionError extends Error {}
 
@@ -71,7 +87,7 @@ export function validateSave(s: SaveRecord): string[] {
   const errs: string[] = [];
   if (typeof s.id !== 'string' || s.id === '') errs.push('id 누락');
   if (typeof s.name !== 'string') errs.push('name 누락');
-  if (!s.config || typeof s.config.seed !== 'string' || typeof s.config.startDate !== 'string') errs.push('config(seed, startDate) 누락');
+  if (!s.config || typeof s.config.seed !== 'string' || typeof s.config.startDate !== 'string' || typeof s.config.regionId !== 'string') errs.push('config(seed, startDate, regionId) 누락');
   if (!Array.isArray(s.actions)) errs.push('actions 누락');
   if (typeof s.hour !== 'number' || s.hour < 0) errs.push('hour 오류');
   return errs;

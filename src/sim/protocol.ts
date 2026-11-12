@@ -1,24 +1,43 @@
-import type { SimConfig, SimState, UserAction } from '../engine';
+import type { DayWx, EventType, HourWx, SimConfig, SimEvent, SimState, UserAction } from '../engine';
 
 /** 배속: 실제 1초당 게임 시간(h). 0 = 일시정지. */
 export const SPEEDS = [
-  { id: 'pause', label: '정지', hoursPerSecond: 0 },
-  { id: 'd1', label: '1일/초', hoursPerSecond: 24 },
-  { id: 'd7', label: '7일/초', hoursPerSecond: 168 },
-  { id: 'd30', label: '30일/초', hoursPerSecond: 720 },
+  { id: 'pause', label: '정지', short: '❚❚', hoursPerSecond: 0 },
+  { id: 'h1', label: '1시간/초', short: '1시간', hoursPerSecond: 1 },
+  { id: 'h6', label: '6시간/초', short: '6시간', hoursPerSecond: 6 },
+  { id: 'd1', label: '1일/초', short: '1일', hoursPerSecond: 24 },
+  { id: 'd7', label: '7일/초', short: '7일', hoursPerSecond: 168 },
+  { id: 'd30', label: '30일/초', short: '30일', hoursPerSecond: 720 },
 ] as const;
 export type SpeedId = (typeof SPEEDS)[number]['id'];
 
+/** 화면에 보여줄 현재 외기 요약. */
+export interface WxView {
+  now: HourWx;
+  today: DayWx;
+  sunrise: number;
+  sunset: number;
+  daylength: number;
+}
+
 export type ToWorker =
   /** state(스냅샷)에서 시작해 targetHour까지 조치 로그를 재생한 뒤 정지 상태로 대기한다. */
-  | { type: 'init'; config: SimConfig; state: SimState | null; actions: UserAction[]; targetHour: number }
+  | { type: 'init'; config: SimConfig; state: SimState | null; actions: UserAction[]; targetHour: number; autoPause: EventType[] }
   | { type: 'setSpeed'; hoursPerSecond: number }
+  /** 턴 버튼: 지정한 시간만큼 최대 속도로 진행한 뒤 멈춘다. */
+  | { type: 'advance'; hours: number }
+  | { type: 'setAutoPause'; types: EventType[] }
   | { type: 'action'; action: UserAction }
   | { type: 'requestState'; requestId: number };
 
 export type FromWorker =
-  | { type: 'ready'; hour: number }
-  | { type: 'tick'; hour: number; hoursPerSecond: number }
+  | { type: 'ready'; hour: number; view: WxView }
+  | { type: 'tick'; hour: number; hoursPerSecond: number; advancing: boolean; view: WxView }
   /** 스냅샷 시점(7일 간격)을 지날 때마다 보낸다. */
   | { type: 'snapshot'; state: SimState; fingerprint: string }
-  | { type: 'state'; requestId: number; state: SimState; fingerprint: string; actions: UserAction[] };
+  /** 끝난 날들의 일 기상(일 단위 원장). */
+  | { type: 'days'; rows: DayWx[] }
+  /** 새로 생긴 사건. paused = 이 사건 때문에 자동 일시정지했는지. */
+  | { type: 'events'; events: SimEvent[]; paused: boolean }
+  | { type: 'state'; requestId: number; state: SimState; fingerprint: string; actions: UserAction[] }
+  | { type: 'error'; message: string };

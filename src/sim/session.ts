@@ -5,41 +5,65 @@
  *   저장에는 워커 왕복이 필요 없다: 메인 스레드가 아는 "마지막 게임 시각 + 조치 로그"만 쓰면 된다.
  */
 import EngineWorker from './engine.worker?worker&inline';
-import type { SimConfig, UserAction } from '../engine';
-import { kvGet, kvSet, getSave, latestSnapshot, listSnapshots, openDatabase, putSave, putSnapshot, type Db } from '../storage/db';
+import { ENGINE_STATE_VERSION, EVENT_TYPES, type DayWx, type EventType, type SimConfig, type SimEvent, type UserAction } from '../engine';
+import { getDailyRows, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putDailyRows, putSave, putSnapshot, type Db } from '../storage/db';
 import { SAVE_SCHEMA_VERSION, type SaveRecord } from '../storage/schema';
 import { decodeBundle, encodeBundle, exportFileName, shareOrDownload } from '../storage/exportImport';
-import type { FromWorker, ToWorker } from './protocol';
+import type { FromWorker, ToWorker, WxView } from './protocol';
 
 export interface SessionView {
-  status: 'loading' | 'ready' | 'error';
+  /** nosave = 아직 작기가 없음(새 작기 화면을 보여준다) */
+  status: 'loading' | 'nosave' | 'ready' | 'error';
   error?: string;
   save?: SaveRecord;
   hour: number;
   hoursPerSecond: number;
+  /** 턴 버튼으로 진행 중 */
+  advancing: boolean;
+  wx: WxView | null;
+  /** 최근 일 기상(오래된 것부터, 최대 60일) */
+  days: DayWx[];
+  /** 최근 사건(새것부터, 최대 50건) */
+  eventLog: SimEvent[];
+  /** 방금 자동 일시정지를 일으킨 사건들. 사용자가 닫으면 비운다. */
+  pausedBy: SimEvent[] | null;
   /** 브라우저가 "영구 저장"을 허용했는지. null = 확인 불가. */
   persisted: boolean | null;
   lastSavedAt: number | null;
-  /** 이번 실행에서 저장된 지점부터 이어서 열렸는지. */
-  resumedFromHour: number | null;
+}
+
+export interface NewGameOptions {
+  name: string;
+  regionId: string;
+  startDate: string;
+  /** 비우면 자동 생성 */
+  seed?: string;
 }
 
 const AUTOSAVE_MS = 5000;
 const KV_CURRENT = 'currentSaveId';
+const HISTORY_DAYS = 60;
+const EVENT_LOG_MAX = 50;
 
-function newSeed(): string {
+export function newSeed(): string {
   // seed 생성은 엔진 밖에서 한 번만 한다. 이후 모든 랜덤은 이 seed로 고정된다.
   const a = new Uint32Array(2);
   crypto.getRandomValues(a);
   return `${a[0]!.toString(36)}${a[1]!.toString(36)}`;
 }
 
-function todayKst(): string {
+export function todayKst(): string {
   return new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10);
 }
 
+export function isAutoPauseOn(save: SaveRecord | undefined, type: EventType): boolean {
+  return save?.prefs.autoPause[type] !== false;
+}
+
+const enabledTypes = (save: SaveRecord): EventType[] => EVENT_TYPES.filter((t) => isAutoPauseOn(save, t));
+
 export class Session {
-  private view: SessionView = { status: 'loading', hour: 0, hoursPerSecond: 0, persisted: null, lastSavedAt: null, resumedFromHour: null };
+  private view: SessionView = { status: 'loading', hour: 0, hoursPerSecond: 0, advancing: false, wx: null, days: [], eventLog: [], pausedBy: null, persisted: null, lastSavedAt: null };
   private listeners = new Set<() => void>();
   private db: Db | null = null;
   private worker: Worker | null = null;
@@ -64,46 +88,52 @@ export class Session {
       if (navigator.storage?.persist) {
         persisted = (await navigator.storage.persisted?.()) || (await navigator.storage.persist());
       }
-      const currentId = await kvGet<string>(this.db, KV_CURRENT);
-      let save = currentId ? await getSave(this.db, currentId) : undefined;
-      const isNew = !save;
-      if (!save) {
-        const now = Date.now();
-        const config: SimConfig = { seed: newSeed(), startDate: todayKst() };
-        save = {
-          schemaVersion: SAVE_SCHEMA_VERSION,
-          id: `save-${now.toString(36)}`,
-          name: '시험 작기',
-          createdAt: now,
-          updatedAt: now,
-          config,
-          actions: [],
-          hour: 0,
-          observationMode: 'god',
-        };
-        await putSave(this.db, save);
-        await kvSet(this.db, KV_CURRENT, save.id);
-      }
-      this.set({ persisted, save, hour: save.hour, resumedFromHour: isNew || save.hour === 0 ? null : save.hour });
-      await this.bootWorker(save);
+      this.set({ persisted });
       document.addEventListener('visibilitychange', this.onVisibility);
       window.addEventListener('pagehide', this.onHide);
       setInterval(() => {
         if (this.dirty) void this.saveNow();
       }, AUTOSAVE_MS);
+
+      const currentId = await kvGet<string>(this.db, KV_CURRENT);
+      const save = currentId ? await getSave(this.db, currentId) : undefined;
+      if (!save) {
+        this.set({ status: 'nosave' });
+        return;
+      }
+      await this.open(save);
     } catch (e) {
       this.set({ status: 'error', error: e instanceof Error ? e.message : String(e) });
     }
   }
 
-  private async bootWorker(save: SaveRecord): Promise<void> {
+  /** 세이브를 현재 작기로 연다. 실패하면 오류 상태로 알린다(세이브는 지우지 않는다). */
+  private async open(save: SaveRecord): Promise<void> {
+    try {
+      await this.openInner(save);
+    } catch (e) {
+      this.set({ status: 'error', error: e instanceof Error ? e.message : String(e) });
+    }
+  }
+
+  private async openInner(save: SaveRecord): Promise<void> {
+    const db = this.db!;
+    await kvSet(db, KV_CURRENT, save.id);
+    const today = Math.floor(save.hour / 24);
+    const days = await getDailyRows<DayWx>(db, save.id, today - HISTORY_DAYS, today - 1);
+    const eventLog = ((await kvGet<SimEvent[]>(db, `events:${save.id}`)) ?? []).filter((e) => e.hour <= save.hour);
+    this.dirty = false;
+    this.set({ status: 'loading', save, hour: save.hour, hoursPerSecond: 0, advancing: false, wx: null, days, eventLog, pausedBy: null, error: undefined });
+
     this.worker?.terminate();
-    const snap = await latestSnapshot(this.db!, save.id, save.hour);
+    const snap = await latestSnapshot(db, save.id, save.hour);
+    // 엔진 상태 구조가 바뀐 옛 스냅샷은 쓰지 않고 처음부터 다시 계산한다(결과는 같다).
+    const state = snap && snap.state.stateVersion === ENGINE_STATE_VERSION ? snap.state : null;
     const worker = new EngineWorker();
     this.worker = worker;
     worker.onmessage = (ev: MessageEvent<FromWorker>) => this.onWorker(ev.data);
     worker.onerror = (ev) => this.set({ status: 'error', error: `엔진 오류: ${ev.message}` });
-    this.send({ type: 'init', config: save.config, state: snap?.state ?? null, actions: save.actions, targetHour: save.hour });
+    this.send({ type: 'init', config: save.config, state, actions: save.actions, targetHour: save.hour, autoPause: enabledTypes(save) });
   }
 
   private send(msg: ToWorker) {
@@ -113,20 +143,40 @@ export class Session {
   private onWorker(msg: FromWorker) {
     switch (msg.type) {
       case 'ready':
-        this.set({ status: 'ready', hour: msg.hour, hoursPerSecond: 0 });
+        this.set({ status: 'ready', hour: msg.hour, hoursPerSecond: 0, wx: msg.view });
         break;
-      case 'tick':
+      case 'tick': {
         if (msg.hour !== this.view.hour) this.dirty = true;
-        if (msg.hour !== this.view.hour || msg.hoursPerSecond !== this.view.hoursPerSecond) {
-          this.set({ hour: msg.hour, hoursPerSecond: msg.hoursPerSecond });
-        }
+        this.set({ hour: msg.hour, hoursPerSecond: msg.hoursPerSecond, advancing: msg.advancing, wx: msg.view });
         // 정지 직후 워커가 알려주는 "확정 시각"으로 바로 저장한다.
-        if (msg.hoursPerSecond === 0 && this.dirty) void this.saveNow();
+        if (msg.hoursPerSecond === 0 && !msg.advancing && this.dirty) void this.saveNow();
         break;
+      }
       case 'snapshot':
         if (this.db && this.view.save) {
           void putSnapshot(this.db, { saveId: this.view.save.id, hour: msg.state.hour, state: msg.state, fingerprint: msg.fingerprint });
         }
+        break;
+      case 'days': {
+        const save = this.view.save;
+        if (!save) break;
+        const known = new Map(this.view.days.map((d) => [d.dayIndex, d]));
+        for (const d of msg.rows) known.set(d.dayIndex, d);
+        const days = [...known.values()].sort((a, b) => a.dayIndex - b.dayIndex).slice(-HISTORY_DAYS);
+        this.set({ days });
+        if (this.db) void putDailyRows(this.db, save.id, msg.rows.map((d) => ({ day: d.dayIndex, data: d })));
+        break;
+      }
+      case 'events': {
+        const save = this.view.save;
+        const eventLog = [...[...msg.events].reverse(), ...this.view.eventLog].slice(0, EVENT_LOG_MAX);
+        const pausing = msg.events.filter((e) => isAutoPauseOn(save, e.type));
+        this.set({ eventLog, pausedBy: msg.paused && pausing.length ? pausing : this.view.pausedBy });
+        if (this.db && save) void kvSet(this.db, `events:${save.id}`, eventLog);
+        break;
+      }
+      case 'error':
+        this.set({ status: 'error', error: msg.message });
         break;
       case 'state':
         break;
@@ -134,10 +184,30 @@ export class Session {
   }
 
   setSpeed(hoursPerSecond: number) {
+    if (hoursPerSecond > 0) this.set({ pausedBy: null });
     this.send({ type: 'setSpeed', hoursPerSecond });
   }
 
-  /** 사용자 조치를 로그에 추가한다(Phase 1부터 실제 조치가 생긴다). */
+  /** 턴 버튼: hours 만큼 진행하고 멈춘다. */
+  advance(hours: number) {
+    this.set({ pausedBy: null, advancing: true });
+    this.send({ type: 'advance', hours });
+  }
+
+  dismissPause() {
+    this.set({ pausedBy: null });
+  }
+
+  setAutoPause(type: EventType, on: boolean) {
+    const save = this.view.save;
+    if (!save) return;
+    const updated: SaveRecord = { ...save, prefs: { ...save.prefs, autoPause: { ...save.prefs.autoPause, [type]: on } } };
+    this.set({ save: updated });
+    this.send({ type: 'setAutoPause', types: enabledTypes(updated) });
+    this.dirty = true;
+  }
+
+  /** 사용자 조치를 로그에 추가한다(Phase 2부터 실제 조치가 생긴다). */
   addAction(type: string, payload: unknown) {
     const save = this.view.save;
     if (!save) return;
@@ -151,14 +221,15 @@ export class Session {
 
   async saveNow(): Promise<void> {
     const save = this.view.save;
-    if (!this.db || !save) return;
+    if (!this.db || !save || this.view.status !== 'ready') return;
     const updated: SaveRecord = { ...save, hour: this.view.hour, updatedAt: Date.now() };
     this.dirty = false;
     await putSave(this.db, updated);
-    this.set({ save: updated, lastSavedAt: updated.updatedAt });
+    if (this.view.save?.id === updated.id) this.set({ save: { ...this.view.save, hour: updated.hour, updatedAt: updated.updatedAt }, lastSavedAt: updated.updatedAt });
   }
 
   private onHide = () => {
+    if (this.view.status !== 'ready') return;
     if (this.view.hoursPerSecond > 0) this.speedBeforeHide = this.view.hoursPerSecond;
     this.send({ type: 'setSpeed', hoursPerSecond: 0 });
     // 1차: 지금 아는 시각으로 즉시 저장(앱이 곧바로 멈춰도 남는다).
@@ -175,6 +246,37 @@ export class Session {
       this.speedBeforeHide = 0;
     }
   };
+
+  /** 새 작기를 만든다. 이전 작기는 지우지 않는다. */
+  async newGame(opts: NewGameOptions): Promise<void> {
+    await this.saveNow();
+    const now = Date.now();
+    const config: SimConfig = { seed: opts.seed?.trim() || newSeed(), startDate: opts.startDate, regionId: opts.regionId };
+    const save: SaveRecord = {
+      schemaVersion: SAVE_SCHEMA_VERSION,
+      id: `save-${now.toString(36)}`,
+      name: opts.name.trim() || '새 작기',
+      createdAt: now,
+      updatedAt: now,
+      config,
+      actions: [],
+      hour: 0,
+      observationMode: 'god',
+      prefs: { autoPause: {} },
+    };
+    await putSave(this.db!, save);
+    await this.open(save);
+  }
+
+  async listSaves(): Promise<SaveRecord[]> {
+    return this.db ? listSaves(this.db) : [];
+  }
+
+  async loadSave(id: string): Promise<void> {
+    await this.saveNow();
+    const save = await getSave(this.db!, id);
+    if (save) await this.open(save);
+  }
 
   async exportCurrent(): Promise<'shared' | 'downloaded' | 'cancelled'> {
     await this.saveNow();
@@ -194,9 +296,7 @@ export class Session {
     const imported: SaveRecord = { ...save, id, updatedAt: Date.now() };
     await putSave(db, imported);
     for (const s of snapshots) await putSnapshot(db, { ...s, saveId: id });
-    await kvSet(db, KV_CURRENT, id);
-    this.set({ status: 'loading', save: imported, hour: imported.hour, resumedFromHour: imported.hour });
-    await this.bootWorker(imported);
+    await this.open(imported);
   }
 }
 

@@ -53,7 +53,7 @@ export function calendarAt(config: SimConfig, hour: number): CalendarTime {
 export const timeModule: EngineModule = {
   id: 'time',
   title: '시계',
-  plannedPhase: 0,
+  plannedPhase: 1,
   implemented: true,
   step: (state) => ({ ...state, hour: state.hour + 1 }),
 };

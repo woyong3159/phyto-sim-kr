@@ -1,9 +1,5987 @@
 {
-  "_meta": {
-    "file": "climate",
-    "title": "기후 평년값(기상청 1991–2020)",
-    "plannedPhase": 1,
-    "schemaVersion": 1
+ "_meta": {
+  "file": "climate",
+  "title": "기후 평년값(기상청 1991–2020)과 기상 생성기 파라미터",
+  "plannedPhase": 1,
+  "schemaVersion": 1
+ },
+ "params": {
+  "normals": {
+   "seoul": {
+    "TMAX": {
+     "values": [
+      2.1,
+      5.1,
+      11,
+      17.9,
+      23.6,
+      27.6,
+      29,
+      30,
+      26.2,
+      20.2,
+      11.9,
+      4.2
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seoul",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seoul' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -2,
+      0.7,
+      6.1,
+      12.6,
+      18.2,
+      22.7,
+      25.3,
+      26.1,
+      21.7,
+      15,
+      7.5,
+      0.2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seoul",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seoul' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -5.5,
+      -3.2,
+      1.9,
+      8,
+      13.5,
+      18.7,
+      22.3,
+      22.9,
+      17.7,
+      10.6,
+      3.5,
+      -3.4
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seoul",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seoul' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      16.8,
+      28.2,
+      36.9,
+      72.9,
+      103.6,
+      129.5,
+      414.4,
+      348.2,
+      141.5,
+      52.2,
+      51.1,
+      22.6
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seoul",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seoul' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      3.3,
+      3.4,
+      4.7,
+      6.5,
+      6.8,
+      7.6,
+      13.3,
+      11.8,
+      6.5,
+      4.8,
+      6.4,
+      4.2
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seoul",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Seoul' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      56.2,
+      54.6,
+      54.6,
+      54.8,
+      59.7,
+      65.7,
+      76.2,
+      73.5,
+      66.4,
+      61.8,
+      60.4,
+      57.8
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seoul",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seoul' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      169.6,
+      170.8,
+      198.2,
+      206.3,
+      223,
+      189.1,
+      123.6,
+      156.1,
+      179.7,
+      206.5,
+      157.3,
+      162.9
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seoul",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seoul' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.42,
+      2.53,
+      2.76,
+      2.76,
+      2.42,
+      2.07,
+      2.07,
+      1.95,
+      1.84,
+      1.95,
+      2.18,
+      2.42
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2.3 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "incheon": {
+    "TMAX": {
+     "values": [
+      2.2,
+      4.8,
+      10.1,
+      16.2,
+      21.6,
+      25.6,
+      27.8,
+      29.2,
+      25.8,
+      19.9,
+      12,
+      4.5
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Incheon",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Incheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -1.5,
+      0.7,
+      5.6,
+      11.5,
+      16.8,
+      21.3,
+      24.4,
+      25.6,
+      21.5,
+      15.3,
+      7.9,
+      0.7
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Incheon",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Incheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -4.8,
+      -2.8,
+      2.1,
+      7.9,
+      13.1,
+      18,
+      21.8,
+      22.9,
+      18.1,
+      11.4,
+      4.3,
+      -2.7
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Incheon",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Incheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      15.9,
+      25.1,
+      33.8,
+      63.5,
+      96.3,
+      106,
+      337.7,
+      274.6,
+      130.3,
+      51.1,
+      50.8,
+      22.3
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Incheon",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Incheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      5.9,
+      5.2,
+      5.9,
+      7.9,
+      8.4,
+      9.5,
+      15,
+      12.4,
+      8.1,
+      6,
+      8.6,
+      7.7
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Incheon",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Incheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      61.1,
+      61.2,
+      63.4,
+      64.5,
+      69.8,
+      75.9,
+      83.8,
+      80.1,
+      72.9,
+      66.7,
+      64.3,
+      61.8
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Incheon",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Incheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      186.6,
+      188.5,
+      215.3,
+      220,
+      239.5,
+      212.5,
+      159.7,
+      189.8,
+      200.4,
+      219.1,
+      170.2,
+      176.7
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Incheon",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Incheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      3.15,
+      3.3,
+      3.6,
+      3.6,
+      3.15,
+      2.7,
+      2.7,
+      2.55,
+      2.4,
+      2.55,
+      2.85,
+      3.15
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 3 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "suwon": {
+    "TMAX": {
+     "values": [
+      2.8,
+      5.6,
+      11.3,
+      18.2,
+      23.6,
+      27.5,
+      29.3,
+      30.3,
+      26.4,
+      20.4,
+      12.5,
+      4.9
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Suwon",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Suwon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -2.1,
+      0.3,
+      5.7,
+      12,
+      17.6,
+      22.2,
+      25.3,
+      26,
+      21.4,
+      14.6,
+      7.2,
+      0.1
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Suwon",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Suwon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -6.6,
+      -4.5,
+      0.6,
+      6.4,
+      12.3,
+      17.9,
+      22.1,
+      22.7,
+      17.1,
+      9.4,
+      2.4,
+      -4.2
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Suwon",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Suwon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      18.1,
+      28.3,
+      40.7,
+      71.6,
+      95,
+      122.9,
+      385.1,
+      296.3,
+      133.5,
+      54.1,
+      48.9,
+      25.8
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Suwon",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Suwon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      6.7,
+      6.2,
+      7,
+      8,
+      8.6,
+      9.6,
+      15.4,
+      14,
+      8.6,
+      6.1,
+      9,
+      8.3
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Suwon",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Suwon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      63,
+      61.9,
+      62.2,
+      62.1,
+      66.1,
+      71.4,
+      79.9,
+      77.6,
+      73.2,
+      69.8,
+      67.9,
+      64.4
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Suwon",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Suwon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      174.3,
+      178.7,
+      205.7,
+      214.5,
+      229.7,
+      195,
+      138.2,
+      168.7,
+      184.6,
+      208.9,
+      162.5,
+      166.2
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Suwon",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Suwon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2,
+      2.09,
+      2.28,
+      2.28,
+      2,
+      1.71,
+      1.71,
+      1.62,
+      1.52,
+      1.62,
+      1.81,
+      2
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.9 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "icheon": {
+    "TMAX": {
+     "values": [
+      2.7,
+      6,
+      12.2,
+      19.3,
+      24.4,
+      27.9,
+      29.4,
+      30.2,
+      26,
+      20.4,
+      12.1,
+      4.4
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Icheon",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Icheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -3.1,
+      -0.3,
+      5.4,
+      11.9,
+      17.6,
+      22,
+      24.7,
+      25,
+      19.8,
+      13,
+      5.8,
+      -1.2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Icheon",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Icheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -8.5,
+      -6.1,
+      -0.9,
+      5,
+      11.2,
+      16.7,
+      20.9,
+      21.1,
+      15,
+      7,
+      0.2,
+      -6.3
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Icheon",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Icheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      19.2,
+      29.6,
+      42.9,
+      78.5,
+      93.2,
+      128.2,
+      364.3,
+      288,
+      153.1,
+      50.9,
+      45.1,
+      22.9
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Icheon",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Icheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      5.7,
+      5.5,
+      6.8,
+      7.5,
+      7.9,
+      9.1,
+      15.3,
+      13.3,
+      8.8,
+      5.5,
+      8.2,
+      7.4
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Icheon",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Icheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      63.3,
+      59.4,
+      56.8,
+      55.2,
+      60.8,
+      66.7,
+      77.1,
+      76.8,
+      74.3,
+      70.8,
+      67.9,
+      66.3
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Icheon",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Icheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      170.8,
+      174.3,
+      202.4,
+      214.9,
+      232,
+      203.3,
+      150,
+      170.4,
+      173.7,
+      189.9,
+      153.2,
+      161.3
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Icheon",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Icheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.37,
+      1.43,
+      1.56,
+      1.56,
+      1.37,
+      1.17,
+      1.17,
+      1.11,
+      1.04,
+      1.11,
+      1.23,
+      1.37
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.3 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "chuncheon": {
+    "TMAX": {
+     "values": [
+      1.9,
+      5.4,
+      11.6,
+      18.9,
+      24.3,
+      28.1,
+      29.3,
+      29.9,
+      25.6,
+      19.6,
+      11.2,
+      3.5
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chuncheon",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chuncheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -4.1,
+      -1,
+      5,
+      11.7,
+      17.6,
+      22.2,
+      24.9,
+      25,
+      19.8,
+      12.7,
+      5.3,
+      -2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chuncheon",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chuncheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -9.3,
+      -6.7,
+      -1.1,
+      4.7,
+      11.3,
+      17,
+      21.3,
+      21.3,
+      15.3,
+      7.5,
+      0.4,
+      -6.6
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chuncheon",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chuncheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      18.6,
+      27.6,
+      33.5,
+      71.5,
+      99.4,
+      122.9,
+      398.2,
+      319.9,
+      128.1,
+      49.3,
+      48.3,
+      24.2
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chuncheon",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chuncheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      6.2,
+      5.9,
+      7.3,
+      8.3,
+      9.1,
+      9.9,
+      15.6,
+      14,
+      8.3,
+      6,
+      8,
+      7.5
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chuncheon",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Chuncheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      68,
+      63.2,
+      60.6,
+      58.8,
+      65,
+      70.6,
+      80,
+      80.5,
+      78.2,
+      76.2,
+      73.3,
+      71.5
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chuncheon",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chuncheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      170,
+      174.3,
+      199.9,
+      210.1,
+      227.5,
+      205,
+      144.2,
+      166.3,
+      173.3,
+      178.9,
+      141.8,
+      148.4
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chuncheon",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chuncheon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.47,
+      1.54,
+      1.68,
+      1.68,
+      1.47,
+      1.26,
+      1.26,
+      1.19,
+      1.12,
+      1.19,
+      1.33,
+      1.47
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.4 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "wonju": {
+    "TMAX": {
+     "values": [
+      2.4,
+      5.6,
+      11.8,
+      19.1,
+      24.4,
+      28.1,
+      29.7,
+      30.3,
+      25.9,
+      20,
+      12,
+      4.3
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Wonju",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Wonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -3.1,
+      -0.3,
+      5.5,
+      12.2,
+      17.9,
+      22.4,
+      25.1,
+      25.3,
+      20.2,
+      13.3,
+      6,
+      -1.1
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Wonju",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Wonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -8,
+      -5.6,
+      -0.3,
+      5.7,
+      11.8,
+      17.3,
+      21.4,
+      21.5,
+      15.5,
+      7.8,
+      1,
+      -5.7
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Wonju",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Wonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      18,
+      28.5,
+      43.8,
+      73,
+      86.1,
+      136.7,
+      357.8,
+      289.8,
+      147,
+      52.7,
+      42.1,
+      23.5
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Wonju",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Wonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      6.7,
+      6.2,
+      8.1,
+      8.9,
+      8.9,
+      10.1,
+      16.6,
+      14.9,
+      9.2,
+      6,
+      8.5,
+      7.6
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Wonju",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Wonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      64,
+      60.5,
+      57.9,
+      56.4,
+      61.3,
+      67.1,
+      76.3,
+      75.8,
+      73.3,
+      71.1,
+      68.6,
+      66.8
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Wonju",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Wonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      162.5,
+      164.5,
+      189.5,
+      199.7,
+      217.2,
+      186.2,
+      132.4,
+      153.7,
+      166.2,
+      188.4,
+      148.7,
+      154.2
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Wonju",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Wonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.26,
+      1.32,
+      1.44,
+      1.44,
+      1.26,
+      1.08,
+      1.08,
+      1.02,
+      0.96,
+      1.02,
+      1.14,
+      1.26
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.2 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "cheorwon": {
+    "TMAX": {
+     "values": [
+      0.7,
+      4.1,
+      10.2,
+      17.5,
+      22.9,
+      26.7,
+      28.1,
+      28.9,
+      25,
+      19.1,
+      10.5,
+      2.7
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheorwon_County",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheorwon_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -5.7,
+      -2.3,
+      3.7,
+      10.5,
+      16.6,
+      21.1,
+      23.8,
+      24,
+      18.9,
+      11.8,
+      4.3,
+      -3.2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheorwon_County",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheorwon_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -11.8,
+      -8.6,
+      -2.6,
+      3.4,
+      10.4,
+      16.1,
+      20.2,
+      20.1,
+      13.6,
+      5.5,
+      -1.2,
+      -8.6
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheorwon_County",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheorwon_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      18.2,
+      26.3,
+      30.8,
+      69,
+      102.4,
+      119,
+      400,
+      347.4,
+      121.2,
+      49.9,
+      48.1,
+      22.1
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheorwon_County",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheorwon_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      6.3,
+      6,
+      7.3,
+      8.1,
+      9.1,
+      10.9,
+      16.6,
+      14.3,
+      8.4,
+      6.6,
+      8.1,
+      7.5
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheorwon_County",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheorwon_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      67.1,
+      63.1,
+      60.5,
+      58.3,
+      64.4,
+      71.4,
+      81.3,
+      81.4,
+      76.9,
+      72.9,
+      71.6,
+      70
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheorwon_County",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheorwon_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      173.3,
+      176,
+      196.5,
+      203.7,
+      224.5,
+      198.7,
+      141.9,
+      170,
+      187,
+      200.6,
+      152.3,
+      159
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheorwon_County",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheorwon_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.68,
+      1.76,
+      1.92,
+      1.92,
+      1.68,
+      1.44,
+      1.44,
+      1.36,
+      1.28,
+      1.36,
+      1.52,
+      1.68
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.6 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "daegwallyeong": {
+    "TMAX": {
+     "values": [
+      -1.8,
+      0.6,
+      5.5,
+      12.9,
+      18.4,
+      21.3,
+      23.4,
+      23.6,
+      19.4,
+      14.6,
+      7.5,
+      0.5
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegwallyeong",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegwallyeong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -7,
+      -4.6,
+      0.4,
+      7,
+      12.5,
+      16.2,
+      19.6,
+      19.7,
+      14.6,
+      8.8,
+      2.3,
+      -4.5
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegwallyeong",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegwallyeong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -12.2,
+      -10.1,
+      -4.7,
+      1.2,
+      6.8,
+      11.6,
+      16.6,
+      16.5,
+      10.4,
+      3.5,
+      -2.6,
+      -9.4
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegwallyeong",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegwallyeong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      53.1,
+      49.2,
+      72.6,
+      93.5,
+      108.2,
+      162.5,
+      336.3,
+      368.4,
+      249.6,
+      97.6,
+      69.4,
+      34.7
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegwallyeong",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegwallyeong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      9.4,
+      8.9,
+      11.2,
+      10.4,
+      10.8,
+      12.9,
+      17.8,
+      18.1,
+      13.1,
+      8.9,
+      10.2,
+      8.5
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegwallyeong",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegwallyeong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      66.3,
+      65.7,
+      65.8,
+      61.9,
+      67.5,
+      79.4,
+      86.2,
+      87.2,
+      85.5,
+      76.8,
+      70.3,
+      66.6
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegwallyeong",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegwallyeong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      199.3,
+      193.5,
+      210.9,
+      223.1,
+      237.2,
+      192.4,
+      143,
+      138.2,
+      149.6,
+      196.2,
+      177.2,
+      193.3
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegwallyeong",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegwallyeong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      3.99,
+      4.18,
+      4.56,
+      4.56,
+      3.99,
+      3.42,
+      3.42,
+      3.23,
+      3.04,
+      3.23,
+      3.61,
+      3.99
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 3.8 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "taebaek": {
+    "TMAX": {
+     "values": [
+      0.7,
+      3.1,
+      7.9,
+      15.1,
+      20.8,
+      24,
+      25.9,
+      26,
+      21.5,
+      16.8,
+      9.9,
+      3
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Taebaek",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Taebaek' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -4.7,
+      -2.5,
+      2.4,
+      8.9,
+      14.5,
+      18.1,
+      21.4,
+      21.3,
+      16.2,
+      10.5,
+      4.2,
+      -2.3
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Taebaek",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Taebaek' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -9.6,
+      -7.8,
+      -2.9,
+      2.9,
+      8.4,
+      12.9,
+      17.7,
+      17.7,
+      11.7,
+      5,
+      -0.9,
+      -7.1
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Taebaek",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Taebaek' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      26.6,
+      28.8,
+      54.8,
+      85.8,
+      90.2,
+      140.4,
+      274.2,
+      278.7,
+      198.4,
+      65.5,
+      45.2,
+      19.4
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Taebaek",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Taebaek' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      7.2,
+      6.5,
+      9.9,
+      9.5,
+      9,
+      11.2,
+      16.3,
+      16,
+      12,
+      7.2,
+      8.1,
+      6.2
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Taebaek",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Taebaek' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      59.1,
+      58.4,
+      59.2,
+      55.4,
+      59.4,
+      71.2,
+      78.3,
+      79.9,
+      79.3,
+      70.5,
+      63.6,
+      58.4
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Taebaek",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Taebaek' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      174.9,
+      178.3,
+      202.7,
+      207.2,
+      232.9,
+      192.7,
+      143.8,
+      141.7,
+      147.4,
+      178.7,
+      159.6,
+      169.8
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Taebaek",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Taebaek' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.1,
+      2.2,
+      2.4,
+      2.4,
+      2.1,
+      1.8,
+      1.8,
+      1.7,
+      1.6,
+      1.7,
+      1.9,
+      2.1
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "gangneung": {
+    "TMAX": {
+     "values": [
+      5.3,
+      7.1,
+      11.7,
+      17.9,
+      22.7,
+      25.4,
+      28.1,
+      28.6,
+      24.6,
+      20.3,
+      14,
+      7.7
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gangneung",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gangneung' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      0.9,
+      2.7,
+      7,
+      13.1,
+      17.9,
+      21.3,
+      24.7,
+      25,
+      20.5,
+      15.6,
+      9.5,
+      3.3
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gangneung",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gangneung' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -2.7,
+      -1.3,
+      2.6,
+      8.2,
+      13.3,
+      17.5,
+      21.6,
+      21.9,
+      17,
+      11.5,
+      5.6,
+      -0.5
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gangneung",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gangneung' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      47.9,
+      48,
+      65.1,
+      81.9,
+      79.2,
+      118.5,
+      250.2,
+      292.9,
+      229.3,
+      113.9,
+      81.1,
+      36.9
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gangneung",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gangneung' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      6.2,
+      5.7,
+      8.8,
+      8.9,
+      9.1,
+      10.8,
+      16,
+      16.4,
+      11.8,
+      7.8,
+      7.3,
+      4.6
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gangneung",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Gangneung' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      46.8,
+      49.2,
+      52.8,
+      52.2,
+      59.3,
+      69.3,
+      74.7,
+      76.4,
+      73,
+      61.5,
+      52.7,
+      45.6
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gangneung",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gangneung' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      190.2,
+      182.2,
+      199.3,
+      209.6,
+      218.7,
+      176.9,
+      148.9,
+      151.3,
+      162.1,
+      192.5,
+      175.2,
+      189.7
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gangneung",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gangneung' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.52,
+      2.64,
+      2.88,
+      2.88,
+      2.52,
+      2.16,
+      2.16,
+      2.04,
+      1.92,
+      2.04,
+      2.28,
+      2.52
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2.4 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "sokcho": {
+    "TMAX": {
+     "values": [
+      4.2,
+      6,
+      10.6,
+      16.5,
+      20.9,
+      23.5,
+      26.7,
+      27.5,
+      24,
+      19.5,
+      13.1,
+      6.6
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Sokcho",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Sokcho' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      0.1,
+      1.9,
+      6.3,
+      11.9,
+      16.3,
+      19.8,
+      23.4,
+      24.1,
+      20.1,
+      15.1,
+      8.8,
+      2.5
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Sokcho",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Sokcho' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -3.8,
+      -2.2,
+      1.8,
+      7.3,
+      12.1,
+      16.5,
+      20.6,
+      21.2,
+      16.5,
+      10.8,
+      4.7,
+      -1.5
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Sokcho",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Sokcho' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      43.5,
+      45.9,
+      52.3,
+      73.3,
+      88.5,
+      119.5,
+      265.6,
+      298,
+      200.6,
+      87.9,
+      92,
+      40.1
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Sokcho",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Sokcho' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      5.8,
+      5.9,
+      8.3,
+      8.6,
+      9.3,
+      11.5,
+      15.7,
+      15.2,
+      11.7,
+      7,
+      7.9,
+      4.7
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Sokcho",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Sokcho' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      49,
+      53.2,
+      58,
+      60.5,
+      68.6,
+      78.7,
+      82.2,
+      82.3,
+      77.8,
+      65.6,
+      56,
+      47.9
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Sokcho",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Sokcho' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      185.4,
+      176.9,
+      194.9,
+      211.9,
+      216.3,
+      172.4,
+      146.3,
+      152.4,
+      166.8,
+      189.8,
+      169,
+      184.3
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Sokcho",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Sokcho' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.84,
+      2.97,
+      3.24,
+      3.24,
+      2.84,
+      2.43,
+      2.43,
+      2.3,
+      2.16,
+      2.3,
+      2.57,
+      2.84
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2.7 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "cheongju": {
+    "TMAX": {
+     "values": [
+      3.4,
+      6.4,
+      12.5,
+      19.6,
+      24.8,
+      28.2,
+      30,
+      30.6,
+      26.4,
+      20.7,
+      13,
+      5.4
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheongju",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheongju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -1.5,
+      1,
+      6.5,
+      13,
+      18.7,
+      23,
+      25.8,
+      26.2,
+      21.3,
+      14.6,
+      7.5,
+      0.6
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheongju",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheongju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -5.8,
+      -3.8,
+      1,
+      7,
+      13.1,
+      18.4,
+      22.4,
+      22.6,
+      17,
+      9.4,
+      2.6,
+      -3.7
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheongju",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheongju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      20.6,
+      29,
+      42.9,
+      75.5,
+      82.8,
+      140,
+      293.8,
+      274.2,
+      142.3,
+      58,
+      46.6,
+      26.7
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheongju",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheongju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      7.2,
+      6.4,
+      7.8,
+      8.3,
+      8.1,
+      9.4,
+      15.7,
+      14,
+      8.7,
+      6.1,
+      8.7,
+      8.8
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheongju",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheongju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      63.5,
+      58.6,
+      55.6,
+      53.4,
+      57.7,
+      64.5,
+      74.2,
+      73.1,
+      70.6,
+      66.8,
+      65.6,
+      64.9
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheongju",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheongju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      166.9,
+      176.9,
+      207.6,
+      220,
+      238.8,
+      196.5,
+      150.1,
+      173.1,
+      176.4,
+      204.1,
+      160.6,
+      161
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheongju",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheongju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.68,
+      1.76,
+      1.92,
+      1.92,
+      1.68,
+      1.44,
+      1.44,
+      1.36,
+      1.28,
+      1.36,
+      1.52,
+      1.68
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.6 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "chungju": {
+    "TMAX": {
+     "values": [
+      2.5,
+      5.8,
+      11.9,
+      19.2,
+      24.5,
+      28,
+      29.7,
+      30.3,
+      26,
+      20.2,
+      12.3,
+      4.5
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chungju",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chungju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -3.2,
+      -0.5,
+      5.3,
+      11.9,
+      17.5,
+      22.1,
+      24.9,
+      25.2,
+      19.9,
+      12.9,
+      5.7,
+      -1.3
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chungju",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chungju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -8.3,
+      -6.1,
+      -0.9,
+      4.8,
+      10.9,
+      16.8,
+      21.1,
+      21.3,
+      15.2,
+      7.1,
+      0.3,
+      -6.2
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chungju",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chungju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      20,
+      29.4,
+      41.5,
+      73.8,
+      87.4,
+      134.7,
+      293.3,
+      273,
+      140.2,
+      56.7,
+      39.4,
+      24.9
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chungju",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chungju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      6.6,
+      6.3,
+      8.1,
+      8.8,
+      8.7,
+      9.1,
+      16.7,
+      14.5,
+      9.5,
+      6.2,
+      8.2,
+      7.4
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chungju",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Chungju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      67,
+      62.2,
+      58.1,
+      55.1,
+      59.5,
+      65.8,
+      75.1,
+      75.5,
+      74.9,
+      73.6,
+      70.8,
+      69.6
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chungju",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chungju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      163.5,
+      171.8,
+      199.8,
+      214.3,
+      233.3,
+      198.2,
+      142,
+      164.6,
+      169,
+      185.5,
+      145.9,
+      150.8
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Chungju",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Chungju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.26,
+      1.32,
+      1.44,
+      1.44,
+      1.26,
+      1.08,
+      1.08,
+      1.02,
+      0.96,
+      1.02,
+      1.14,
+      1.26
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.2 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "daejeon": {
+    "TMAX": {
+     "values": [
+      4.1,
+      7,
+      12.7,
+      19.4,
+      24.5,
+      27.9,
+      29.6,
+      30.3,
+      26.3,
+      20.8,
+      13.5,
+      6.2
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daejeon",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daejeon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -1,
+      1.4,
+      6.6,
+      13,
+      18.5,
+      22.7,
+      25.5,
+      26,
+      21.2,
+      14.6,
+      7.7,
+      1
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daejeon",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daejeon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -5.5,
+      -3.6,
+      1.1,
+      6.9,
+      12.8,
+      18.1,
+      22.2,
+      22.5,
+      17,
+      9.4,
+      2.8,
+      -3.4
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daejeon",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daejeon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      25.5,
+      37.2,
+      51.6,
+      81.6,
+      91.8,
+      167.3,
+      306.9,
+      299.8,
+      152.5,
+      59.3,
+      48,
+      29.7
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daejeon",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daejeon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      8,
+      7,
+      8.3,
+      8.3,
+      8.2,
+      9.9,
+      16.4,
+      14.8,
+      9.1,
+      6.1,
+      8.5,
+      9.3
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daejeon",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Daejeon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      65.3,
+      60.3,
+      57.9,
+      56.9,
+      62.4,
+      69.8,
+      79.1,
+      78.2,
+      75.3,
+      71.8,
+      69.3,
+      67.9
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daejeon",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daejeon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      168.2,
+      176.2,
+      207.7,
+      220.5,
+      239.8,
+      198.5,
+      155.5,
+      177,
+      180.3,
+      205.1,
+      162.4,
+      162.5
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daejeon",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daejeon' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.89,
+      1.98,
+      2.16,
+      2.16,
+      1.89,
+      1.62,
+      1.62,
+      1.53,
+      1.44,
+      1.53,
+      1.71,
+      1.89
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.8 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "cheonan": {
+    "TMAX": {
+     "values": [
+      3,
+      5.8,
+      11.8,
+      18.7,
+      24.1,
+      27.5,
+      29.5,
+      30.2,
+      26.1,
+      20.4,
+      12.8,
+      5.2
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheonan",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheonan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -2.4,
+      0,
+      5.3,
+      11.7,
+      17.5,
+      21.8,
+      24.9,
+      25.2,
+      20.2,
+      13.4,
+      6.5,
+      -0.2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheonan",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheonan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -7.5,
+      -5.4,
+      -0.8,
+      4.9,
+      11.4,
+      16.8,
+      21.2,
+      21.3,
+      15.2,
+      7.4,
+      1,
+      -5.1
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheonan",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheonan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      19,
+      27,
+      38.3,
+      67.5,
+      78.7,
+      127,
+      284.1,
+      299.7,
+      146.4,
+      55.5,
+      47.6,
+      27.9
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheonan",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheonan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      7.4,
+      6.2,
+      7.4,
+      7.9,
+      7.6,
+      8.5,
+      14.1,
+      13.7,
+      8.8,
+      6,
+      9.1,
+      9.6
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheonan",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheonan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      68.5,
+      63.8,
+      61.1,
+      58.2,
+      62.3,
+      69.1,
+      77.2,
+      76.7,
+      74,
+      71.2,
+      70,
+      69.5
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheonan",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheonan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      167.2,
+      178.4,
+      211.6,
+      221.5,
+      241.5,
+      207.3,
+      160.5,
+      184,
+      179.8,
+      204.8,
+      159.2,
+      155.5
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Cheonan",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Cheonan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.58,
+      1.65,
+      1.8,
+      1.8,
+      1.58,
+      1.35,
+      1.35,
+      1.27,
+      1.2,
+      1.27,
+      1.42,
+      1.58
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.5 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "seosan": {
+    "TMAX": {
+     "values": [
+      3.3,
+      5.6,
+      10.8,
+      17.3,
+      22.5,
+      26.4,
+      28.5,
+      29.7,
+      26.1,
+      20.5,
+      13,
+      5.7
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seosan",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seosan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -1.6,
+      0.1,
+      4.9,
+      10.9,
+      16.6,
+      21.3,
+      24.5,
+      25.3,
+      20.7,
+      14.1,
+      7.4,
+      0.8
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seosan",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seosan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -6.2,
+      -4.9,
+      -0.7,
+      5,
+      11.4,
+      17,
+      21.5,
+      21.7,
+      16.1,
+      8.6,
+      2.2,
+      -3.7
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seosan",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seosan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      23.5,
+      31.1,
+      41.5,
+      74.7,
+      101.1,
+      138.2,
+      274.6,
+      283.5,
+      144.4,
+      53,
+      54.1,
+      34.2
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seosan",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seosan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      8.6,
+      6.6,
+      6.6,
+      7.8,
+      8,
+      9.3,
+      14.8,
+      13.8,
+      8.1,
+      6.3,
+      9.7,
+      11.5
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seosan",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Seosan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      70.7,
+      68.2,
+      67.5,
+      67.4,
+      71.5,
+      76.5,
+      84.2,
+      82.4,
+      78.1,
+      74.1,
+      73.4,
+      72
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seosan",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seosan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      157.2,
+      173.5,
+      208.1,
+      219.5,
+      238.8,
+      195.4,
+      146.7,
+      183.1,
+      190.8,
+      208.1,
+      155.7,
+      147.9
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seosan",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seosan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.52,
+      2.64,
+      2.88,
+      2.88,
+      2.52,
+      2.16,
+      2.16,
+      2.04,
+      1.92,
+      2.04,
+      2.28,
+      2.52
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2.4 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "buyeo": {
+    "TMAX": {
+     "values": [
+      4.4,
+      7.2,
+      12.7,
+      19.3,
+      24.5,
+      28,
+      29.8,
+      30.8,
+      26.9,
+      21.4,
+      13.8,
+      6.5
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Buyeo_County",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Buyeo_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -1.5,
+      0.7,
+      5.7,
+      11.8,
+      17.6,
+      22.1,
+      25.3,
+      25.7,
+      20.7,
+      13.8,
+      6.9,
+      0.4
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Buyeo_County",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Buyeo_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -6.6,
+      -4.9,
+      -0.6,
+      4.9,
+      11.4,
+      17.2,
+      21.8,
+      21.9,
+      15.9,
+      7.7,
+      1.4,
+      -4.5
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Buyeo_County",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Buyeo_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      24.9,
+      37.6,
+      50.9,
+      85.3,
+      97.5,
+      157.1,
+      295.7,
+      284.8,
+      146,
+      63.6,
+      51.8,
+      31.4
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Buyeo_County",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Buyeo_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      6.9,
+      5.8,
+      7.6,
+      7.9,
+      7.9,
+      9.3,
+      14.7,
+      13.5,
+      8.7,
+      5.9,
+      8.4,
+      8.9
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Buyeo_County",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Buyeo_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      70.9,
+      65.6,
+      64.1,
+      63,
+      66.9,
+      72.1,
+      79.8,
+      78.5,
+      75.8,
+      74,
+      73.1,
+      73.2
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Buyeo_County",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Buyeo_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      164.4,
+      173.6,
+      209.6,
+      222.5,
+      236.5,
+      199.3,
+      157.7,
+      184.5,
+      187.2,
+      198.8,
+      155.6,
+      153.3
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Buyeo_County",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Buyeo_County' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.37,
+      1.43,
+      1.56,
+      1.56,
+      1.37,
+      1.17,
+      1.17,
+      1.11,
+      1.04,
+      1.11,
+      1.23,
+      1.37
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.3 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "jeonju": {
+    "TMAX": {
+     "values": [
+      4.8,
+      7.5,
+      13,
+      19.7,
+      25,
+      28.4,
+      30.6,
+      31.3,
+      27.4,
+      21.7,
+      14.4,
+      7.1
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeonju",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      0,
+      2,
+      6.8,
+      12.9,
+      18.5,
+      22.8,
+      26.2,
+      26.5,
+      21.9,
+      15.4,
+      8.8,
+      2.2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeonju",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -4.3,
+      -2.8,
+      1.4,
+      6.9,
+      12.7,
+      18.2,
+      22.7,
+      22.9,
+      17.4,
+      10.1,
+      3.9,
+      -2.1
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeonju",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      26.9,
+      36.8,
+      53.7,
+      78.4,
+      82.8,
+      159,
+      302.8,
+      289.6,
+      128.2,
+      57.3,
+      49.8,
+      34
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeonju",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      8.3,
+      6.9,
+      9.4,
+      8.7,
+      8.9,
+      10.3,
+      16,
+      15,
+      9.3,
+      6.6,
+      8.9,
+      9
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeonju",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      66.8,
+      63.5,
+      60.9,
+      59.1,
+      63.2,
+      70.6,
+      77.5,
+      76.9,
+      73.4,
+      69.4,
+      67.4,
+      67.6
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeonju",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      151.2,
+      162.3,
+      191.7,
+      209.7,
+      220.5,
+      168.1,
+      133.1,
+      153.1,
+      169.6,
+      198.7,
+      158.1,
+      142.9
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeonju",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeonju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.68,
+      1.76,
+      1.92,
+      1.92,
+      1.68,
+      1.44,
+      1.44,
+      1.36,
+      1.28,
+      1.36,
+      1.52,
+      1.68
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.6 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "gwangju": {
+    "TMAX": {
+     "values": [
+      5.7,
+      8.3,
+      13.6,
+      19.9,
+      24.8,
+      27.9,
+      30,
+      30.9,
+      27.1,
+      21.9,
+      15,
+      8
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gwangju",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gwangju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      1,
+      2.9,
+      7.5,
+      13.4,
+      18.7,
+      22.7,
+      25.9,
+      26.5,
+      22.2,
+      16.1,
+      9.6,
+      3.2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gwangju",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gwangju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -2.7,
+      -1.5,
+      2.4,
+      7.8,
+      13.4,
+      18.7,
+      22.8,
+      23.2,
+      18.2,
+      11.2,
+      5,
+      -0.8
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gwangju",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gwangju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      32.6,
+      43.6,
+      61.9,
+      86.6,
+      91.4,
+      152.6,
+      294.2,
+      326.4,
+      145,
+      59,
+      50.2,
+      37.1
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gwangju",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gwangju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      10.1,
+      8.2,
+      8.8,
+      8.9,
+      9,
+      10.2,
+      15.1,
+      15,
+      9.6,
+      6.8,
+      8.8,
+      10.2
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gwangju",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Gwangju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      65.7,
+      61.6,
+      60.3,
+      60.2,
+      64.5,
+      72,
+      79.8,
+      78,
+      73.6,
+      67.6,
+      66.9,
+      66.9
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gwangju",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gwangju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      161.4,
+      170.5,
+      201,
+      214.1,
+      227.9,
+      169.9,
+      143.1,
+      169,
+      174.4,
+      208.5,
+      167.4,
+      156.9
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Gwangju",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Gwangju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2,
+      2.09,
+      2.28,
+      2.28,
+      2,
+      1.71,
+      1.71,
+      1.62,
+      1.52,
+      1.62,
+      1.81,
+      2
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.9 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "mokpo": {
+    "TMAX": {
+     "values": [
+      5.8,
+      7.6,
+      11.9,
+      17.5,
+      22.3,
+      25.7,
+      28.4,
+      30,
+      26.5,
+      21.5,
+      14.9,
+      8.3
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Mokpo",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Mokpo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      1.8,
+      3,
+      6.9,
+      12.4,
+      17.5,
+      21.6,
+      25.1,
+      26.3,
+      22.3,
+      16.6,
+      10.4,
+      4.2
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Mokpo",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Mokpo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -1.3,
+      -0.6,
+      2.9,
+      8.2,
+      13.5,
+      18.5,
+      22.7,
+      23.5,
+      19,
+      12.7,
+      6.6,
+      0.7
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Mokpo",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Mokpo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      31.8,
+      36.8,
+      64.9,
+      80.3,
+      91.3,
+      150.2,
+      220.7,
+      209,
+      137.7,
+      58.9,
+      48.9,
+      37.2
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Mokpo",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Mokpo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      11,
+      8.9,
+      9,
+      8.7,
+      9.4,
+      9.8,
+      13.2,
+      12.4,
+      8.9,
+      6.2,
+      8.6,
+      11.1
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Mokpo",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Mokpo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      70.8,
+      70,
+      69.1,
+      69.7,
+      73.8,
+      79.8,
+      85.1,
+      81.8,
+      77.1,
+      70.6,
+      69.5,
+      70
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Mokpo",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Mokpo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      147.3,
+      161.2,
+      195.4,
+      212.1,
+      223.3,
+      174.5,
+      159.8,
+      200.8,
+      184.7,
+      211.3,
+      166.6,
+      143.8
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Mokpo",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Mokpo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      3.78,
+      3.96,
+      4.32,
+      4.32,
+      3.78,
+      3.24,
+      3.24,
+      3.06,
+      2.88,
+      3.06,
+      3.42,
+      3.78
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 3.6 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "yeosu": {
+    "TMAX": {
+     "values": [
+      6.6,
+      8.5,
+      12.4,
+      17.4,
+      21.7,
+      24.4,
+      27.3,
+      28.9,
+      25.8,
+      21.3,
+      15.1,
+      8.9
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Yeosu",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Yeosu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      2.8,
+      4.4,
+      8.3,
+      13.3,
+      17.9,
+      21.2,
+      24.5,
+      26,
+      22.6,
+      17.5,
+      11.3,
+      5.1
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Yeosu",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Yeosu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -0.3,
+      0.9,
+      4.8,
+      9.9,
+      14.7,
+      18.8,
+      22.5,
+      23.8,
+      20,
+      14.5,
+      8.2,
+      2
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Yeosu",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Yeosu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      24.5,
+      44.6,
+      83.9,
+      125.2,
+      143.5,
+      194.3,
+      276.8,
+      264.8,
+      151.7,
+      66.6,
+      46.8,
+      26.4
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Yeosu",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Yeosu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      4.9,
+      5.7,
+      8,
+      8.8,
+      9.6,
+      10.5,
+      13.8,
+      12.1,
+      9.2,
+      4.8,
+      6.1,
+      5
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Yeosu",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Yeosu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      53,
+      53.1,
+      57.4,
+      61.8,
+      68.1,
+      77.9,
+      84.5,
+      79.4,
+      71.7,
+      62.5,
+      59.5,
+      54.8
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Yeosu",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Yeosu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      193.3,
+      191.6,
+      209.8,
+      215.4,
+      227.7,
+      175.1,
+      163,
+      197.4,
+      181.1,
+      219.2,
+      189.8,
+      197.8
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Yeosu",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Yeosu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      4.2,
+      4.4,
+      4.8,
+      4.8,
+      4.2,
+      3.6,
+      3.6,
+      3.4,
+      3.2,
+      3.4,
+      3.8,
+      4.2
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 4 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "daegu": {
+    "TMAX": {
+     "values": [
+      5.9,
+      8.8,
+      14.2,
+      20.6,
+      25.7,
+      28.7,
+      30.8,
+      31.3,
+      27,
+      22,
+      14.9,
+      7.9
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegu",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      1.1,
+      3.5,
+      8.4,
+      14.5,
+      19.7,
+      23.4,
+      26.3,
+      26.7,
+      22.1,
+      16.2,
+      9.4,
+      3
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegu",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -2.9,
+      -1.1,
+      3.3,
+      8.8,
+      14.1,
+      18.8,
+      22.8,
+      23.1,
+      18,
+      11.4,
+      4.8,
+      -1.2
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegu",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      18.6,
+      25.4,
+      49,
+      70.6,
+      77.9,
+      129.2,
+      223.9,
+      245.3,
+      142.4,
+      50.1,
+      29.7,
+      18.7
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegu",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      4.5,
+      4.7,
+      7.1,
+      8.2,
+      8.8,
+      9.4,
+      13.9,
+      13.4,
+      9.3,
+      5.2,
+      5.1,
+      4.4
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegu",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      51.4,
+      49.8,
+      49.8,
+      50.8,
+      55.8,
+      63.8,
+      71.7,
+      72.2,
+      69.3,
+      62.8,
+      58.2,
+      53.3
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegu",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      195.5,
+      188.6,
+      210.8,
+      220.2,
+      232.6,
+      175.1,
+      153,
+      156.6,
+      164,
+      206.2,
+      183.9,
+      189.4
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Daegu",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Daegu' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.42,
+      2.53,
+      2.76,
+      2.76,
+      2.42,
+      2.07,
+      2.07,
+      1.95,
+      1.84,
+      1.95,
+      2.18,
+      2.42
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2.3 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "andong": {
+    "TMAX": {
+     "values": [
+      4,
+      7,
+      12.6,
+      19.5,
+      24.7,
+      27.9,
+      29.5,
+      30.1,
+      25.8,
+      20.5,
+      13,
+      5.9
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Andong",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Andong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      -1.8,
+      0.8,
+      6,
+      12.4,
+      17.8,
+      21.9,
+      24.8,
+      25.1,
+      20,
+      13.5,
+      6.4,
+      -0.1
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Andong",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Andong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -7.2,
+      -5.1,
+      -0.2,
+      5.5,
+      11.2,
+      16.5,
+      21,
+      21.2,
+      15.5,
+      8,
+      1,
+      -5.3
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Andong",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Andong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      16.7,
+      24.9,
+      44.5,
+      74,
+      85.1,
+      123.1,
+      235.2,
+      226.4,
+      119.8,
+      46.5,
+      30.9,
+      18.6
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Andong",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Andong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      4.9,
+      4.9,
+      7.2,
+      8,
+      8.7,
+      9.6,
+      14.2,
+      13.9,
+      9,
+      5.7,
+      6.2,
+      5.5
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Andong",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Andong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      59.9,
+      57.3,
+      56.8,
+      55.4,
+      61,
+      68.8,
+      77.5,
+      77.7,
+      76.5,
+      72.7,
+      68.2,
+      62.7
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Andong",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Andong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      194.8,
+      193.8,
+      214.1,
+      222.3,
+      235.2,
+      200.4,
+      161.9,
+      172.8,
+      157,
+      188.5,
+      166.7,
+      185.1
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Andong",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Andong' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.68,
+      1.76,
+      1.92,
+      1.92,
+      1.68,
+      1.44,
+      1.44,
+      1.36,
+      1.28,
+      1.36,
+      1.52,
+      1.68
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.6 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "pohang": {
+    "TMAX": {
+     "values": [
+      6.7,
+      9,
+      13.3,
+      19.1,
+      23.5,
+      25.8,
+      29,
+      29.5,
+      25.5,
+      21.4,
+      15.4,
+      8.9
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Pohang",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Pohang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      2.2,
+      4.3,
+      8.6,
+      14.1,
+      18.6,
+      21.8,
+      25.4,
+      26,
+      21.9,
+      16.9,
+      10.6,
+      4.3
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Pohang",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Pohang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -1.5,
+      0.2,
+      4.2,
+      9.6,
+      14.4,
+      18.6,
+      22.5,
+      23.3,
+      18.9,
+      13.1,
+      6.6,
+      0.5
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Pohang",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Pohang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      39.8,
+      36.5,
+      60.5,
+      81.2,
+      84.6,
+      126.8,
+      200.6,
+      230.2,
+      189.3,
+      76.7,
+      40.1,
+      26.1
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Pohang",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Pohang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      5.7,
+      5.9,
+      8.5,
+      8.2,
+      8.5,
+      9.7,
+      13.7,
+      13.5,
+      11.3,
+      6.4,
+      6.2,
+      4.7
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Pohang",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Pohang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      48.8,
+      50.8,
+      55.4,
+      57.1,
+      64.1,
+      73.9,
+      78.3,
+      78.6,
+      75.3,
+      65.1,
+      57.4,
+      49.9
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Pohang",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Pohang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      191.4,
+      185.1,
+      203.8,
+      219.3,
+      230.9,
+      189.2,
+      168.5,
+      178.5,
+      160.9,
+      199.7,
+      185,
+      191.2
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Pohang",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Pohang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.84,
+      2.97,
+      3.24,
+      3.24,
+      2.84,
+      2.43,
+      2.43,
+      2.3,
+      2.16,
+      2.3,
+      2.57,
+      2.84
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2.7 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "busan": {
+    "TMAX": {
+     "values": [
+      8.2,
+      10.2,
+      13.8,
+      18.2,
+      22,
+      24.6,
+      27.5,
+      29.5,
+      26.4,
+      22.5,
+      16.6,
+      10.4
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Busan",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Busan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      3.6,
+      5.4,
+      9.1,
+      13.8,
+      17.9,
+      21,
+      24.4,
+      26.1,
+      22.6,
+      17.9,
+      11.9,
+      5.8
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Busan",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Busan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -0.1,
+      1.5,
+      5.3,
+      10.1,
+      14.6,
+      18.3,
+      22.1,
+      23.7,
+      19.8,
+      14.5,
+      8.3,
+      2
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Busan",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Busan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      34.5,
+      49.6,
+      89.7,
+      140.9,
+      155.9,
+      188.4,
+      326.8,
+      266.5,
+      160.6,
+      79.6,
+      50.4,
+      33.8
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Busan",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Busan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      5.4,
+      5.9,
+      8.3,
+      9.2,
+      9.1,
+      10.4,
+      13.6,
+      11.9,
+      9.2,
+      5.3,
+      6,
+      4.7
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Busan",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Busan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      46.8,
+      49.4,
+      56,
+      61.1,
+      68.3,
+      76.8,
+      83.4,
+      78.5,
+      72.6,
+      62.7,
+      56.3,
+      48.1
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Busan",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Busan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      203.1,
+      189.4,
+      202,
+      212.6,
+      228.5,
+      180.3,
+      172.3,
+      199.2,
+      173.8,
+      212.1,
+      195.5,
+      205.6
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Busan",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Busan' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      3.57,
+      3.74,
+      4.08,
+      4.08,
+      3.57,
+      3.06,
+      3.06,
+      2.89,
+      2.72,
+      2.89,
+      3.23,
+      3.57
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 3.4 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "jinju": {
+    "TMAX": {
+     "values": [
+      7.2,
+      9.6,
+      14.2,
+      19.9,
+      24.6,
+      27.4,
+      29.6,
+      30.6,
+      26.9,
+      22.3,
+      15.6,
+      9.2
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jinju",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jinju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      0.3,
+      2.6,
+      7.3,
+      12.9,
+      18,
+      21.8,
+      25.3,
+      25.9,
+      21.4,
+      15,
+      8.2,
+      2.1
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jinju",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jinju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -5.5,
+      -3.7,
+      0.6,
+      6,
+      11.6,
+      17.2,
+      21.9,
+      22.2,
+      16.7,
+      8.9,
+      2,
+      -3.8
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jinju",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jinju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      28,
+      45.6,
+      77.6,
+      126.4,
+      137.3,
+      174.3,
+      312.2,
+      296.8,
+      180.7,
+      68.3,
+      44.7,
+      26.1
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jinju",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jinju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      4.5,
+      5.1,
+      7.3,
+      8.9,
+      9.2,
+      10.5,
+      14.2,
+      14.2,
+      9.8,
+      5,
+      5.7,
+      4.3
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jinju",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Jinju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      58.1,
+      56.5,
+      58.9,
+      61.5,
+      66.5,
+      73.4,
+      80.1,
+      78.4,
+      75.6,
+      71.1,
+      67.9,
+      61.4
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jinju",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jinju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      194.6,
+      191,
+      210.5,
+      215,
+      225.8,
+      169.4,
+      155,
+      173.7,
+      167.3,
+      210.7,
+      184.6,
+      194.9
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jinju",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jinju' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.47,
+      1.54,
+      1.68,
+      1.68,
+      1.47,
+      1.26,
+      1.26,
+      1.19,
+      1.12,
+      1.19,
+      1.33,
+      1.47
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.4 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "miryang": {
+    "TMAX": {
+     "values": [
+      7.4,
+      9.9,
+      14.7,
+      20.7,
+      25.5,
+      28.3,
+      30.4,
+      31.3,
+      27.4,
+      22.6,
+      15.9,
+      9.3
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Miryang",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Miryang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      0.5,
+      2.8,
+      7.7,
+      13.2,
+      18.3,
+      22.3,
+      25.6,
+      26.1,
+      21.5,
+      15.2,
+      8.4,
+      2.1
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Miryang",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Miryang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      -5.4,
+      -3.6,
+      0.9,
+      6,
+      11.6,
+      17.3,
+      21.8,
+      22,
+      16.6,
+      9,
+      2.1,
+      -3.6
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Miryang",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Miryang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      21.2,
+      33,
+      59,
+      90.5,
+      106.7,
+      155.9,
+      259.3,
+      240.6,
+      144.4,
+      53.3,
+      40.1,
+      22.6
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Miryang",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Miryang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      3.9,
+      4.7,
+      6.8,
+      8.2,
+      8.6,
+      9.5,
+      13.5,
+      12.8,
+      8.7,
+      4.3,
+      5.1,
+      4
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Miryang",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Miryang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      58.9,
+      56.7,
+      58.3,
+      59.7,
+      64,
+      69.5,
+      77.3,
+      76.7,
+      74.7,
+      71.1,
+      68,
+      61.8
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Miryang",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Miryang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      188,
+      184.6,
+      208.2,
+      214.2,
+      225.9,
+      175.5,
+      151.5,
+      172.7,
+      160.6,
+      197.4,
+      174.4,
+      183.9
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Miryang",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Miryang' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      1.58,
+      1.65,
+      1.8,
+      1.8,
+      1.58,
+      1.35,
+      1.35,
+      1.27,
+      1.2,
+      1.27,
+      1.42,
+      1.58
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 1.5 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "jeju": {
+    "TMAX": {
+     "values": [
+      8.6,
+      9.9,
+      13.3,
+      18,
+      22.1,
+      24.9,
+      29.3,
+      30.1,
+      26.1,
+      21.6,
+      16.4,
+      11
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeju_City",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeju_City' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      6.1,
+      6.8,
+      9.8,
+      14.2,
+      18.3,
+      21.7,
+      26.2,
+      27.2,
+      23.3,
+      18.6,
+      13.3,
+      8.3
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeju_City",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeju_City' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      3.7,
+      4,
+      6.6,
+      10.8,
+      15,
+      19.1,
+      23.7,
+      24.8,
+      20.9,
+      15.7,
+      10.4,
+      5.6
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeju_City",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeju_City' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      67.5,
+      57.2,
+      90.6,
+      89.7,
+      95.6,
+      171.2,
+      210.2,
+      272.3,
+      227.8,
+      95.1,
+      69.5,
+      55.6
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeju_City",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeju_City' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      12.2,
+      10.2,
+      10.3,
+      9.4,
+      9.8,
+      11.7,
+      11.8,
+      13.2,
+      11.2,
+      6.7,
+      9.8,
+      11.5
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeju_City",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeju_City' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      64,
+      63.3,
+      63.2,
+      64.8,
+      68.4,
+      77.9,
+      78.3,
+      76.2,
+      73.7,
+      66.4,
+      65,
+      64.1
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeju_City",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeju_City' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      70.2,
+      110,
+      166,
+      196.5,
+      212.2,
+      159.7,
+      189.8,
+      195.1,
+      158.9,
+      173.3,
+      123.7,
+      79.1
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Jeju_City",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Jeju_City' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      3.47,
+      3.63,
+      3.96,
+      3.96,
+      3.47,
+      2.97,
+      2.97,
+      2.81,
+      2.64,
+      2.81,
+      3.14,
+      3.47
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 3.3 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   },
+   "seogwipo": {
+    "TMAX": {
+     "values": [
+      10.8,
+      11.8,
+      14.7,
+      18.6,
+      22.3,
+      24.7,
+      28.3,
+      30.1,
+      27.4,
+      23.5,
+      18.4,
+      13.1
+     ],
+     "unit": "°C",
+     "range": [
+      -20,
+      40
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seogwipo",
+     "note": "월평균 일최고기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seogwipo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TAVG": {
+     "values": [
+      7.2,
+      8.2,
+      11,
+      15,
+      18.8,
+      21.8,
+      25.7,
+      27.2,
+      24.1,
+      19.6,
+      14.6,
+      9.4
+     ],
+     "unit": "°C",
+     "range": [
+      -25,
+      35
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seogwipo",
+     "note": "월평균 기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seogwipo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "TMIN": {
+     "values": [
+      4.1,
+      4.8,
+      7.5,
+      11.6,
+      15.8,
+      19.5,
+      23.8,
+      24.9,
+      21.5,
+      16.4,
+      11.2,
+      6.2
+     ],
+     "unit": "°C",
+     "range": [
+      -30,
+      30
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seogwipo",
+     "note": "월평균 일최저기온. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seogwipo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PRCP": {
+     "values": [
+      60.7,
+      77.9,
+      130.3,
+      187,
+      223.6,
+      267.6,
+      275.8,
+      315.7,
+      208.8,
+      100.4,
+      86.2,
+      55.6
+     ],
+     "unit": "mm",
+     "range": [
+      0,
+      600
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seogwipo",
+     "note": "월 강수량. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seogwipo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "PDAY": {
+     "values": [
+      9.8,
+      9.6,
+      10.5,
+      10.1,
+      10.7,
+      12.8,
+      13.8,
+      14.3,
+      10.9,
+      5.8,
+      8.1,
+      8.9
+     ],
+     "unit": "d",
+     "range": [
+      0,
+      31
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seogwipo",
+     "note": "월 강수일수(0.1 mm 이상). 기상청 기후평년값(1991–2020). 영어 위키백과 'Seogwipo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "RH": {
+     "values": [
+      63,
+      62.5,
+      62.4,
+      65.2,
+      70.6,
+      80.7,
+      86.1,
+      80.9,
+      73.6,
+      64.8,
+      64.7,
+      63.2
+     ],
+     "unit": "%",
+     "range": [
+      20,
+      100
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seogwipo",
+     "note": "월평균 상대습도. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seogwipo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "SUN": {
+     "values": [
+      153.5,
+      157.4,
+      185.8,
+      196.5,
+      203.5,
+      136.3,
+      144.8,
+      187.7,
+      174.7,
+      208.8,
+      166.8,
+      158.8
+     ],
+     "unit": "h",
+     "range": [
+      0,
+      350
+     ],
+     "tag": "SRC",
+     "source": "https://en.wikipedia.org/wiki/Seogwipo",
+     "note": "월 일조시간 합계. 기상청 기후평년값(1991–2020). 영어 위키백과 'Seogwipo' 문서 기후표(출처 표기: Korea Meteorological Administration)를 거쳐 2026-11-12 전사. 12개월 값과 표의 연값 대조 검산 통과."
+    },
+    "WIND": {
+     "values": [
+      2.84,
+      2.97,
+      3.24,
+      3.24,
+      2.84,
+      2.43,
+      2.43,
+      2.3,
+      2.16,
+      2.3,
+      2.57,
+      2.84
+     ],
+     "unit": "m/s",
+     "range": [
+      0,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "월평균 풍속. 평년값 원자료 미확보 → 연평균 2.7 m/s(학습 지식, ±0.5 불확실)에 계절 계수(봄 최대·초가을 최소)를 곱한 추정. 기상청 원자료로 교체 필요."
+    }
+   }
   },
-  "params": {}
+  "generator": {
+   "angstromA": {
+    "value": 0.25,
+    "unit": "-",
+    "range": [
+     0.15,
+     0.35
+    ],
+    "tag": "EST",
+    "source": "FAO Irrigation and Drainage Paper 56 (Allen et al., 1998) 권장 기본값",
+    "note": "일사량 평년값 원자료 미확보 → 일조시간(SRC)에서 Ångström–Prescott 식 Rs = (a + b·n/N)·Ra 로 환산. a는 완전히 흐린 날의 대기 투과율."
+   },
+   "angstromB": {
+    "value": 0.5,
+    "unit": "-",
+    "range": [
+     0.4,
+     0.6
+    ],
+    "tag": "EST",
+    "source": "FAO Irrigation and Drainage Paper 56 (Allen et al., 1998) 권장 기본값",
+    "note": "위와 같음. a+b = 맑은 날 투과율 0.75. 국내 실측 일사와의 대조는 원자료 확보 후 CAL 예정."
+   },
+   "clearSkyFraction": {
+    "value": 0.75,
+    "unit": "-",
+    "range": [
+     0.7,
+     0.8
+    ],
+    "tag": "SRC",
+    "source": "FAO-56 식 37: Rso = (0.75 + 2e-5·z)·Ra",
+    "note": "청천 일사 상한."
+   },
+   "tempSdMonthly": {
+    "values": [
+     3.6,
+     3.5,
+     3.2,
+     3,
+     2.4,
+     1.9,
+     1.9,
+     1.8,
+     2.1,
+     2.6,
+     3.3,
+     3.6
+    ],
+    "unit": "°C",
+    "range": [
+     0.5,
+     6
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "내륙 기준 일평균기온 편차의 표준편차. 중위도 대륙 동안 기후에서 겨울(시베리아 고기압 확장·후퇴)에 크고 여름(북태평양 고기압 지배)에 작다는 일반 경향에 따른 추정. 일별 관측자료로 CAL 필요."
+   },
+   "tempSdClassFactor": {
+    "inland": {
+     "value": 1,
+     "unit": "-",
+     "range": [
+      0.5,
+      1.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "기준."
+    },
+    "coastal": {
+     "value": 0.85,
+     "unit": "-",
+     "range": [
+      0.5,
+      1.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "해양 완충으로 변동 감소."
+    },
+    "highland": {
+     "value": 1.05,
+     "unit": "-",
+     "range": [
+      0.5,
+      1.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "고도·복사냉각으로 변동 약간 증가."
+    },
+    "island": {
+     "value": 0.75,
+     "unit": "-",
+     "range": [
+      0.5,
+      1.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "제주: 해양성으로 변동 최소."
+    }
+   },
+   "arFastPhi": {
+    "value": 0.65,
+    "unit": "-",
+    "range": [
+     0.4,
+     0.85
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일평균기온 편차의 1일 자기상관(종관 규모 3–5일 주기). 중위도 일기온 lag-1 상관의 통상 범위 0.6–0.8의 하단."
+   },
+   "arSlowPhi": {
+    "value": 0.9,
+    "unit": "-",
+    "range": [
+     0.8,
+     0.99
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "1–3주 지속되는 저빈도 편차(블로킹·고기압 정체). 폭염·한파가 며칠씩 이어지게 하는 성분."
+   },
+   "slowVarianceShare": {
+    "value": 0.12,
+    "unit": "-",
+    "range": [
+     0,
+     0.6
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "전체 기온 분산 중 저빈도 성분 몫. 이 값과 arSlowPhi로 월평균기온의 해마다 변동폭이 겨울 약 1.5°C·여름 약 0.8°C(표준편차)가 되도록 잡았다(국내 월평균기온 연변동의 통상 크기)."
+   },
+   "wetPersistence": {
+    "value": 0.25,
+    "unit": "-",
+    "range": [
+     0,
+     0.6
+    ],
+    "tag": "EST",
+    "source": "Geng, Penning de Vries & Supit (1986) Agric. For. Meteorol. 36:363–376",
+    "note": "P(wet|wet) − P(wet|dry). Geng 등의 경험식 P(wet|dry)=0.75·(강수일 비율)과 같은 값. 강수일 비율은 평년값(SRC)에서 온다."
+   },
+   "wetPersistenceJangma": {
+    "value": 0.45,
+    "unit": "-",
+    "range": [
+     0.25,
+     0.8
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "장마 기간에는 정체전선으로 비 오는 날이 더 길게 이어진다. 강수일 비율은 그대로 두고 연속성만 높인다."
+   },
+   "precipWeibullShape": {
+    "value": 0.75,
+    "unit": "-",
+    "range": [
+     0.5,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "강수일 강수량 분포(Weibull) 형상. 1보다 작을수록 약한 비가 많고 가끔 큰비. 일강수량에 통상 쓰이는 범위 0.6–0.9."
+   },
+   "wetDtrFactor": {
+    "value": 0.65,
+    "unit": "-",
+    "range": [
+     0.3,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "비 오는 날 일교차 축소 배율(구름·습윤). 맑은 날은 월평균이 보존되도록 자동으로 커진다."
+   },
+   "dtrNoiseSd": {
+    "value": 0.15,
+    "unit": "-",
+    "range": [
+     0,
+     0.4
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일교차의 날짜별 무작위 변동(상대값)."
+   },
+   "wetTempOffsetMonthly": {
+    "values": [
+     0.8,
+     0.5,
+     0,
+     -0.5,
+     -1,
+     -1.5,
+     -1.5,
+     -1.5,
+     -1,
+     -0.5,
+     0,
+     0.5
+    ],
+    "unit": "°C",
+    "range": [
+     -3,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "비 오는 날 일평균기온 보정. 여름엔 비 오는 날이 서늘하고, 겨울엔 구름·남서류로 오히려 덜 춥다. 맑은 날은 월평균 보존되도록 반대 방향으로 보정."
+   },
+   "wetRhOffset": {
+    "value": 10,
+    "unit": "%p",
+    "range": [
+     0,
+     25
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "비 오는 날 일평균 상대습도 상승폭. 맑은 날은 월평균 보존되도록 낮아진다."
+   },
+   "rhNoiseSd": {
+    "value": 6,
+    "unit": "%p",
+    "range": [
+     0,
+     15
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일평균 상대습도의 날짜별 무작위 변동."
+   },
+   "wetSolarFactor": {
+    "value": 0.4,
+    "unit": "-",
+    "range": [
+     0.15,
+     0.7
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "비 오는 날 일사 배율(기준선 대비). 맑은 날은 월평균 보존되도록 커지되 청천 상한의 92%를 넘지 않게 자동 조정."
+   },
+   "solarNoise": {
+    "value": 0.25,
+    "unit": "-",
+    "range": [
+     0,
+     0.4
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일사의 날짜별 무작위 변동(균등 ±)."
+   },
+   "windWeibullShape": {
+    "value": 2,
+    "unit": "-",
+    "range": [
+     1.5,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일평균 풍속 분포(Weibull) 형상. 풍속에 표준적으로 쓰는 Rayleigh 분포(k=2)."
+   },
+   "windDiurnalAmp": {
+    "value": 0.35,
+    "unit": "-",
+    "range": [
+     0,
+     0.6
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "풍속 일변화 진폭. 오후 2시경 최대, 새벽 최소(혼합층 발달)."
+   },
+   "partonLoganA": {
+    "value": 1.86,
+    "unit": "h",
+    "range": [
+     0.5,
+     3
+    ],
+    "tag": "SRC",
+    "source": "Parton & Logan (1981) Agric. Meteorol. 23:205–216 (150 cm 기온)",
+    "note": "최고기온 발생의 남중 후 지연."
+   },
+   "partonLoganB": {
+    "value": 2.2,
+    "unit": "-",
+    "range": [
+     1,
+     4
+    ],
+    "tag": "SRC",
+    "source": "Parton & Logan (1981) Agric. Meteorol. 23:205–216 (150 cm 기온)",
+    "note": "야간 기온 감쇠 계수."
+   },
+   "partonLoganC": {
+    "value": -0.17,
+    "unit": "h",
+    "range": [
+     -1,
+     2
+    ],
+    "tag": "SRC",
+    "source": "Parton & Logan (1981) Agric. Meteorol. 23:205–216 (150 cm 기온)",
+    "note": "최저기온 발생의 일출 대비 지연. 계수는 미국 콜로라도 실측 기준 — 국내 시간별 자료로 CAL 여지."
+   },
+   "snowRatio": {
+    "value": 1,
+    "unit": "cm/mm",
+    "range": [
+     0.5,
+     2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "강수량 1 mm당 신적설(통상의 10:1 비)."
+   },
+   "snowTempFull": {
+    "value": 0.5,
+    "unit": "°C",
+    "range": [
+     -1,
+     2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일평균기온이 이 값 이하면 전부 눈."
+   },
+   "snowTempNone": {
+    "value": 2.5,
+    "unit": "°C",
+    "range": [
+     1,
+     5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "일평균기온이 이 값 이상이면 전부 비. 사이는 선형."
+   }
+  }
+ }
 }

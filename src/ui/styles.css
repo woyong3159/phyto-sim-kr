@@ -435,3 +435,343 @@ button {
     flex: 0 0 120px;
   }
 }
+
+/* ───────── Phase 1 ───────── */
+:root {
+  --hot: #c2410c;
+  --cold: #1d6fb8;
+  --sun: #b7791f;
+  --rain: #3b82c4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hot: #ff9466;
+    --cold: #7cc0ff;
+    --sun: #f2c14e;
+    --rain: #5aa7e8;
+  }
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* 상단 시간바 */
+.timebar {
+  flex: none;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: calc(var(--sat) + 8px) calc(var(--sar) + 12px) 8px calc(var(--sal) + 12px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.has-timebar .screen {
+  padding-top: 12px;
+}
+
+.update-banner + .timebar {
+  padding-top: 8px;
+}
+
+.timebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.timebar-date {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.timebar-date strong {
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.turns,
+.speeds {
+  display: flex;
+  gap: 4px;
+}
+
+.turns button,
+.speeds button {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.turns button {
+  min-width: 52px;
+  padding: 0 6px;
+}
+
+.turns button:disabled {
+  opacity: 0.5;
+}
+
+.speeds button {
+  flex: 1;
+  min-width: 44px;
+  padding: 0 2px;
+}
+
+.speeds button[aria-pressed='true'] {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #fff;
+}
+
+.pause-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--warn-soft);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.pause-banner strong {
+  color: var(--warn);
+}
+
+/* 외기 카드 */
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wx-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.wx-temp {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-width: 0;
+}
+
+.metric-value {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-unit {
+  margin-left: 3px;
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.wx-temp .metric-unit {
+  font-size: 0.45em;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge-warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.chart {
+  width: 100%;
+  height: 200px;
+}
+
+.chart-short {
+  height: 150px;
+}
+
+/* 새 작기 */
+.region-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.region-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  min-height: 44px;
+  min-width: 56px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.chip[aria-selected='true'] {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #fff;
+}
+
+.region-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.spark {
+  width: 100%;
+  height: auto;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin: 0;
+}
+
+.facts div {
+  display: flex;
+  flex-direction: column;
+}
+
+.facts dt {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.field input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 400;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.switch {
+  flex: none;
+  width: 52px;
+  height: 32px;
+  padding: 0;
+  margin: 6px 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.switch span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s;
+}
+
+.switch[aria-checked='true'] {
+  background: var(--accent-strong);
+}
+
+.switch[aria-checked='true'] span {
+  transform: translateX(20px);
+}
+
+.btn-row {
+  flex-wrap: wrap;
+}
+
+@media (min-width: 900px) {
+  .timebar {
+    align-items: center;
+  }
+
+  .timebar-top,
+  .speeds,
+  .pause-banner {
+    width: 100%;
+    max-width: 960px;
+  }
+}
