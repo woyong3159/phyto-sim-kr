@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "file": "viruses",
+    "title": "바이러스",
+    "plannedPhase": 6,
+    "schemaVersion": 1
+  },
+  "params": {}
+}

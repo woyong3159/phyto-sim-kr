@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "file": "equipment",
+    "title": "장비(난방·환기·보광 등)",
+    "plannedPhase": 1,
+    "schemaVersion": 1
+  },
+  "params": {}
+}

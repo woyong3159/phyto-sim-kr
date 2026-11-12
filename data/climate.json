@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "file": "climate",
+    "title": "기후 평년값(기상청 1991–2020)",
+    "plannedPhase": 1,
+    "schemaVersion": 1
+  },
+  "params": {}
+}

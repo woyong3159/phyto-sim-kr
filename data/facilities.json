@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "file": "facilities",
+    "title": "시설(온실 유형)",
+    "plannedPhase": 1,
+    "schemaVersion": 1
+  },
+  "params": {}
+}

@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "file": "crops",
+    "title": "작물 공통 생리 파라미터",
+    "plannedPhase": 2,
+    "schemaVersion": 1
+  },
+  "params": {}
+}
