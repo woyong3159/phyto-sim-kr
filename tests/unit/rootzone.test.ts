@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createInitialState, createWorld, defaultRzConfig, designRecipe, ecOf, feedOf, fillTank, fingerprint, IONS, psiOf, rawAlkalinity, rawWaters, recipeVec, solveMix, speciate, stepHour, stockMix, thetaCC, waterVec, zero, type IonVec, type SubstrateSys } from '../../src/engine';
 import { uptakeOf } from '../../src/engine/rootzone/plant';
+import { ecTargetAt, phTargetAt } from '../../src/engine/rootzone/setup';
 import { avg, CUC, low, massBalance, scenarios, up } from '../../tools/validate-rootzone';
 import { config, data, world } from './helpers';
 
@@ -105,6 +106,23 @@ describe('근권 화학 — 수식(V1)', () => {
     // 뿌리 활력이 낮으면 능동 흡수가 줄어든다
     const weak = uptakeOf(base, 8, 0, 20, 0.3, 6, null, n, p);
     expect(weak.K).toBeLessThan(u1.K * 0.5);
+  });
+});
+
+describe('근권 — 생육 단계별 EC·pH 프로그램', () => {
+  it('단계별 pH를 비우면 기본 pH, 적으면 그 날부터 바뀐다', () => {
+    const cfg = defaultRzConfig(p, 'cucumber', 'buyeo');
+    const nut = { ...cfg.nut, phTarget: 5.6, ecProgram: [[0, 2.0], [30, 2.4, 5.9], [60, 2.6]] as ([number, number] | [number, number, number])[] };
+    expect(phTargetAt(nut, 10)).toBeCloseTo(5.6);
+    expect(phTargetAt(nut, 40)).toBeCloseTo(5.9);
+    expect(phTargetAt(nut, 70)).toBeCloseTo(5.9); // 세 번째 단계는 pH를 안 적었으니 앞 단계 유지
+    expect(ecTargetAt(nut, 70)).toBeCloseTo(2.6);
+  });
+  it('와사비 담액수경 기본값: 전량 교체 없이 상시 소량 갱신(주 8%)', () => {
+    const cfg = defaultRzConfig(p, 'wasabi', 'buyeo');
+    expect(cfg.irr.renewDays).toBe(0);
+    expect(cfg.irr.bleed).toBeCloseTo(8);
+    expect(cfg.nut.phTarget).toBeCloseTo(6.0);
   });
 });
 

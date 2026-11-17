@@ -8,7 +8,7 @@ import { trap } from '../crop/canopy';
 import { dexp, dpow } from '../dmath';
 import { copy, ecOf, IONS, speciate, zero, type IonVec } from './chem';
 import { allocate, cropDm, initPools, poolTotal, supplyOf, tissue, uptakeOf } from './plant';
-import { ecTargetAt, feedOf, fillTank, psiOf, solveMix, thetaCC, type Feed } from './setup';
+import { ecTargetAt, phTargetAt, feedOf, fillTank, psiOf, solveMix, thetaCC, type Feed } from './setup';
 import type { HydroSys, Lab, RzBalance, RzDay, RzOut, RzSetup, RzState, RzTotal, SubstrateSys } from './types';
 
 const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
@@ -49,7 +49,7 @@ function fillRootzone(world: World, rz: RzState, dap: number, area: number) {
   const sys = sysOf(world, rz.setup);
   const W = capacityOf(world, rz.setup);
   const base = world.raw[rz.setup.water === 'rain' ? rz.setup.backup : rz.setup.water];
-  const nut = rz.nut;
+  const nut = { ...rz.nut, phTarget: phTargetAt(rz.nut, dap) };
   // 자동 보충이면 큰 수경조도 원액을 여러 번 타서 채운다(제한 없음), 아니면 남은 원액만큼만
   const need = W * area;
   const cap = (k: TankKey, D: number) => (!hasRecipe(nut.tanks[k]) ? 0 : nut.autoRefill ? 99 : need > 0 ? (rz.stock[k].left * D) / need : 0);
@@ -335,6 +335,15 @@ export function stepRootzone(state: SimState, world: World, actions: readonly Us
     rz.lastRenew = day;
     refillRootzone = true;
   }
+  // ── 수경 상시 소량 갱신: 매일 아침 양액 일부를 버린다(보충 때 새 급액으로 채워진다) ──
+  if (hydro && living && hod === 9 && (rz.irr.bleed ?? 0) > 0 && rz.W > 0) {
+    const out = rz.W * Math.min(1, (rz.irr.bleed ?? 0) / 100 / 7);
+    for (const i of IONS) bal.ionDrain[i] += rz.ions[i] * out;
+    bal.waterDrain += out;
+    rz.W -= out;
+    td.drain += out;
+    rz.total.drain += out;
+  }
   if (refillRootzone) {
     const { f, won } = fillRootzone(world, rz, dap, area);
     cost('fert', won);
@@ -404,6 +413,7 @@ export function stepRootzone(state: SimState, world: World, actions: readonly Us
 
   // ── 급액: 원수(+회수 배액) + 원액 + 산 ──
   const ecT = ecTargetAt(rz.nut, dap);
+  const nutNow = { ...rz.nut, phTarget: phTargetAt(rz.nut, dap) };
   // 원액 재고(온실 전체 L)로 이번 급액(L/m² × 면적)에 넣을 수 있는 최대 배율
   const lim = (k: TankKey, vol: number, D: number) => (vol > 0 && hasRecipe(rz.nut.tanks[k]) ? (rz.stock[k].left * D) / (vol * area) : 0);
   const src = rz.setup.water === 'rain' ? rz.setup.backup : rz.setup.water;
@@ -445,7 +455,7 @@ export function stepRootzone(state: SimState, world: World, actions: readonly Us
   };
   const solve = (b: ReturnType<typeof baseFor>, L: number, mixWith?: Parameters<typeof solveMix>[7]) => {
     const l = { A: lim('A', L, rz.nut.dilution), B: lim('B', L, rz.nut.dilution), acid: lim('acid', L, rz.nut.acidDilution) };
-    const m = !rz.nut.feedOn ? { rA: 0, rB: 0, ra: 0 } : rz.setup.injector === 'mixing' ? solveMix(b.vec, {}, rz.stock, rz.nut, ecT, chem, l, mixWith) : { rA: Math.min(1, l.A), rB: Math.min(1, l.B), ra: Math.min(1, l.acid) };
+    const m = !rz.nut.feedOn ? { rA: 0, rB: 0, ra: 0 } : rz.setup.injector === 'mixing' ? solveMix(b.vec, {}, rz.stock, nutNow, ecT, chem, l, mixWith) : { rA: Math.min(1, l.A), rB: Math.min(1, l.B), ra: Math.min(1, l.acid) };
     return feedOf(b.vec, {}, rz.stock, rz.nut, m.rA, m.rB, m.ra, chem);
   };
 

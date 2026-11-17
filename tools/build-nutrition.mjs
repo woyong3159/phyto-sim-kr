@@ -151,6 +151,7 @@ const rootzone = {
     doTarget: curve([0.5, 4, 99, 100], 'mg L⁻¹', 'EST', '', '용존산소에 따른 뿌리 활력. 4 mg/L 이하에서 줄고 0.5 mg/L에서 0(일반 수경 지침).'),
     rootO2: E(1.5, 'mg O₂ g⁻¹ h⁻¹', [0.3, 5], '뿌리 건물 1 g의 산소 소비(20°C). 수경 뿌리 호흡 10–20 µmol O₂/g 생체중/h(건물 환산 약 3–6 mg)의 하한 쪽 추정(학습 지식).'),
     rootO2Q10: E(2, '-', [1.5, 3], '뿌리 호흡 Q10.'),
+    bleed: E(8, '% 주⁻¹', [0, 100], '수경 양액 상시 소량 갱신: 일주일에 양액의 8%를 버리고 새 급액으로 채운다. 후쿠시마현 농업시험장(2005) 엽파 담액수경 시험: 갱신 8%/주에서도 수량 감소 없음. 일반 순환 수경의 전량 교체 관행(2–4주)과 견줘 비료·물 낭비가 적다. 와사비 전용 자료는 찾지 못해 이 값을 기본으로 둔다(추정).'),
     pumpFail: E(2, 'h', [0.5, 12], 'NFT 펌프가 멈추면 이 시간 뒤 뿌리가 마르기 시작한다(Phase 6 장비 고장과 연결 예정).'),
   },
   doSat: V([14.62, -0.3898, 0.006969, -5.897e-5], 'mg L⁻¹ (계수: a0 + a1·T + a2·T² + a3·T³)', [-100, 100], 'SRC', S_DO, '담수 포화 용존산소(1기압). 20°C 9.1, 30°C 7.6 mg/L.'),
@@ -314,7 +315,7 @@ const nutrition = {
   defaults: {
     cucumber: { system: 'rockwool', drain: 'open', recipe: 'pbg_cucumber_open', ec: [[0, 2.0], [30, 2.4]], ph: 5.6, irrigation: { mode: 'solar', solarJ: 100, dose: 150, start: 7, end: 17, minGap: 20, drainTarget: 30 } },
     strawberry: { system: 'coir', drain: 'open', recipe: 'yamazaki_strawberry', ec: [[0, 0.8], [40, 1.0]], ph: 5.8, irrigation: { mode: 'solar', solarJ: 250, dose: 60, start: 8, end: 16, minGap: 30, drainTarget: 30 } },
-    wasabi: { system: 'dft', drain: 'closed', recipe: 'wasabi_half', ec: [[0, 1.0]], ph: 6.2, irrigation: { mode: 'continuous', solarJ: 0, dose: 0, start: 0, end: 24, minGap: 0, drainTarget: 0 } },
+    wasabi: { system: 'dft', drain: 'closed', recipe: 'wasabi_half', ec: [[0, 1.0]], ph: 6.0, irrigation: { mode: 'continuous', solarJ: 0, dose: 0, start: 0, end: 24, minGap: 0, drainTarget: 0 } },
     note: E(0, '-', [0, 0], '작물별 기본 근권 구성(EST): 오이 암면 배출식, 딸기 코이어 배출식(국내 야마자키 처방 관행), 와사비 DFT 순환식. EC 프로그램은 [정식 후 일, EC dS/m].'),
   },
 };

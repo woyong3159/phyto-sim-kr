@@ -46,6 +46,8 @@ export interface IrrSettings {
   reuse: number;
   /** 수경: 양액 전량 교체 주기(일, 0 = 교체 안 함) */
   renewDays: number;
+  /** 수경: 상시 소량 갱신 — 일주일에 양액의 몇 %를 버리고 새 급액으로 채울지(0 = 안 함) */
+  bleed?: number;
 }
 
 export interface NutSettings {
@@ -56,8 +58,8 @@ export interface NutSettings {
   dilution: number;
   /** 산 탱크 희석 배율(비례 주입기) */
   acidDilution: number;
-  /** EC 프로그램 [정식 후 일, EC dS/m] — 혼합기에서만 쓴다 */
-  ecProgram: [number, number][];
+  /** EC·pH 프로그램 [정식 후 일, EC dS/m, (pH)] — 혼합기에서만 쓴다. pH를 비우면 phTarget */
+  ecProgram: ([number, number] | [number, number, number])[];
   phTarget: number;
   /** false = 원액을 넣지 않는다(물만 준다) */
   feedOn: boolean;
@@ -299,7 +301,7 @@ export interface WaterProfile {
 export interface RzParams {
   systems: Record<RzSystem, SubstrateSys | HydroSys>;
   substrate: { psiCurve: Curve; afp: Curve; afpTempRef: number; afpTemp: number; tempWeight: number };
-  hydro: { doTarget: Curve; rootO2: number; rootO2Q10: number; pumpFail: number };
+  hydro: { doTarget: Curve; rootO2: number; rootO2Q10: number; pumpFail: number; bleed: number };
   doSat: number[];
   chem: ChemParams;
   chelate: { EDTA: Curve; DTPA: Curve; EDDHA: Curve; free: Curve; decay: number; freeRate: number };

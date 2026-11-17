@@ -5209,7 +5209,7 @@
               1
             ]
           ],
-          "ph": 6.2,
+          "ph": 6,
           "irrigation": {
             "mode": "continuous",
             "solarJ": 0,

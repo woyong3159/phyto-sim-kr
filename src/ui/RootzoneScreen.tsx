@@ -337,6 +337,7 @@ function IrrEditor({ rz, living, cropId, regionId, density }: { rz: RzView; livi
         {hydro ? (
           <>
             <p className="muted small">수경은 양액이 늘 순환합니다. 증산으로 준 만큼 원수와 원액을 보충하고, 혼합기는 탱크 전체를 목표 EC·pH로 맞춥니다.</p>
+            <Num label="상시 소량 갱신" value={irr.bleed ?? 0} min={0} max={100} unit="%/주" hint="일주일에 양액의 몇 %를 버리고 새로 채울지. 0 = 안 함" onChange={(v) => set('bleed', v)} testId="rz-bleed" />
             <Num label="양액 전량 교체 주기" value={irr.renewDays} min={0} max={180} unit="일" hint="0 = 교체 안 함" onChange={(v) => set('renewDays', v)} testId="rz-renew" />
           </>
         ) : (
@@ -465,16 +466,19 @@ function NutEditor({ rz, regionId, cropId, dap, real }: { rz: RzView; regionId: 
       <section className="card setup">
         <h2>급액 기본</h2>
         <Toggle label="원액 주입" checked={nut.feedOn} onChange={(v) => setNut({ ...nut, feedOn: v })} hint="끄면 원수(물)만 준다" />
-        <h3>EC 프로그램(생육 단계별)</h3>
-        {ecProg.map(([d, ec], idx) => (
-          <div key={idx} className="fert-row">
-            <Num label={`정식 후 ${idx === 0 ? '0' : ''}일부터`} value={d} min={0} max={720} unit="일" onChange={(v) => setNut({ ...nut, ecProgram: ecProg.map((x, j) => (j === idx ? [v, x[1]] : x)) as [number, number][] })} />
-            <Num label="목표 EC" value={ec} step={0.1} min={0} max={6} unit="dS/m" onChange={(v) => setNut({ ...nut, ecProgram: ecProg.map((x, j) => (j === idx ? [x[0], v] : x)) as [number, number][] })} testId={idx === 0 ? 'rz-ec0' : undefined} />
-            {idx > 0 && <button type="button" className="btn btn-ghost btn-small" onClick={() => setNut({ ...nut, ecProgram: ecProg.filter((_, j) => j !== idx) })}>빼기</button>}
-          </div>
-        ))}
-        <button type="button" className="btn btn-small" onClick={() => setNut({ ...nut, ecProgram: [...ecProg, [(ecProg[ecProg.length - 1]?.[0] ?? 0) + 30, ecProg[ecProg.length - 1]?.[1] ?? 1.5]] })}>단계 추가</button>
-        <Num label="목표 pH" value={nut.phTarget} step={0.1} min={4} max={8} onChange={(v) => setNut({ ...nut, phTarget: v })} testId="rz-ph" />
+        <h3>EC·pH 프로그램(생육 단계별)</h3>
+        {ecProg.map((row, idx) => {
+          const put = (k: 0 | 1 | 2, v: number) => setNut({ ...nut, ecProgram: ecProg.map((x, j) => (j === idx ? ([x[0], x[1], x[2] ?? nut.phTarget].map((y, q) => (q === k ? v : y)) as [number, number, number]) : x)) });
+          return (
+            <div key={idx} className="fert-row">
+              <Num label={`정식 후 ${idx === 0 ? '0' : ''}일부터`} value={row[0]} min={0} max={720} unit="일" onChange={(v) => put(0, v)} />
+              <Num label="목표 EC" value={row[1]} step={0.1} min={0} max={6} unit="dS/m" onChange={(v) => put(1, v)} testId={idx === 0 ? 'rz-ec0' : undefined} />
+              <Num label="목표 pH" value={row[2] ?? nut.phTarget} step={0.1} min={4} max={8} onChange={(v) => (idx === 0 && row.length < 3 ? setNut({ ...nut, phTarget: v }) : put(2, v))} testId={idx === 0 ? 'rz-ph' : undefined} />
+              {idx > 0 && <button type="button" className="btn btn-ghost btn-small" onClick={() => setNut({ ...nut, ecProgram: ecProg.filter((_, j) => j !== idx) })}>빼기</button>}
+            </div>
+          );
+        })}
+        <button type="button" className="btn btn-small" onClick={() => { const last = ecProg[ecProg.length - 1]; setNut({ ...nut, ecProgram: [...ecProg, [(last?.[0] ?? 0) + 30, last?.[1] ?? 1.5, last?.[2] ?? nut.phTarget]] }); }}>단계 추가</button>
         <p className="muted small">EC·pH 목표는 혼합기에서만 자동으로 맞춥니다. 비례 주입기는 희석 배율대로 들어갑니다.</p>
         <Num label="원액 희석 배율 1:" value={nut.dilution} step={10} min={20} max={500} onChange={(v) => setNut({ ...nut, dilution: v })} />
         <Num label="산 희석 배율 1:" value={nut.acidDilution} step={10} min={20} max={2000} onChange={(v) => setNut({ ...nut, acidDilution: v })} />

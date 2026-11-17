@@ -158,12 +158,12 @@ export interface RzConfig {
 export function defaultRzConfig(p: RzParams, cropId: CropId, regionId: string): RzConfig {
   const d = p.defaults[cropId];
   const setup: RzSetup = { system: d.system, drain: d.drain, disinfect: d.drain === 'closed' ? 'uv' : 'none', aeration: d.system === 'dft', water: 'groundwater', backup: 'groundwater', rainTank: p.tanks.rainVolume, injector: 'mixing', meter: true };
-  const irr: IrrSettings = { mode: d.irrigation.mode, solarJ: d.irrigation.solarJ, timerCount: 8, sensorTheta: 0, dose: d.irrigation.dose, start: d.irrigation.start, end: d.irrigation.end, minGap: d.irrigation.minGap, startShot: true, drainTarget: d.irrigation.drainTarget, autoDrain: true, reuse: 0.5, renewDays: d.system === 'dft' || d.system === 'nft' ? 30 : 0 };
+  const irr: IrrSettings = { mode: d.irrigation.mode, solarJ: d.irrigation.solarJ, timerCount: 8, sensorTheta: 0, dose: d.irrigation.dose, start: d.irrigation.start, end: d.irrigation.end, minGap: d.irrigation.minGap, startShot: true, drainTarget: d.irrigation.drainTarget, autoDrain: true, reuse: 0.5, renewDays: 0, bleed: d.system === 'dft' || d.system === 'nft' ? p.hydro.bleed : 0 };
   const sys = p.systems[d.system];
   if (sys.kind === 'substrate') irr.sensorTheta = Math.round(thetaCC(sys) * 100 * 0.85);
   const raw = rawWaters(p, regionId).groundwater;
   const rec = designRecipe(p, d.recipe, raw, rawAlkalinity(p, regionId, 'groundwater'));
-  const nut: NutSettings = { tanks: rec.tanks, volume: { A: p.tanks.stockVolume, B: p.tanks.stockVolume, acid: p.tanks.acidVolume }, dilution: 100, acidDilution: 200, ecProgram: d.ec.map(([a, b]) => [a, b] as [number, number]), phTarget: d.ph, feedOn: true, autoRefill: true };
+  const nut: NutSettings = { tanks: rec.tanks, volume: { A: p.tanks.stockVolume, B: p.tanks.stockVolume, acid: p.tanks.acidVolume }, dilution: 100, acidDilution: 200, ecProgram: d.ec.map((e) => [...e] as [number, number] | [number, number, number]), phTarget: d.ph, feedOn: true, autoRefill: true };
   return { setup, irr, nut };
 }
 
@@ -286,6 +286,13 @@ export function solveMix(base: IonVec, baseChel: Record<string, number>, stock: 
   a = solveA(r);
   const e = evalAt(r, a);
   return { rA: e.rA, rB: e.rB, ra: e.ra };
+}
+
+/** 생육 단계별 목표 pH(EC 프로그램의 세 번째 값, 없으면 phTarget) */
+export function phTargetAt(nut: NutSettings, dap: number): number {
+  let ph = nut.phTarget;
+  for (const e of nut.ecProgram) if (dap >= e[0] && e.length > 2 && Number.isFinite(e[2])) ph = e[2] as number;
+  return ph;
 }
 
 export function ecTargetAt(nut: NutSettings, dap: number): number {
