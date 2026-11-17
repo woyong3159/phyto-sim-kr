@@ -21,6 +21,7 @@ export interface CoreParams {
     poolFeedbackStart: number;
     poolFeedbackFull: number;
     poolFeedbackMin: number;
+    poolOverflow: number;
     q10: number;
     carbonCH2O: number;
   };
@@ -124,14 +125,53 @@ export interface StrawberryVariety {
   seedlingPrice: number;
 }
 
+export interface WasabiParams {
+  name: string;
+  dev: { tBase: number; tOpt: number; tMax: number };
+  photo: PhotoParams;
+  resp: RespParams;
+  leaf: LeafParams & { dmc: number };
+  rhizome: { rate: number; half: number; rootRatio: number; dmc: number; market: number; premium: number; cv: number };
+  root: { temp: Curve; substrateAir: number; photoShare: number };
+  light: { inhibit: Curve; days: number; scorch: number };
+  offshoot: { rate: number; grow: number; max: number };
+  bolting: { vernTemp: number; vernDays: number; startTemp: number; duration: number; sink: number; dmc: number; pungencyLoss: number };
+  pungency: { age: number; temp: Curve; tempShare: number };
+  damage: DamageParams & { rotTemp: number; rotRate: number };
+  labor: { plant: number; deleaf: number; runner: number; thin: number; harvestBase: number; harvestPerTon: number; remove: number; workHour: number };
+  seedling: { leaves: number; leafCap: number; leafArea: number; leafW: number; stemW: number; rootW: number; shockFactor: number; shock: number };
+  density: number;
+  systems: Record<string, { name: string; sowing: string; harvest: string; transplantMonth: number; transplantDay: number; benchYield: number }>;
+}
+
+export interface WasabiVariety {
+  name: string;
+  type: string;
+  desc: string;
+  real: boolean;
+  pmaxFactor: number;
+  leafArea: number;
+  rhizome: number;
+  pungency: number;
+  heatTol: number;
+  boltDays: number;
+  offshoot: number;
+  monthsToHarvest: number;
+  potentialYield: number;
+  resistance: Record<string, number>;
+  pricePremium: number;
+  seedlingPrice: number;
+}
+
 export interface CropData {
   core: CoreParams;
   cucumber: CucumberParams;
   strawberry: StrawberryParams;
-  varieties: { cucumber: Record<string, CucumberVariety>; strawberry: Record<string, StrawberryVariety> };
+  wasabi: WasabiParams;
+  varieties: { cucumber: Record<string, CucumberVariety>; strawberry: Record<string, StrawberryVariety>; wasabi: Record<string, WasabiVariety> };
 }
 
-export type CropId = 'cucumber' | 'strawberry';
+export type CropId = 'cucumber' | 'strawberry' | 'wasabi';
 export type WorkTask = 'train' | 'deleaf' | 'harvest' | 'pinch' | 'thin' | 'runner' | 'bees';
 export type BeeType = 'none' | 'honey' | 'bumble';
 
@@ -162,6 +202,8 @@ export interface WorkPlan {
   beesEvery?: number;
   /** 체내 질소 수준(1 = 표준). Phase 4(양액) 전까지 사용자가 직접 정하는 임시 입력이다. */
   nLevel?: number;
+  /** ── 와사비 전용 ── 꽃대 수확 간격(일, 0 = 두기) */
+  stalkEvery?: number;
 }
 
 export interface PlantOrder {
@@ -245,6 +287,9 @@ export interface Stress {
   /** 딸기: 휴면(왜화)에 의한 생장 억제, 오늘의 수분 조건(벌 활동 × 꽃가루 활력) */
   dormancy: number;
   pollination: number;
+  /** 와사비: 근권 온도에 따른 뿌리 활력, 강광 장해 */
+  rootTemp: number;
+  light: number;
 }
 
 export interface CropDay {
@@ -297,6 +342,8 @@ export interface CropOut {
   /** 가장 큰 과실의 생체중 g */
   biggestFruit: number;
   stress: Stress;
+  /** 와사비 전용 표시값 */
+  ws?: { rhizomeFresh: number; pungency: number; rootT: number; vern: number; bolting: boolean; offshoots: number; marketShare: number; peakPpfd: number };
   /** 딸기 전용 표시값 */
   sb?: { crowns: number; trusses: number; induction: number; dormancy: number; chill: number; photoperiod: number; runners: number; beeStrength: number; beeActivity: number; nextAnthesis: number; firstFlowerDay: number };
 }
@@ -355,6 +402,8 @@ export interface CropState {
   out: CropOut;
   /** 딸기 전용 상태 */
   sb?: SbState;
+  /** 와사비 전용 상태 */
+  ws?: WsState;
   /** 수확 품질(상품+중품 무게 가중 누적합): 당도·산도·경도·과중 합계와 무게, 기형과 개수 */
   quality?: Quality;
 }
@@ -386,6 +435,32 @@ export interface SbState {
   firstFlowerHour: number;
   /** 탄저병 잠복 위험 지수(Phase 6 인터페이스) */
   anthracnoseRisk: number;
+}
+
+export interface WsState {
+  /** 춘화 누적 일수, 추대 남은 생리일수(0 = 추대 중 아님), 꽃대 건물중 g(포기당) */
+  vern: number;
+  boltLeft: number;
+  stalkW: number;
+  bolts: number;
+  /** 분얼 수(포기당)와 건물중 g */
+  offshoots: number;
+  offshootW: number;
+  /** 낮 최고 PPFD: 오늘 값과 이동평균 */
+  peakToday: number;
+  peakAvg: number;
+  /** 근권 온도 이동평균 */
+  rootT: number;
+  /** 최근 고온 장해 적산(서서히 잊는다) — 고사 원인 판정용 */
+  heatLoad: number;
+  lastOffshoot: number;
+  lastStalk: number;
+  /** 부산물 누적(kg m⁻² 생체중): 잎·엽병, 꽃대 */
+  leafYield: number;
+  stalkYield: number;
+  /** 근경 수확을 마쳤는지, 수확 때의 매운맛 지수 */
+  harvested: boolean;
+  pungency: number;
 }
 
 export interface Quality {

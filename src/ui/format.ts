@@ -76,9 +76,9 @@ export function eventText(e: SimEvent): string {
     case 'equipment':
       return `장비 고장 — ${DEVICE_LABEL[e.code as DeviceId] ?? e.code}`;
     case 'crop': {
-      if (e.code === 'firstHarvest') return `첫 수확 — 정식 후 ${v.toFixed(0)}일`;
+      if (e.code === 'firstHarvest') return `첫 수확(와사비는 근경 수확) — 정식 후 ${v.toFixed(0)}일`;
       if (e.code === 'removed') return `작물 철거 — 누적 수확 ${(v * 1000).toFixed(0)} kg/10a`;
-      const cause: Record<string, string> = { 'dead:frost': '동해', 'dead:chill': '저온 장해', 'dead:heat': '고온 장해', 'dead:collapse': '잎 소실' };
+      const cause: Record<string, string> = { 'dead:frost': '동해', 'dead:chill': '저온 장해', 'dead:heat': '고온 장해', 'dead:collapse': '잎 소실', 'dead:rot': '고온 근권(뿌리 상함)' };
       return `작물 고사 — ${cause[e.code] ?? e.code} (실내 ${v.toFixed(1)}°C)`;
     }
     default:

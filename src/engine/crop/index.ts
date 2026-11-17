@@ -8,12 +8,14 @@ import type { World } from '../world';
 import type { CanopyView } from './canopy';
 import { canopyOfCucumber, defaultPlan, plantCucumber, stepCucumber, type CropEnv } from './cucumber';
 import { canopyOfStrawberry, defaultPlanSb, plantStrawberry, stepStrawberry, type Nursery } from './strawberry';
+import { canopyOfWasabi, defaultPlanWs, plantWasabi, stepWasabi } from './wasabi';
 import type { CropData, CropId, CropState, PlantOrder, WorkPlan, WorkTask } from './types';
 
 export * from './types';
 export { canopyPhoto, diffuseFraction, leafEnv, trap, interp, type CanopyView } from './canopy';
 export { beta, defaultPlan } from './cucumber';
 export { defaultPlanSb, inductionRate } from './strawberry';
+export { defaultPlanWs } from './wasabi';
 
 /** Phase 4 인터페이스: 근권이 계산하기 전까지 수분 가용도와 양분 스트레스는 1(충분)이다. */
 export function rootzoneSupply(_state: SimState): { water: number; nutrient: number } {
@@ -29,12 +31,17 @@ export function cropCanopy(state: SimState, world: World): CanopyView | null {
     const v = d.varieties.strawberry[c.varietyId];
     return v ? canopyOfStrawberry(c, d.core, d.strawberry, v, water) : null;
   }
+  if (c.cropId === 'wasabi') {
+    const v = d.varieties.wasabi[c.varietyId];
+    return v ? canopyOfWasabi(c, d.core, d.wasabi, v, water) : null;
+  }
   const v = d.varieties.cucumber[c.varietyId];
   return v ? canopyOfCucumber(c, d.core, d.cucumber, v, water) : null;
 }
 
 export function defaultOrder(d: CropData, varietyId = 'cheongchun', system?: string, cropId?: CropId): PlantOrder {
-  const crop: CropId = cropId ?? (varietyId in d.varieties.strawberry ? 'strawberry' : 'cucumber');
+  const crop: CropId = cropId ?? (varietyId in d.varieties.strawberry ? 'strawberry' : varietyId in d.varieties.wasabi ? 'wasabi' : 'cucumber');
+  if (crop === 'wasabi') return { cropId: 'wasabi', varietyId: varietyId in d.varieties.wasabi ? varietyId : 'daruma', system: system ?? 'hydro', density: d.wasabi.density, plan: defaultPlanWs() };
   if (crop === 'strawberry') {
     const id = varietyId in d.varieties.strawberry ? varietyId : 'seolhyang';
     return { cropId: 'strawberry', varietyId: id, system: system ?? 'forcing', density: d.strawberry.density, plan: defaultPlanSb(), seedling: 'buy', nightChill: false };
@@ -46,7 +53,7 @@ export function defaultOrder(d: CropData, varietyId = 'cheongchun', system?: str
 function envOf(state: SimState, world: World): CropEnv {
   const o = state.gh.out;
   const rz = rootzoneSupply(state);
-  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, rh: o.rhIn, lamp: o.light, solar: state.weather.now.solarW, area: state.gh.setup.area, water: rz.water, nutrient: rz.nutrient };
+  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, rh: o.rhIn, tSol: o.tSolution, lamp: o.light, solar: state.weather.now.solarW, area: state.gh.setup.area, water: rz.water, nutrient: rz.nutrient };
 }
 
 function plant(state: SimState, world: World, order: PlantOrder): CropState | null {
@@ -64,6 +71,10 @@ function plant(state: SimState, world: World, order: PlantOrder): CropState | nu
     }
     return plantStrawberry(order, d.strawberry, v, envOf(state, world), nursery);
   }
+  if (order.cropId === 'wasabi') {
+    const wv = d.varieties.wasabi[order.varietyId];
+    return wv ? plantWasabi(order, d.wasabi, wv, envOf(state, world)) : null;
+  }
   const v = d.varieties.cucumber[order.varietyId];
   if (order.cropId !== 'cucumber' || !v) return null;
   return plantCucumber(order, d.cucumber, v, envOf(state, world));
@@ -71,7 +82,7 @@ function plant(state: SimState, world: World, order: PlantOrder): CropState | nu
 
 export const cropModule: EngineModule = {
   id: 'crop',
-  title: '생육 코어 + 작물별 모듈(오이·딸기; 와사비는 3c)',
+  title: '생육 코어 + 작물별 모듈(오이·딸기·와사비)',
   plannedPhase: 3,
   implemented: true,
   step(state, { world, actions }): SimState {
@@ -88,10 +99,10 @@ export const cropModule: EngineModule = {
     }
     const plan = world.config.crop;
     const d = world.crops;
-    if (!crop && plan && state.hour === plan.day * 24 + (plan.order.cropId === 'strawberry' ? d.strawberry : d.cucumber).labor.workHour) crop = plant(state, world, plan.order);
+    if (!crop && plan && state.hour === plan.day * 24 + d[plan.order.cropId].labor.workHour) crop = plant(state, world, plan.order);
     if (crop && !crop.dead) {
       const env = envOf(state, world);
-      const r = crop.cropId === 'strawberry' ? stepStrawberry(crop, d.core, d.strawberry, d.varieties.strawberry[crop.varietyId]!, env, works) : stepCucumber(crop, d.core, d.cucumber, d.varieties.cucumber[crop.varietyId]!, env, works);
+      const r = crop.cropId === 'wasabi' ? stepWasabi(crop, d.core, d.wasabi, d.varieties.wasabi[crop.varietyId]!, env, works) : crop.cropId === 'strawberry' ? stepStrawberry(crop, d.core, d.strawberry, d.varieties.strawberry[crop.varietyId]!, env, works) : stepCucumber(crop, d.core, d.cucumber, d.varieties.cucumber[crop.varietyId]!, env, works);
       crop = r.crop;
       events.push(...r.events);
     }

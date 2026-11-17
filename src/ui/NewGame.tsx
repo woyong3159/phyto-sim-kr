@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ENGINE_DATA } from '../data';
-import { defaultSetup, sunDay, MONTH_DAYS, type GhSetup, type PlantOrder } from '../engine';
-import { OrderEditor, defaultOrderUi } from './CropScreen';
+import { defaultSettings, defaultSetup, sunDay, MONTH_DAYS, type GhSetup, type PlantOrder } from '../engine';
+import { CROPS, OrderEditor, defaultOrderUi } from './CropScreen';
 import { Num, Toggle } from './Num';
 import { SetupEditor } from './SetupEditor';
 import { session, todayKst } from '../sim/session';
@@ -129,7 +129,7 @@ export function NewGame({ onDone, onCancel }: { onDone?: () => void; onCancel?: 
   const validDate = /^\d{4}-\d{2}-\d{2}$/.test(startDate);
 
   const start = async () => {
-    await session.newGame({ name: name || `${st.name} ${startDate}`, regionId, startDate, seed, setup, crop: withCrop ? { day: plantDay, order } : null });
+    await session.newGame({ name: name || `${st.name} ${startDate}`, regionId, startDate, seed, setup, settings: withCrop ? { ...defaultSettings(), ...CROPS[order.cropId].recommend } : undefined, crop: withCrop ? { day: plantDay, order } : null });
     onDone?.();
   };
 
@@ -189,6 +189,9 @@ export function NewGame({ onDone, onCancel }: { onDone?: () => void; onCancel?: 
         {withCrop && (
           <>
             <OrderEditor value={order} onChange={setOrder} />
+            <p className="muted small">
+              제어 설정은 이 작물의 표준값으로 시작합니다(난방 주간 {CROPS[order.cropId].recommend.heatDay}°C / 야간 {CROPS[order.cropId].recommend.heatNight}°C, 환기 {CROPS[order.cropId].recommend.ventTemp}°C부터). 시작한 뒤 "환경 → 제어"에서 바꿀 수 있습니다.
+            </p>
             <Num label="정식일" value={plantDay} min={0} max={120} unit="일째" hint="작기 시작일로부터(아침 7시에 심음)" onChange={setPlantDay} testId="plant-day" />
           </>
         )}

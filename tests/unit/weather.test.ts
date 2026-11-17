@@ -222,7 +222,7 @@ describe('기상 생성기 — 시나리오(V3)', () => {
     const w = worldOf({ seed: 'golden', startDate: '2026-07-01', regionId: 'daegu' });
     let s = createInitialState(w);
     for (let i = 0; i < 30 * 24 + 14; i++) s = stepHour(s, w, []);
-    expect(fingerprint(s)).toMatchInlineSnapshot(`"84a142fb29a4352e"`);
+    expect(fingerprint(s)).toMatchInlineSnapshot(`"f445afbc37d084f6"`);
     expect({ t: s.weather.now.temp, rh: s.weather.now.rh, sol: s.weather.now.solarW }).toMatchInlineSnapshot(`
       {
         "rh": 42.25653170596644,

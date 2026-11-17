@@ -151,6 +151,17 @@
           "source": "",
           "note": "되먹임 억제 때 Pmax 하한 배수."
         },
+        "poolOverflow": {
+          "value": 2,
+          "unit": "-",
+          "range": [
+            1.2,
+            5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저장 당이 poolFeedbackFull의 이 배수를 넘으면 광합성이 더 줄기 시작해 그 1.5배에서 0이 된다(저장 한계: 당이 무한히 쌓이지 않게 하는 상한)."
+        },
         "q10": {
           "value": 2,
           "unit": "-",
@@ -227,6 +238,74 @@
     },
     "cucumber": {
       "name": "오이",
+      "recommend": {
+        "heatDay": {
+          "value": 18,
+          "unit": "°C",
+          "range": [
+            5,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "heatNight": {
+          "value": 14,
+          "unit": "°C",
+          "range": [
+            5,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "heatPreDawn": {
+          "value": 15,
+          "unit": "°C",
+          "range": [
+            5,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "ventTemp": {
+          "value": 28,
+          "unit": "°C",
+          "range": [
+            15,
+            35
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "ventBand": {
+          "value": 4,
+          "unit": "°C",
+          "range": [
+            1,
+            10
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "rhMax": {
+          "value": 90,
+          "unit": "%",
+          "range": [
+            60,
+            100
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        }
+      },
       "dev": {
         "tBase": {
           "value": 10,
@@ -1587,6 +1666,74 @@
     },
     "strawberry": {
       "name": "딸기",
+      "recommend": {
+        "heatDay": {
+          "value": 10,
+          "unit": "°C",
+          "range": [
+            0,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "heatNight": {
+          "value": 8,
+          "unit": "°C",
+          "range": [
+            0,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "heatPreDawn": {
+          "value": 8,
+          "unit": "°C",
+          "range": [
+            0,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "ventTemp": {
+          "value": 25,
+          "unit": "°C",
+          "range": [
+            15,
+            35
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "ventBand": {
+          "value": 4,
+          "unit": "°C",
+          "range": [
+            1,
+            10
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "rhMax": {
+          "value": 85,
+          "unit": "%",
+          "range": [
+            60,
+            100
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        }
+      },
       "dev": {
         "tBase": {
           "value": 3,
@@ -3216,6 +3363,1269 @@
             "tag": "EST",
             "source": "",
             "note": "반촉성 10a 수량 추정(조사 수치 미확인, 벤치마크 판정에는 쓰지 않는다)."
+          }
+        }
+      }
+    },
+    "wasabi": {
+      "name": "와사비",
+      "recommend": {
+        "heatDay": {
+          "value": 8,
+          "unit": "°C",
+          "range": [
+            0,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "heatNight": {
+          "value": 8,
+          "unit": "°C",
+          "range": [
+            0,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "heatPreDawn": {
+          "value": 8,
+          "unit": "°C",
+          "range": [
+            0,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "ventTemp": {
+          "value": 18,
+          "unit": "°C",
+          "range": [
+            10,
+            35
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "ventBand": {
+          "value": 4,
+          "unit": "°C",
+          "range": [
+            1,
+            10
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "rhMax": {
+          "value": 95,
+          "unit": "%",
+          "range": [
+            60,
+            100
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "shadeOnW": {
+          "value": 250,
+          "unit": "W m⁻²",
+          "range": [
+            0,
+            1000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "coolTemp": {
+          "value": 22,
+          "unit": "°C",
+          "range": [
+            15,
+            35
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "fogTemp": {
+          "value": 22,
+          "unit": "°C",
+          "range": [
+            15,
+            35
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "fogRhMax": {
+          "value": 90,
+          "unit": "%",
+          "range": [
+            50,
+            100
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "solutionMin": {
+          "value": 12,
+          "unit": "°C",
+          "range": [
+            5,
+            25
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        },
+        "solutionMax": {
+          "value": 17,
+          "unit": "°C",
+          "range": [
+            10,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작물 표준 제어 설정(새 작기를 이 작물로 시작할 때의 기본값). 검증의 표준 관리와 같다."
+        }
+      },
+      "dev": {
+        "tBase": {
+          "value": 2,
+          "unit": "°C",
+          "range": [
+            0,
+            5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "발육 기준온도. 겨울 야간 5°C에서 잎 생장이 매우 느리다는 보고에 맞춤."
+        },
+        "tOpt": {
+          "value": 16,
+          "unit": "°C",
+          "range": [
+            12,
+            18
+          ],
+          "tag": "SRC",
+          "source": "최선영 등 (1995) 온도 및 차광이 고추냉이의 생장과 주요 병해발생에 미치는 영향. 생물환경조절학회지: 생장상 10·17·23°C 가운데 17°C가 최적, 75% 차광에서 근경이 가장 좋음, 고온에서 묵입병·무름병 증가",
+          "note": "발육 최적온도. 국내 생장상 시험 17°C 최적, 해외 8–18°C(물재배 12–15°C)."
+        },
+        "tMax": {
+          "value": 28,
+          "unit": "°C",
+          "range": [
+            25,
+            30
+          ],
+          "tag": "EST",
+          "source": "HortScience 60(11):2094 (2025) Hot Pursuit: 밭재배 6–20°C(최적 8–18°C), 물재배 12–15°C, VPD 2.0 kPa 이하, 광 500–830 μmol m⁻² s⁻¹에서 양호, Vcmax 74·Jmax 108(21°C)",
+          "note": "발육 상한온도(생육 정지). 20°C가 재배 한계, 27°C(80°F) 안팎에서 생장이 멈춘다는 재배 자료에 근거."
+        }
+      },
+      "photo": {
+        "pmax": {
+          "value": 13,
+          "unit": "μmol CO2 m⁻² s⁻¹",
+          "range": [
+            7,
+            18
+          ],
+          "tag": "EST",
+          "source": "HortScience 60(11):2094 (2025) Hot Pursuit: 밭재배 6–20°C(최적 8–18°C), 물재배 12–15°C, VPD 2.0 kPa 이하, 광 500–830 μmol m⁻² s⁻¹에서 양호, Vcmax 74·Jmax 108(21°C)",
+          "note": "성엽의 광포화 총광합성. Vcmax 74(21°C) 보고에서 환산하면 순광합성 12–15 수준이나 음지 적응 식물임을 고려해 낮게 잡았다."
+        },
+        "pmaxTemp": {
+          "values": [
+            0,
+            10,
+            20,
+            30
+          ],
+          "unit": "°C(엽온)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "최선영 등 (1995) 온도 및 차광이 고추냉이의 생장과 주요 병해발생에 미치는 영향. 생물환경조절학회지: 생장상 10·17·23°C 가운데 17°C가 최적, 75% 차광에서 근경이 가장 좋음, 고온에서 묵입병·무름병 증가",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 냉량성: 10–20°C 평탄, 30°C에서 0."
+        },
+        "ageX": {
+          "values": [
+            0,
+            10,
+            40,
+            70,
+            100
+          ],
+          "unit": "pd",
+          "range": [
+            0,
+            300
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "엽령별 Pmax 배수의 x축."
+        },
+        "ageY": {
+          "values": [
+            0.5,
+            1,
+            1,
+            0.5,
+            0.15
+          ],
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "엽령별 Pmax 배수."
+        },
+        "kDiffuse": {
+          "value": 0.7,
+          "unit": "-",
+          "range": [
+            0.4,
+            0.9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "산란광 흡광계수. 넓은 심장형 잎이 수평으로 펼쳐진다."
+        },
+        "kLaiSlope": {
+          "value": 0.02,
+          "unit": "LAI⁻¹",
+          "range": [
+            0,
+            0.1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "LAI 증가에 따른 감소."
+        },
+        "kMin": {
+          "value": 0.55,
+          "unit": "-",
+          "range": [
+            0.3,
+            0.8
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "흡광계수 하한."
+        },
+        "lmaExp": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 두께와 면적당 광합성 능력의 관계 지수."
+        },
+        "stomatalMin": {
+          "value": 100,
+          "unit": "s m⁻¹",
+          "range": [
+            60,
+            250
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기공저항 최솟값(추정)."
+        }
+      },
+      "resp": {
+        "leaf": {
+          "value": 0.03,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.015,
+            0.04
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "잎·엽병 유지호흡 계수(25°C)."
+        },
+        "stem": {
+          "value": 0.01,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.005,
+            0.02
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "근경(저장기관) 유지호흡 계수."
+        },
+        "root": {
+          "value": 0.01,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.005,
+            0.02
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "뿌리 유지호흡 계수."
+        },
+        "fruit": {
+          "value": 0.01,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.005,
+            0.02
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "꽃대 유지호흡 계수."
+        },
+        "cvfLeaf": {
+          "value": 0.72,
+          "unit": "g g⁻¹",
+          "range": [
+            0.65,
+            0.78
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "잎 전환효율."
+        },
+        "cvfStem": {
+          "value": 0.74,
+          "unit": "g g⁻¹",
+          "range": [
+            0.65,
+            0.8
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 전환효율(전분·섬유질 저장기관)."
+        },
+        "cvfRoot": {
+          "value": 0.72,
+          "unit": "g g⁻¹",
+          "range": [
+            0.65,
+            0.78
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "뿌리 전환효율."
+        },
+        "cvfFruit": {
+          "value": 0.72,
+          "unit": "g g⁻¹",
+          "range": [
+            0.65,
+            0.8
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃대 전환효율."
+        },
+        "carbonVeg": {
+          "value": 0.45,
+          "unit": "g C g⁻¹",
+          "range": [
+            0.4,
+            0.48
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "건물 탄소 비율."
+        },
+        "carbonFruit": {
+          "value": 0.45,
+          "unit": "g C g⁻¹",
+          "range": [
+            0.4,
+            0.48
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃대 탄소 비율."
+        }
+      },
+      "leaf": {
+        "rate": {
+          "value": 0.16,
+          "unit": "매 pd⁻¹",
+          "range": [
+            0.08,
+            0.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "엽 출현 속도. 적온에서 6–7일에 1매(추정)."
+        },
+        "maxArea": {
+          "value": 0.022,
+          "unit": "m² 매⁻¹",
+          "range": [
+            0.01,
+            0.04
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "심장형 잎 한 장의 잠재 최대 면적(지름 16–18 cm)."
+        },
+        "expandDays": {
+          "value": 16,
+          "unit": "pd",
+          "range": [
+            8,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎이 다 펴지는 생리일수."
+        },
+        "sla": {
+          "value": 0.011,
+          "unit": "m² g⁻¹",
+          "range": [
+            0.007,
+            0.018
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "엽신 + 엽병 건물 기준 비엽면적. 긴 엽병(30–50 cm)이 엽신과 비슷한 무게라 낮다."
+        },
+        "slaDliRef": {
+          "value": 8,
+          "unit": "mol m⁻² d⁻¹",
+          "range": [
+            3,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA 기준 일적산광량(차광 하)."
+        },
+        "slaLightExp": {
+          "value": 0.2,
+          "unit": "-",
+          "range": [
+            0,
+            0.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "약광에서 잎이 얇아지고 엽병이 길어지는 정도. 35 μmol의 약광에서 줄기 신장이 촉진된다는 보고와 같은 방향."
+        },
+        "slaTemp": {
+          "value": 0.01,
+          "unit": "°C⁻¹",
+          "range": [
+            0,
+            0.04
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온에서 잎이 얇아지는 정도."
+        },
+        "slaTempRef": {
+          "value": 14,
+          "unit": "°C",
+          "range": [
+            10,
+            18
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA 기준 평균기온."
+        },
+        "slaMin": {
+          "value": 0.008,
+          "unit": "m² g⁻¹",
+          "range": [
+            0.005,
+            0.012
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA 하한."
+        },
+        "slaMax": {
+          "value": 0.017,
+          "unit": "m² g⁻¹",
+          "range": [
+            0.012,
+            0.025
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA 상한."
+        },
+        "life": {
+          "value": 75,
+          "unit": "pd",
+          "range": [
+            40,
+            130
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 수명."
+        },
+        "senescence": {
+          "value": 0.07,
+          "unit": "pd⁻¹",
+          "range": [
+            0.02,
+            0.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "수명이 지난 잎의 면적 감소율."
+        },
+        "shadeLight": {
+          "value": 0.04,
+          "unit": "-",
+          "range": [
+            0.01,
+            0.15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "그늘 노화가 시작되는 상대 광."
+        },
+        "shadeSenescence": {
+          "value": 0.03,
+          "unit": "pd⁻¹",
+          "range": [
+            0,
+            0.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "그늘 노화율."
+        },
+        "starveLoss": {
+          "value": 0.05,
+          "unit": "h⁻¹",
+          "range": [
+            0,
+            0.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기아 상태 하엽 소모율."
+        },
+        "acclimDays": {
+          "value": 7,
+          "unit": "d",
+          "range": [
+            3,
+            14
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광·온도 이력 이동평균 기간."
+        },
+        "dmc": {
+          "value": 0.11,
+          "unit": "g g⁻¹",
+          "range": [
+            0.07,
+            0.16
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎·엽병 건물률(수확 생체중 환산)."
+        }
+      },
+      "rhizome": {
+        "rate": {
+          "value": 0.075,
+          "unit": "g 건물 pd⁻¹",
+          "range": [
+            0.02,
+            0.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "다 자란 포기의 근경 잠재 비대 속도. 적온 관리 18개월에 생체중 60–70 g(국내 물재배 상품 근경 40 g 이상, 일본 수경 2년 60 g)에 맞춘 추정."
+        },
+        "half": {
+          "value": 90,
+          "unit": "pd",
+          "range": [
+            30,
+            250
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 비대 속도가 절반에 이르는 정식 후 생리일수(초기에는 잎을 먼저 키운다)."
+        },
+        "rootRatio": {
+          "value": 0.35,
+          "unit": "-",
+          "range": [
+            0.15,
+            0.7
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "뿌리 잠재 생장 = 잎 잠재 생장 × 이 비율. 물재배 와사비는 뿌리가 많다."
+        },
+        "dmc": {
+          "value": 0.22,
+          "unit": "g g⁻¹",
+          "range": [
+            0.15,
+            0.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 건물률."
+        },
+        "market": {
+          "value": 40,
+          "unit": "g",
+          "range": [
+            30,
+            60
+          ],
+          "tag": "SRC",
+          "source": "고추냉이 물재배시 묘크기가 생육 및 수량에 미치는 영향 (1997) 한국약용작물학회지: 상품 근경 40 g 이상, 분주묘 근경 수량 567–782 kg/10a(상품률 54–87%)",
+          "note": "상품 근경 기준 생체중."
+        },
+        "premium": {
+          "value": 80,
+          "unit": "g",
+          "range": [
+            60,
+            150
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "특품 근경 기준 생체중."
+        },
+        "cv": {
+          "value": 0.3,
+          "unit": "-",
+          "range": [
+            0.1,
+            0.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "포기 사이 근경 무게의 변이계수. 평균 한 포기 계산에서 등급 비율을 나누는 데 쓴다(국내 시험의 상품률 54–87% 범위에 맞춘 추정)."
+        }
+      },
+      "root": {
+        "temp": {
+          "values": [
+            3,
+            10,
+            20,
+            27
+          ],
+          "unit": "°C(근권 온도)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "Hassan et al. (2001) Effects of solution temperature on the growth and development of wasabi grown in NFT (Kagawa Univ.): 13°C에서 엽수·분얼 최다, 19°C에서 뿌리 생장·생체중 우세; Environ. Control Biol. 43(3):181 (2005): 겨울 야간 최저 5°C에서 잎 생장 지연·8°C에서 회복, 일장 연장이 회복 촉진, 배지 온도 13.5–28.1°C로 연중 재배, 2년에 근경 약 60 g",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 근권(양액) 온도에 따른 뿌리 활력. 문헌이 엇갈린다: NFT 시험은 13°C(엽수·분얼)와 19°C(뿌리·생체중)가 각각 유리했고, 일본 연중 수경은 배지 13.5–28.1°C에서도 재배가 가능했다. 그래서 넓은 평탄부(10–20°C)를 둔 추정값이다."
+        },
+        "substrateAir": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "배지 재배에서 근권 온도 = 양액 온도와 실내 평균기온의 가중 평균(이 값이 기온의 비중). 수경(NFT/DFT)은 양액 온도 그대로."
+        },
+        "photoShare": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "뿌리 활력 저하가 광합성에 미치는 비중(나머지는 생장에만 작용)."
+        }
+      },
+      "light": {
+        "inhibit": {
+          "values": [
+            -100000,
+            -99999,
+            700,
+            1500
+          ],
+          "unit": "μmol m⁻² s⁻¹(낮 최고 PPFD의 이동평균)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "최선영 등 (1995) 온도 및 차광이 고추냉이의 생장과 주요 병해발생에 미치는 영향. 생물환경조절학회지: 생장상 10·17·23°C 가운데 17°C가 최적, 75% 차광에서 근경이 가장 좋음, 고온에서 묵입병·무름병 증가; HortScience 60(11):2094 (2025) Hot Pursuit: 밭재배 6–20°C(최적 8–18°C), 물재배 12–15°C, VPD 2.0 kPa 이하, 광 500–830 μmol m⁻² s⁻¹에서 양호, Vcmax 74·Jmax 108(21°C)",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 강광 장해(광저해·엽소)에 의한 광합성 능력 감소. 국내 시험은 75% 차광이 최적, 미국 온실 시험은 500–830 μmol에서 양호 → 700까지는 영향 없고 그 위에서 감소하도록 잡았다."
+        },
+        "days": {
+          "value": 5,
+          "unit": "d",
+          "range": [
+            1,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "강광 이력 이동평균 기간."
+        },
+        "scorch": {
+          "value": 0.0012,
+          "unit": "h⁻¹",
+          "range": [
+            0,
+            0.01
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "강광 장해가 최대일 때 시간당 잃는 엽면적 비율(광저해가 이어지면 잎이 탈색·고사한다). 추정값."
+        }
+      },
+      "offshoot": {
+        "rate": {
+          "value": 0.012,
+          "unit": "개 pd⁻¹",
+          "range": [
+            0,
+            0.05
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "분얼(자구) 발생 속도. 정식 후 half 생리일수가 지나야 나오기 시작한다."
+        },
+        "grow": {
+          "value": 0.015,
+          "unit": "g pd⁻¹ 개⁻¹",
+          "range": [
+            0.005,
+            0.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "분얼 하나가 어미 포기에서 가져가는 잠재 생장 속도(분얼도 제 잎으로 광합성을 하므로 순수요만 셈한다)."
+        },
+        "max": {
+          "value": 6,
+          "unit": "개",
+          "range": [
+            2,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한 포기에 붙어 있을 수 있는 분얼 수 상한."
+        }
+      },
+      "bolting": {
+        "vernTemp": {
+          "value": 10,
+          "unit": "°C",
+          "range": [
+            5,
+            13
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "춘화에 셈하는 일평균기온 상한. 와사비 개화 생리는 잘 밝혀지지 않아 추정이다(저온과 일장이 관여)."
+        },
+        "vernDays": {
+          "value": 40,
+          "unit": "d",
+          "range": [
+            15,
+            90
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "추대에 필요한 저온 일수."
+        },
+        "startTemp": {
+          "value": 8,
+          "unit": "°C",
+          "range": [
+            4,
+            12
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "춘화가 끝난 뒤 꽃대가 올라오기 시작하는 일평균기온."
+        },
+        "duration": {
+          "value": 35,
+          "unit": "pd",
+          "range": [
+            15,
+            70
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃대 신장·개화가 이어지는 생리일수."
+        },
+        "sink": {
+          "value": 0.12,
+          "unit": "g pd⁻¹",
+          "range": [
+            0.03,
+            0.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃대의 잠재 생장 속도(포기당). 이 기간에는 근경 비대와 경합한다."
+        },
+        "dmc": {
+          "value": 0.1,
+          "unit": "g g⁻¹",
+          "range": [
+            0.06,
+            0.15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃대 건물률."
+        },
+        "pungencyLoss": {
+          "value": 0.25,
+          "unit": "-",
+          "range": [
+            0,
+            0.6
+          ],
+          "tag": "EST",
+          "source": "Shizuoka Agric. Exp. Stn. Bull. 46 (2001): 알릴이소티오시아네이트(AITC) 발생량은 근경의 시니그린 함량에 비례; Breeding Science 73(3):237 (2023): 봄에 함량이 낮음; 문정섭 등 (2004): 18개월 물재배 근경 AITC 0.777 mg/g",
+          "note": "추대기 매운맛 지수 감소 비율. 봄에 AITC 함량이 낮다는 보고에 근거."
+        }
+      },
+      "pungency": {
+        "age": {
+          "value": 250,
+          "unit": "pd",
+          "range": [
+            80,
+            500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "매운맛 지수가 품종 최대값의 63%에 이르는 정식 후 생리일수(오래 키울수록 맵다)."
+        },
+        "temp": {
+          "values": [
+            -100000,
+            -99999,
+            16,
+            26
+          ],
+          "unit": "°C(최근 평균기온)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "Shizuoka Agric. Exp. Stn. Bull. 46 (2001): 알릴이소티오시아네이트(AITC) 발생량은 근경의 시니그린 함량에 비례; Breeding Science 73(3):237 (2023): 봄에 함량이 낮음; 문정섭 등 (2004): 18개월 물재배 근경 AITC 0.777 mg/g",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 서늘할수록 매운맛(시니그린)이 높다. 방향은 문헌, 수치는 추정."
+        },
+        "tempShare": {
+          "value": 0.3,
+          "unit": "-",
+          "range": [
+            0,
+            0.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "온도가 매운맛 지수에 미치는 최대 비중."
+        }
+      },
+      "damage": {
+        "chillTemp": {
+          "value": -3,
+          "unit": "°C",
+          "range": [
+            -6,
+            0
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 저온 장해 시작 온도(내한성 −5°C 안팎)."
+        },
+        "chillRate": {
+          "value": 0.004,
+          "unit": "h⁻¹ °C⁻¹",
+          "range": [
+            0.001,
+            0.02
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해로 시간당 잃는 엽면적 비율."
+        },
+        "frostTemp": {
+          "value": -8,
+          "unit": "°C",
+          "range": [
+            -15,
+            -5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 동사 온도."
+        },
+        "frostRate": {
+          "value": 0.3,
+          "unit": "h⁻¹",
+          "range": [
+            0.05,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "동사 때 시간당 고사 비율."
+        },
+        "heatTemp": {
+          "value": 29,
+          "unit": "°C",
+          "range": [
+            26,
+            33
+          ],
+          "tag": "EST",
+          "source": "최선영 등 (1995) 온도 및 차광이 고추냉이의 생장과 주요 병해발생에 미치는 영향. 생물환경조절학회지: 생장상 10·17·23°C 가운데 17°C가 최적, 75% 차광에서 근경이 가장 좋음, 고온에서 묵입병·무름병 증가",
+          "note": "고온 장해 시작 실내기온(엽온이 아니라 기온 기준). 23°C에서도 생장이 뚜렷이 줄고 병이 늘었다는 국내 시험 + 27°C 안팎 생육 정지."
+        },
+        "heatRate": {
+          "value": 0.004,
+          "unit": "h⁻¹ °C⁻¹",
+          "range": [
+            0.001,
+            0.03
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 장해로 시간당 잃는 엽면적 비율."
+        },
+        "rotTemp": {
+          "value": 24,
+          "unit": "°C",
+          "range": [
+            20,
+            28
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "이 근권 온도 이상이 이어지면 근경·뿌리가 상한다(무름·묵입병 위험은 Phase 6에서 따로 계산, 여기서는 생리적 손상만)."
+        },
+        "rotRate": {
+          "value": 0.0004,
+          "unit": "h⁻¹ °C⁻¹",
+          "range": [
+            0,
+            0.005
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 근권에서 시간당 포기가 죽는 비율."
+        }
+      },
+      "labor": {
+        "plant": {
+          "value": 50,
+          "unit": "h (10a)⁻¹",
+          "range": [
+            20,
+            100
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식."
+        },
+        "deleaf": {
+          "value": 14,
+          "unit": "h (10a)⁻¹ 회⁻¹",
+          "range": [
+            5,
+            40
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎·엽병 수확(노엽 정리 포함) 1회."
+        },
+        "runner": {
+          "value": 10,
+          "unit": "h (10a)⁻¹ 회⁻¹",
+          "range": [
+            3,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "분얼 제거 1회."
+        },
+        "thin": {
+          "value": 12,
+          "unit": "h (10a)⁻¹ 회⁻¹",
+          "range": [
+            4,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃대 수확 1회."
+        },
+        "harvestBase": {
+          "value": 60,
+          "unit": "h (10a)⁻¹",
+          "range": [
+            20,
+            150
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 수확(굴취·다듬기) 기본 시간."
+        },
+        "harvestPerTon": {
+          "value": 120,
+          "unit": "h t⁻¹",
+          "range": [
+            50,
+            300
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 선별·세척 무게당 시간."
+        },
+        "remove": {
+          "value": 20,
+          "unit": "h (10a)⁻¹",
+          "range": [
+            5,
+            60
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작기 종료."
+        },
+        "workHour": {
+          "value": 7,
+          "unit": "시",
+          "range": [
+            5,
+            12
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "계획 작업 시각."
+        }
+      },
+      "seedling": {
+        "leaves": {
+          "value": 4,
+          "unit": "매",
+          "range": [
+            3,
+            7
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 엽수(분주묘 중묘)."
+        },
+        "leafCap": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0.3,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 시기 잎의 잠재 크기 배수."
+        },
+        "leafArea": {
+          "value": 0.006,
+          "unit": "m² 매⁻¹",
+          "range": [
+            0.003,
+            0.012
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 평균 엽면적."
+        },
+        "leafW": {
+          "value": 1.6,
+          "unit": "g 주⁻¹",
+          "range": [
+            0.5,
+            4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 잎·엽병 건물중."
+        },
+        "stemW": {
+          "value": 0.5,
+          "unit": "g 주⁻¹",
+          "range": [
+            0.1,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 근경 건물중."
+        },
+        "rootW": {
+          "value": 0.8,
+          "unit": "g 주⁻¹",
+          "range": [
+            0.2,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 뿌리 건물중."
+        },
+        "shockFactor": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0.1,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "활착 기간의 엽 출현 속도 배수."
+        },
+        "shock": {
+          "value": 6,
+          "unit": "pd",
+          "range": [
+            0,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "활착 기간."
+        }
+      },
+      "density": {
+        "value": 8,
+        "unit": "주 m⁻²",
+        "range": [
+          4,
+          14
+        ],
+        "tag": "EST",
+        "source": "",
+        "note": "기본 재식밀도(30–35 cm 간격, 통로 포함)."
+      },
+      "systems": {
+        "hydro": {
+          "name": "수경(NFT/DFT)",
+          "sowing": "가을(9–10월) 또는 봄(3–4월) 정식",
+          "harvest": "정식 후 15–24개월",
+          "transplantMonth": {
+            "value": 9,
+            "unit": "월",
+            "range": [
+              3,
+              10
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 월."
+          },
+          "transplantDay": {
+            "value": 20,
+            "unit": "일",
+            "range": [
+              1,
+              30
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 일."
+          },
+          "benchYield": {
+            "value": 690,
+            "unit": "kg (10a)⁻¹",
+            "range": [
+              300,
+              1500
+            ],
+            "tag": "SRC",
+            "source": "고추냉이 물재배시 묘크기가 생육 및 수량에 미치는 영향 (1997) 한국약용작물학회지: 상품 근경 40 g 이상, 분주묘 근경 수량 567–782 kg/10a(상품률 54–87%)",
+            "note": "국내 물재배 분주묘 상품 근경 수량 범위(567–782)의 중간값. 소득자료집에 와사비가 없어 시험 성적으로 대신한다."
+          }
+        },
+        "substrate": {
+          "name": "배지 재배",
+          "sowing": "가을 또는 봄 정식",
+          "harvest": "정식 후 15–24개월",
+          "transplantMonth": {
+            "value": 9,
+            "unit": "월",
+            "range": [
+              3,
+              10
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 월."
+          },
+          "transplantDay": {
+            "value": 20,
+            "unit": "일",
+            "range": [
+              1,
+              30
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 일."
+          },
+          "benchYield": {
+            "value": 600,
+            "unit": "kg (10a)⁻¹",
+            "range": [
+              200,
+              1500
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "배지 재배 근경 수량 추정(조사 자료 없음)."
           }
         }
       }

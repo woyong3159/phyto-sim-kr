@@ -331,7 +331,7 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
     fruit: trap(core.water.fruit, env.water) * env.nutrient * tempFruit,
     set: sSsr * env.nutrient,
     water: sWaterExpand, nutrient: env.nutrient, sinkFeedback: fb, tempSet: 1, tempFruit, ssr: sSsr, chill: 1, heat: 1, starve, training: 1,
-    dormancy: dormF,
+    dormancy: dormF, rootTemp: 1, light: 1,
     pollination: sb.beeHours > 0 ? clamp(sb.beeAct / sb.beeHours, 0, 1) : 0,
   };
 

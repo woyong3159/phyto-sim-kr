@@ -403,3 +403,36 @@ test('딸기: 새 작기에서 딸기 선택 → 화방·당도·수분 정보 �
   await noOverflow(page);
   await page.screenshot({ path: info.outputPath('33-strawberry-work.png') });
 });
+
+test('와사비: 선택 → 근경·근권 온도·매운맛 정보 → 잎 수확 계획 → 근경 수확(굴취) 확인', async ({ page }, info) => {
+  await page.goto('./');
+  await page.getByTestId('start-date').fill('2026-10-05');
+  await page.getByTestId('seed').fill('e2e-ws');
+  await page.locator('[data-crop="wasabi"]').tap();
+  await page.locator('[data-variety="mazuma"]').tap();
+  await noOverflow(page);
+  await page.locator('[data-variety="mazuma"]').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('40-new-game-wasabi.png') });
+  await page.getByTestId('start-game').tap();
+  await page.getByTestId('confirm-start').tap();
+  await expect(page.getByTestId('clock')).toBeVisible();
+  await advanceWeeks(page, 10);
+  await page.locator('[data-tab="crop"]').tap();
+  await expect(page.getByTestId('crop-status')).toContainText('Mazuma');
+  await expect(page.getByTestId('ws-facts')).toContainText('근권 온도');
+  expect(parseFloat((await page.getByTestId('ws-rhizome').textContent()) ?? '0')).toBeGreaterThan(2);
+  await expect(page.getByTestId('crop-stress')).toContainText('강광 장해');
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('41-wasabi-status.png') });
+  await page.locator('[data-sub="work"]').tap();
+  await expect(page.getByTestId('work-plan')).toContainText('잎 수확 간격');
+  await page.locator('[data-work="harvest"]').tap();
+  await page.getByTestId('confirm-dig').tap();
+  await page.locator('[data-turn="1"]').tap();
+  await page.locator('[data-sub="now"]').tap();
+  await expect(page.getByTestId('crop-status')).toContainText('근경 수확 완료');
+  await expect(page.getByTestId('ws-products')).toBeVisible();
+  await noOverflow(page);
+  await page.getByTestId('crop-yield').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('42-wasabi-harvested.png') });
+});

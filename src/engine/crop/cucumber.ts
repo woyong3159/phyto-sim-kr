@@ -25,7 +25,7 @@ export function defaultPlan(v: CucumberVariety): WorkPlan {
 }
 
 export const emptyYield = (): Yield => ({ top: 0, mid: 0, cull: 0, count: 0 });
-export const noStress = (): Stress => ({ photo: 1, expand: 1, fruit: 1, set: 1, water: 1, nutrient: 1, sinkFeedback: 1, tempSet: 1, tempFruit: 1, ssr: 1, chill: 1, heat: 1, starve: 1, training: 1, dormancy: 1, pollination: 1 });
+export const noStress = (): Stress => ({ photo: 1, expand: 1, fruit: 1, set: 1, water: 1, nutrient: 1, sinkFeedback: 1, tempSet: 1, tempFruit: 1, ssr: 1, chill: 1, heat: 1, starve: 1, training: 1, dormancy: 1, pollination: 1, rootTemp: 1, light: 1 });
 export const emptyDay = (dayIndex: number): CropDay => ({ dayIndex, gross: 0, maint: 0, growthResp: 0, gLeaf: 0, gStem: 0, gRoot: 0, gFruit: 0, demand: 0, supply: 0, harvest: emptyYield(), aborted: 0, labor: 0, sPhoto: 0, sExpand: 0, sFruit: 0, sSet: 0, lai: 0, nodes: 0, fruits: 0 });
 
 export interface CropEnv {
@@ -41,6 +41,8 @@ export interface CropEnv {
   daylength: number;
   /** 실내 상대습도 %, 보광등 가동률(0–1), 외부 일사 W m⁻² */
   rh: number;
+  /** 양액 온도 °C */
+  tSol: number;
   lamp: number;
   solar: number;
   /** 온실 면적 m² (노동 시간 환산) */
@@ -124,7 +126,10 @@ export function feedback(c: CropState, core: CoreParams, wLeafM2: number): numbe
   if (wLeafM2 <= 0) return 1;
   const r = c.pool / wLeafM2;
   const ph = core.photo;
-  return 1 - (1 - ph.poolFeedbackMin) * clamp((r - ph.poolFeedbackStart) / (ph.poolFeedbackFull - ph.poolFeedbackStart), 0, 1);
+  const f = 1 - (1 - ph.poolFeedbackMin) * clamp((r - ph.poolFeedbackStart) / (ph.poolFeedbackFull - ph.poolFeedbackStart), 0, 1);
+  // 저장 한계: 당이 한없이 쌓이지 않도록 그 위에서는 광합성이 0까지 줄어든다
+  const over = ph.poolFeedbackFull * ph.poolOverflow;
+  return r > over ? f * (1 - clamp((r - over) / (over * 0.5), 0, 1)) : f;
 }
 
 /** 온실 모델에 넘길 군락 요약(이 시간 동안 고정). */
@@ -364,6 +369,8 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
     training: 1 - over,
     dormancy: 1,
     pollination: 1,
+    rootTemp: 1,
+    light: 1,
   };
 
   // ── 새 마디 ──

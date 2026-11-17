@@ -18,6 +18,10 @@ export const CUCUMBER_SETTINGS: Partial<ControlSettings> = { heatDay: 18, heatNi
 /** 딸기 표준 관리(촉성): 주간 난방 없음(환기 25°C), 야간 8°C */
 export const STRAWBERRY_SETTINGS: Partial<ControlSettings> = { heatDay: 10, heatNight: 8, heatPreDawn: 8, ventTemp: 25, ventBand: 4, shadeOnW: 2000, rhMax: 85 };
 
+/** 와사비 표준 관리: 55% 차광(일사 250 W/m² 이상일 때), 18°C부터 환기, 난방 8°C, 패드앤팬 22°C, 포그, 양액 12–17°C 유지 */
+export const WASABI_SETTINGS: Partial<ControlSettings> = { heatDay: 8, heatNight: 8, heatPreDawn: 8, ventTemp: 18, ventBand: 4, shadeOnW: 250, rhMax: 95, fogTemp: 22, fogRhMax: 90, coolTemp: 22, solutionMin: 12, solutionMax: 17 };
+export const WASABI_SETUP: Partial<GhSetup> = { shade: 's55', cooling: 'padfan', fog: true, solutionChiller: true, solutionHeater: true };
+
 export function runCrop(opts: { regionId?: string; startDate: string; seed?: string; days: number; plantDay?: number; setup?: Partial<GhSetup>; settings?: Partial<ControlSettings>; order?: Partial<PlantOrder>; plan?: Partial<WorkPlan>; actions?: UserAction[] }): CropRun {
   const world0 = createWorld({ seed: 's', startDate: opts.startDate, regionId: opts.regionId ?? 'buyeo', setup: defaultSetup(), settings: defaultSettings() }, data);
   const base = defaultOrder(world0.crops, opts.order?.varietyId ?? 'cheongchun', opts.order?.system);
@@ -26,8 +30,8 @@ export function runCrop(opts: { regionId?: string; startDate: string; seed?: str
     seed: opts.seed ?? 'crop-validate',
     startDate: opts.startDate,
     regionId: opts.regionId ?? 'buyeo',
-    setup: { ...defaultSetup(opts.setup?.facility ?? 'multi_pe'), ...opts.setup },
-    settings: { ...defaultSettings(), ...(base.cropId === 'strawberry' ? STRAWBERRY_SETTINGS : CUCUMBER_SETTINGS), ...opts.settings },
+    setup: { ...defaultSetup(opts.setup?.facility ?? 'multi_pe'), ...(base.cropId === 'wasabi' ? WASABI_SETUP : {}), ...opts.setup },
+    settings: { ...defaultSettings(), ...(base.cropId === 'wasabi' ? WASABI_SETTINGS : base.cropId === 'strawberry' ? STRAWBERRY_SETTINGS : CUCUMBER_SETTINGS), ...opts.settings },
     crop: { day: opts.plantDay ?? 3, order },
   };
   const world = createWorld(config, data);
@@ -90,6 +94,37 @@ export function summary(r: CropRun) {
     ssr: mean(r.days.slice(40).map((d) => (d.demand > 0 ? d.supply / d.demand : 1))),
     fuelL: r.fuelL,
   };
+}
+
+if (process.env.RUN === 'wasabi') {
+  const b = { startDate: '2026-09-01', days: 560, plantDay: 19, order: { varietyId: 'daruma' } };
+  const head = '| 조건 | 근경 생체중 g/주 | 근경 kg/10a | 상품(40 g↑) 비율 | 생존 포기 | 매운맛 지수 | 잎·엽병 kg/10a | 꽃대 kg/10a | 추대 횟수 | LAI 평균 | 생리일수 | 고사 | 난방유 L |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|';
+  const row = (name: string, r: CropRun) => {
+    const s = summary(r);
+    const w = r.crop.out.ws!;
+    const ws = r.crop.ws!;
+    return `| ${name} | ${f(w.rhizomeFresh)} | ${f(w.rhizomeFresh * r.crop.density * r.crop.alive, 0)} | ${f(w.marketShare * 100, 0)}% | ${f(r.crop.alive * 100, 0)}% | ${f(w.pungency, 2)} | ${f(ws.leafYield * 1000, 0)} | ${f(ws.stalkYield * 1000, 0)} | ${ws.bolts} | ${f(s.laiMean, 2)} | ${f(r.crop.pd, 0)} | ${s.dead || '–'} | ${f(s.fuelL, 0)} |`;
+  };
+  const std = runCrop(b);
+  const kg = std.crop.out.ws!.rhizomeFresh * std.crop.density * std.crop.alive;
+  const out: string[] = [];
+  out.push('# Phase 3c 검증 — 와사비', '', '`RUN=wasabi npx vite-node tools/validate-crop.ts`가 만든 문서다. 지역 부여, 연동 비닐하우스(이중 피복) 1,000 m², Daruma 8주/m² 수경, 9월 1일 시작·9월 20일 정식, 560일(약 18개월).', '표준 관리: 차광 55%(일사 250 W/m² 이상), 18°C부터 환기, 난방 8°C, 패드앤팬 22°C, 포그, 양액 12–17°C(냉각기·가온기), 잎 수확 30일 간격(9매 유지), 꽃대 수확. 근권 수분·양분 충분, 병해 없음.', '');
+  out.push('## ① 표준 관리와 벤치마크', '', head, row('표준 관리(부여)', std), row('철원', runCrop({ ...b, regionId: 'cheorwon' })), row('대관령', runCrop({ ...b, regionId: 'daegwallyeong' })), row('제주', runCrop({ ...b, regionId: 'jeju' })), '');
+  out.push(`- 국내 물재배 분주묘 근경 수량 567–782 kg/10a(기준 690). 모델 표준 관리: **${f(kg, 0)} kg/10a (${kg > 690 ? '+' : ''}${f((kg / 690 - 1) * 100, 0)}%)** → ±25% 범위 ${Math.abs(kg / 690 - 1) <= 0.25 ? '안' : '밖'}. 소득자료집에 와사비 항목이 없어 시험 성적과 비교했다.`, '- 대관령은 둘째 겨울 대설로 시설이 무너지면 작물도 함께 얼어 죽는다(해마다 다르다, seed에 따라 달라짐).', '');
+  out.push('### 60일 간격 경과(표준 관리)', '', '| 정식 후 일 | 평균기온 °C | DLI mol | LAI | 근경 g/주 | 총광합성 g/m²/d | 광합성 스트레스 | 공급/수요 |', '|---|---|---|---|---|---|---|---|');
+  for (let i = 30; i < std.days.length; i += 60) {
+    const d = std.days.slice(i - 30, i);
+    const l = d[d.length - 1]!;
+    out.push(`| ${i} | ${f(mean(d.map((x) => x.tMean)))} | ${f(mean(d.map((x) => x.dli)))} | ${f(l.lai, 2)} | ${f(l.fruits)} | ${f(mean(d.map((x) => x.gross)))} | ${f(mean(d.map((x) => x.sPhoto)), 2)} | ${f(sum(d.map((x) => x.supply)) / Math.max(1e-9, sum(d.map((x) => x.demand))), 2)} |`);
+  }
+  out.push('', '## ⑤ 장기 고온', '', head, row('표준(패드앤팬 + 포그)', std), row('냉방 없음(부여)', runCrop({ ...b, setup: { cooling: 'none', fog: false } })), row('냉방 없음(철원)', runCrop({ ...b, regionId: 'cheorwon', setup: { cooling: 'none', fog: false } })), row('냉방 없음(대관령)', runCrop({ ...b, regionId: 'daegwallyeong', setup: { cooling: 'none', fog: false } })), row('히트펌프 냉방 500 W/m²', runCrop({ ...b, setup: { cooling: 'heatpump', coolingCapacity: 500 } })), '');
+  const glass = { facility: 'venlo' as const, cooling: 'padfan' as const, fog: true, solutionChiller: true, solutionHeater: true };
+  out.push('## 차광', '', head, row('연동 비닐 무차광', runCrop({ ...b, setup: { shade: 'none' } })), row('연동 비닐 55%(표준)', std), row('연동 비닐 75% 상시', runCrop({ ...b, setup: { shade: 's75' }, settings: { shadeOnW: 0 } })), row('유리온실 무차광', runCrop({ ...b, setup: { ...glass, shade: 'none' } })), row('유리온실 55%', runCrop({ ...b, setup: { ...glass, shade: 's55' } })), row('유리온실 75%', runCrop({ ...b, setup: { ...glass, shade: 's75' } })), '');
+  out.push('## 근권(양액) 온도 · 재배 방식', '', head, row('양액 12–17°C(표준)', std), row('양액 냉각기·가온기 없음', runCrop({ ...b, setup: { solutionChiller: false, solutionHeater: false } })), row('양액 18–22°C', runCrop({ ...b, settings: { solutionMin: 18, solutionMax: 22 } })), row('양액 22–26°C', runCrop({ ...b, settings: { solutionMin: 22, solutionMax: 26 } })), row('배지 재배', runCrop({ ...b, order: { varietyId: 'daruma', system: 'substrate' } })), '');
+  out.push('## 잎 수확 · 추대 · 겨울 온도', '', head, row('잎 수확 안 함', runCrop({ ...b, plan: { deleafEvery: 0 } })), row('잎 30일·9매(표준)', std), row('잎 30일·5매', runCrop({ ...b, plan: { leavesKeep: 5 } })), row('꽃대 방치', runCrop({ ...b, plan: { stalkEvery: 0 } })), row('분얼 방치', runCrop({ ...b, plan: { runnerEvery: 0 } })), row('겨울 난방 5°C', runCrop({ ...b, settings: { heatNight: 5, heatPreDawn: 5, heatDay: 5 } })), row('겨울 난방 13°C(춘화 회피)', runCrop({ ...b, settings: { heatNight: 13, heatPreDawn: 13, heatDay: 13 } })), '');
+  out.push('## 품종 · 재배 기간', '', head, ...['daruma', 'mazuma', 'domesticA'].map((v) => row(v, v === 'daruma' ? std : runCrop({ ...b, order: { varietyId: v } }))), row('Daruma 12개월', runCrop({ ...b, days: 380 })), row('Daruma 24개월', runCrop({ ...b, days: 745 })), row('Mazuma 24개월', runCrop({ ...b, days: 745, order: { varietyId: 'mazuma' } })), '');
+  writeFileSync(new URL('../docs/VALIDATION_PHASE3C.md', import.meta.url), out.join('\n') + '\n');
+  console.log(out.join('\n'));
 }
 
 if (process.env.RUN === 'strawberry') {

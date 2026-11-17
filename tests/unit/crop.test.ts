@@ -360,3 +360,79 @@ describe('딸기 — 수식과 시나리오(V1·V3)', () => {
     expect(summary(cold).yield10a).toBeLessThan(std.yield10a * 0.6);
   });
 });
+
+describe('와사비 — 시나리오(V3)', () => {
+  const b = { startDate: '2026-09-01', days: 560, plantDay: 19, order: { varietyId: 'daruma' } };
+  const digAt = (days: number): UserAction[] => [{ hour: (days - 2) * 24 + 9, seq: 0, type: 'crop/work', payload: { task: 'harvest' } }];
+  const rhiz = (r: ReturnType<typeof runCrop>) => r.crop.out.ws!.rhizomeFresh;
+  const stdRun = runCrop({ ...b, actions: digAt(b.days) });
+  const wp = world.crops.wasabi;
+
+  it('① 표준 관리(차광 55% + 패드앤팬 + 양액 온도 관리, 18개월): 근경이 상품 크기로 자라고 수량이 국내 시험 범위', () => {
+    const c = stdRun.crop;
+    expect(c.dead).toBe(false);
+    expect(c.ws!.harvested).toBe(true);
+    expect(rhiz(stdRun)).toBeGreaterThan(wp.rhizome.market);
+    expect(rhiz(stdRun)).toBeLessThan(140);
+    const kg = (c.total.top + c.total.mid) * 1000;
+    const bench = wp.systems.hydro!.benchYield;
+    expect(kg).toBeGreaterThan(bench * 0.75);
+    expect(kg).toBeLessThan(bench * 1.25);
+    expect(c.total.top + c.total.mid + c.total.cull).toBeCloseTo((rhiz(stdRun) * c.density * c.alive) / 1000, 6);
+    expect(c.ws!.leafYield).toBeGreaterThan(0.5);
+    expect(c.ws!.pungency).toBeGreaterThan(0.4);
+    expect(Math.abs(c.cum.gross - c.cum.maint - c.cum.used - c.pool) / c.cum.gross).toBeLessThan(0.01);
+    // 수확 뒤에는 군락이 없다
+    expect(stdRun.final.gh.out.cGross).toBe(0);
+  });
+
+  it('⑤ 장기 고온(여름 냉방 없음) → 생육 정지와 고온 장해, 근경이 덜 자란다', () => {
+    const hot = runCrop({ ...b, setup: { cooling: 'none', fog: false } });
+    expect(hot.crop.dead).toBe(true);
+    expect(hot.crop.deathCause).toBe('heat');
+    expect(rhiz(hot)).toBeLessThan(rhiz(stdRun) * 0.8);
+    // 죽기 전 한여름(일평균 24°C 초과)에는 생장이 적온기(12–20°C)의 절반에도 못 미친다
+    const g = (d: (typeof hot.days)[number]) => d.gLeaf + d.gStem + d.gRoot;
+    const summer = hot.days.filter((d) => d.tMean > 24 && d.lai > 0.3);
+    const mild = hot.days.filter((d) => d.tMean > 12 && d.tMean < 20 && d.lai > 0.8);
+    expect(summer.length).toBeGreaterThan(10);
+    expect(summer.reduce((a, d) => a + g(d), 0) / summer.length).toBeLessThan((mild.reduce((a, d) => a + g(d), 0) / mild.length) * 0.5);
+  });
+
+  it('차광: 무차광은 강광 장해, 75% 상시 차광은 광 부족 — 중간이 가장 좋다(국내 시험: 차광 필요)', () => {
+    // 투과율이 높은 유리온실에서 비교한다(이중 피복 비닐하우스는 피복만으로도 빛이 40% 넘게 줄어 무차광 피해가 작다)
+    const glass = { facility: 'venlo' as const, cooling: 'padfan' as const, fog: true, solutionChiller: true, solutionHeater: true };
+    const none = runCrop({ ...b, days: 330, setup: { ...glass, shade: 'none' } });
+    const mid = runCrop({ ...b, days: 330, setup: { ...glass, shade: 's55' } });
+    const dark = runCrop({ ...b, days: 330, setup: { ...glass, shade: 's75' }, settings: { shadeOnW: 0 } });
+    expect(rhiz(mid)).toBeGreaterThan(rhiz(none) * 1.05);
+    expect(none.crop.out.lai).toBeLessThan(mid.crop.out.lai);
+    expect(rhiz(mid)).toBeGreaterThan(rhiz(dark) * 1.3);
+    expect(none.days.some((d) => d.sPhoto < 0.8)).toBe(true);
+  });
+
+  it('근권 온도: 양액이 22–26°C로 유지되면 뿌리 활력이 떨어져 근경이 덜 자라고 포기가 죽어 나간다', () => {
+    const warm = runCrop({ ...b, days: 330, settings: { solutionMin: 22, solutionMax: 26 } });
+    const mid = runCrop({ ...b, days: 330 });
+    expect(warm.crop.out.stress.rootTemp).toBeLessThan(0.9);
+    expect(rhiz(warm)).toBeLessThan(rhiz(mid) * 0.9);
+    expect(warm.crop.alive).toBeLessThan(1);
+  });
+
+  it('잎 수확과 근경의 경합, 추대, 품종 차이', () => {
+    const noLeaf = runCrop({ ...b, plan: { deleafEvery: 0 } });
+    const heavy = runCrop({ ...b, plan: { leavesKeep: 5 } });
+    const noDig = runCrop(b);
+    expect(rhiz(noLeaf)).toBeGreaterThan(rhiz(noDig));
+    expect(rhiz(heavy)).toBeLessThan(rhiz(noDig) * 0.8);
+    expect(noDig.crop.ws!.bolts).toBeGreaterThanOrEqual(1);
+    expect(noDig.crop.ws!.stalkYield).toBeGreaterThan(0);
+    // 겨울을 12°C 이상으로 따뜻하게 나면 춘화가 안 되어 추대하지 않는다
+    const warmWinter = runCrop({ ...b, days: 300, settings: { heatNight: 13, heatPreDawn: 13, heatDay: 13 } });
+    expect(warmWinter.crop.ws!.bolts).toBe(0);
+    const maz = runCrop({ ...b, order: { varietyId: 'mazuma' } });
+    expect(rhiz(maz)).toBeLessThan(rhiz(noDig));
+    expect(maz.crop.out.ws!.pungency).toBeGreaterThan(noDig.crop.out.ws!.pungency);
+    expect(Object.keys(world.crops.varieties.wasabi).length).toBe(3);
+  });
+});

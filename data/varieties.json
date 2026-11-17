@@ -1896,6 +1896,461 @@
           "note": "묘 1주 가격(Phase 7)."
         }
       }
+    },
+    "wasabi": {
+      "mazuma": {
+        "name": "Mazuma(마즈마)",
+        "type": "적경계",
+        "desc": "일본 시즈오카 계통의 대표 고급 품종. 엽병이 붉고 매운맛이 강하다. 생육이 느려 18–24개월 걸리고 더위에 약하다.",
+        "real": true,
+        "pmaxFactor": {
+          "value": 0.97,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수."
+        },
+        "leafArea": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "rhizome": {
+          "value": 0.9,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 비대 속도 배수."
+        },
+        "pungency": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.5,
+            1.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "매운맛(시니그린) 지수의 품종 최대값(Mazuma = 1 기준의 상대값)."
+        },
+        "heatTol": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 한계의 품종 차."
+        },
+        "boltDays": {
+          "value": 0,
+          "unit": "d",
+          "range": [
+            -15,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "춘화 요구 일수의 품종 차(음수 = 추대가 쉽다)."
+        },
+        "offshoot": {
+          "value": 0.8,
+          "unit": "-",
+          "range": [
+            0.3,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "분얼 발생 배수."
+        },
+        "monthsToHarvest": {
+          "value": 20,
+          "unit": "개월",
+          "range": [
+            12,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 수확 시기(참고값)."
+        },
+        "potentialYield": {
+          "value": 600,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 관리 근경 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "blackleg": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "묵입병(먹들이병) 저항성. Phase 6에서 사용."
+          },
+          "softRot": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "무름병 저항성. Phase 6에서 사용."
+          }
+        },
+        "pricePremium": {
+          "value": 1.3,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 3500,
+          "unit": "원 주⁻¹",
+          "range": [
+            1000,
+            6000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      },
+      "daruma": {
+        "name": "Daruma(다루마)",
+        "type": "녹경계",
+        "desc": "가장 널리 재배되는 품종. 엽병이 녹색이고 근경이 굵고 빨리 자란다. 재배가 쉽고 더위에 조금 더 견디지만 매운맛은 Mazuma보다 순하다.",
+        "real": true,
+        "pmaxFactor": {
+          "value": 1.03,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수."
+        },
+        "leafArea": {
+          "value": 1.1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "rhizome": {
+          "value": 1.15,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 비대 속도 배수."
+        },
+        "pungency": {
+          "value": 0.85,
+          "unit": "-",
+          "range": [
+            0.5,
+            1.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "매운맛(시니그린) 지수의 품종 최대값(Mazuma = 1 기준의 상대값)."
+        },
+        "heatTol": {
+          "value": 0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 한계의 품종 차."
+        },
+        "boltDays": {
+          "value": 0,
+          "unit": "d",
+          "range": [
+            -15,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "춘화 요구 일수의 품종 차(음수 = 추대가 쉽다)."
+        },
+        "offshoot": {
+          "value": 1.2,
+          "unit": "-",
+          "range": [
+            0.3,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "분얼 발생 배수."
+        },
+        "monthsToHarvest": {
+          "value": 16,
+          "unit": "개월",
+          "range": [
+            12,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 수확 시기(참고값)."
+        },
+        "potentialYield": {
+          "value": 750,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 관리 근경 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "blackleg": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "묵입병(먹들이병) 저항성. Phase 6에서 사용."
+          },
+          "softRot": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "무름병 저항성. Phase 6에서 사용."
+          }
+        },
+        "pricePremium": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 3000,
+          "unit": "원 주⁻¹",
+          "range": [
+            1000,
+            6000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      },
+      "domesticA": {
+        "name": "국내 계통 A (가상, 실제 계통 특성 기반)",
+        "type": "국내 수집 계통",
+        "desc": "국내 물재배 농가의 분주 계통(철원·태백 등)을 본뜬 가상 품종. 국내 기후에 순화되어 더위와 추대에 강한 편이나 근경이 작다.",
+        "real": false,
+        "pmaxFactor": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수."
+        },
+        "leafArea": {
+          "value": 0.95,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "rhizome": {
+          "value": 0.85,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "근경 비대 속도 배수."
+        },
+        "pungency": {
+          "value": 0.9,
+          "unit": "-",
+          "range": [
+            0.5,
+            1.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "매운맛(시니그린) 지수의 품종 최대값(Mazuma = 1 기준의 상대값)."
+        },
+        "heatTol": {
+          "value": 1.2,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 한계의 품종 차."
+        },
+        "boltDays": {
+          "value": 10,
+          "unit": "d",
+          "range": [
+            -15,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "춘화 요구 일수의 품종 차(음수 = 추대가 쉽다)."
+        },
+        "offshoot": {
+          "value": 1.5,
+          "unit": "-",
+          "range": [
+            0.3,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "분얼 발생 배수."
+        },
+        "monthsToHarvest": {
+          "value": 18,
+          "unit": "개월",
+          "range": [
+            12,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 수확 시기(참고값)."
+        },
+        "potentialYield": {
+          "value": 600,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 관리 근경 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "blackleg": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "묵입병(먹들이병) 저항성. Phase 6에서 사용."
+          },
+          "softRot": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "무름병 저항성. Phase 6에서 사용."
+          }
+        },
+        "pricePremium": {
+          "value": 0.9,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 2000,
+          "unit": "원 주⁻¹",
+          "range": [
+            1000,
+            6000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      }
     }
   }
 }
