@@ -5,7 +5,8 @@
  */
 import { dexp, dlog } from './dmath';
 import type { SimConfig } from './types';
-import { buildGhParams, type GhParams } from './greenhouse/params';
+import { buildGhParams, strip, type GhParams } from './greenhouse/params';
+import type { CropData } from './crop/types';
 import { buildClimate, type Climate, type ClimateClass, type JangmaZone, type RegionInfo } from './weather/climate';
 
 interface P {
@@ -38,6 +39,8 @@ export interface EngineData {
   facilities: unknown;
   equipment: unknown;
   prices: unknown;
+  crops: unknown;
+  varieties: unknown;
 }
 
 export interface GenParams {
@@ -92,6 +95,7 @@ export interface World {
   gen: GenParams;
   ev: EventParams;
   gh: GhParams;
+  crops: CropData;
 }
 
 const num = (o: Record<string, unknown>, k: string): number => {
@@ -175,6 +179,7 @@ export function createWorld(config: SimConfig, data: EngineData): World {
     region,
     clim,
     gh: buildGhParams(data.facilities, data.equipment, data.prices, annualMean),
+    crops: buildCrops(data.crops, data.varieties),
     gen: {
       tempSd: arr(g, 'tempSdMonthly').map((v) => v * classFactor),
       arFastPhi: num(g, 'arFastPhi'),
@@ -218,4 +223,11 @@ export function createWorld(config: SimConfig, data: EngineData): World {
       hailMonthlyWeight: arr(e, 'hailMonthlyWeight'),
     },
   };
+}
+
+function buildCrops(crops: unknown, varieties: unknown): CropData {
+  const c = strip(crops) as { core: CropData['core']; cucumber: CropData['cucumber'] };
+  const v = strip(varieties) as CropData['varieties'];
+  if (!c?.core || !c.cucumber || !v?.cucumber) throw new Error('작물·품종 데이터가 올바르지 않습니다.');
+  return { core: c.core, cucumber: c.cucumber, varieties: v };
 }

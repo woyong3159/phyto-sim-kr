@@ -22,6 +22,7 @@ const facility = (o) => ({
   snowLimit: P(o.snow, 'cm', [10, 80], 'EST', '원예특작시설 내재해 설계기준(지역별 설계 적설심 20–40 cm대)의 범위를 참고', `지붕 적설 한계. 넘으면 붕괴. ${o.snowNote}`),
   windLimit: P(o.wind, 'm/s', [15, 50], 'EST', '원예특작시설 내재해 설계기준(지역별 설계 풍속 22–40 m/s)의 범위를 참고', '최대순간풍속 한계. 넘으면 피복 파손.'),
   snowShed: P(o.shed, '-', [0, 1], 'EST', '', '지붕 형상에 따른 눈 흘러내림 정도(시간당 감소 비율 계수). 아치형 단동은 잘 흘러내리고 연동 곡부·유리 지붕은 쌓인다.'),
+  haze: P(o.haze, '-', [0, 1], 'EST', '', '피복재가 직달광을 산란광으로 바꾸는 비율(헤이즈). 맑은 유리는 낮고 PE·PO 필름은 높다. 산란광은 군락 깊숙이 고르게 들어가 광합성 효율을 높인다.'),
   agingLoss: P(o.aging, 'yr⁻¹', [0, 0.1], 'EST', '', '피복재 노후로 인한 연간 투과율 감소.'),
   coverLife: P(o.life, 'yr', [1, 40], 'EST', '', '피복재 교체 주기.'),
   buildCost: P(o.cost, '원/m²', [10000, 800000], 'EST', '', `골조 + 피복 시공비(장비 제외). ${o.costNote} 지역·시기·자동화 수준에 따라 ±40% 차이. Phase 7에서 정밀화.`),
@@ -31,10 +32,10 @@ const facilities = {
   _meta: { file: 'facilities', title: '시설(온실 유형)', plannedPhase: 2, schemaVersion: 1 },
   params: {
     types: {
-      single_pe: facility({ name: '단동 비닐하우스', desc: '폭 6–8 m 아치형, PE 필름 1겹', tau: 0.72, tauNote: 'PE 0.1 mm.', u: 6.6, uNote: 'PE 1겹.', cover: 1.75, eave: 1.5, mean: 2.3, ach: 1.5, side: 0.3, roof: 0, snow: 25, snowNote: '비규격 파이프 하우스는 더 약하다.', wind: 26, shed: 0.6, aging: 0.04, life: 3, cost: 35000, costNote: '평당 약 12만 원.' }),
-      multi_pe: facility({ name: '연동 비닐하우스', desc: '1-2W형 등 연동, PE 필름', tau: 0.68, tauNote: '연동 곡부·골조 그늘이 더 많다.', u: 6.6, uNote: 'PE 1겹.', cover: 1.35, eave: 3.0, mean: 3.8, ach: 1.0, side: 0.1, roof: 0.08, snow: 30, snowNote: '곡부에 눈이 쌓인다.', wind: 30, shed: 0.15, aging: 0.04, life: 3, cost: 110000, costNote: '평당 약 36만 원.' }),
-      multi_po: facility({ name: '연동 PO필름 온실', desc: '광폭·고측고, PO 필름 0.15 mm', tau: 0.74, tauNote: 'PO 필름은 투과율과 내구성이 PE보다 좋다.', u: 6.2, uNote: 'PO는 장파 차단이 PE보다 나아 약간 낮게 잡았다.', cover: 1.3, eave: 4.5, mean: 5.3, ach: 0.6, side: 0.08, roof: 0.12, snow: 40, snowNote: '', wind: 35, shed: 0.15, aging: 0.015, life: 6, cost: 220000, costNote: '평당 약 73만 원.' }),
-      venlo: facility({ name: '벤로형 유리온실', desc: '벤로(Venlo) 지붕, 4 mm 유리', tau: 0.78, tauNote: '유리 + 가는 골조.', u: 6.2, uNote: '유리 1겹.', cover: 1.25, eave: 6.0, mean: 6.8, ach: 0.4, side: 0, roof: 0.18, snow: 50, snowNote: '', wind: 40, shed: 0.1, aging: 0.002, life: 25, cost: 400000, costNote: '평당 약 130만 원.' }),
+      single_pe: facility({ name: '단동 비닐하우스', desc: '폭 6–8 m 아치형, PE 필름 1겹', haze: 0.3, tau: 0.72, tauNote: 'PE 0.1 mm.', u: 6.6, uNote: 'PE 1겹.', cover: 1.75, eave: 1.5, mean: 2.3, ach: 1.5, side: 0.3, roof: 0, snow: 25, snowNote: '비규격 파이프 하우스는 더 약하다.', wind: 26, shed: 0.6, aging: 0.04, life: 3, cost: 35000, costNote: '평당 약 12만 원.' }),
+      multi_pe: facility({ name: '연동 비닐하우스', desc: '1-2W형 등 연동, PE 필름', haze: 0.35, tau: 0.68, tauNote: '연동 곡부·골조 그늘이 더 많다.', u: 6.6, uNote: 'PE 1겹.', cover: 1.35, eave: 3.0, mean: 3.8, ach: 1.0, side: 0.1, roof: 0.08, snow: 30, snowNote: '곡부에 눈이 쌓인다.', wind: 30, shed: 0.15, aging: 0.04, life: 3, cost: 110000, costNote: '평당 약 36만 원.' }),
+      multi_po: facility({ name: '연동 PO필름 온실', desc: '광폭·고측고, PO 필름 0.15 mm', haze: 0.25, tau: 0.74, tauNote: 'PO 필름은 투과율과 내구성이 PE보다 좋다.', u: 6.2, uNote: 'PO는 장파 차단이 PE보다 나아 약간 낮게 잡았다.', cover: 1.3, eave: 4.5, mean: 5.3, ach: 0.6, side: 0.08, roof: 0.12, snow: 40, snowNote: '', wind: 35, shed: 0.15, aging: 0.015, life: 6, cost: 220000, costNote: '평당 약 73만 원.' }),
+      venlo: facility({ name: '벤로형 유리온실', desc: '벤로(Venlo) 지붕, 4 mm 유리', haze: 0.05, tau: 0.78, tauNote: '유리 + 가는 골조.', u: 6.2, uNote: '유리 1겹.', cover: 1.25, eave: 6.0, mean: 6.8, ach: 0.4, side: 0, roof: 0.18, snow: 50, snowNote: '', wind: 40, shed: 0.1, aging: 0.002, life: 25, cost: 400000, costNote: '평당 약 130만 원.' }),
     },
     physics: {
       doubleCoverU: P(0.62, '-', [0.45, 0.8], 'EST', '', '피복을 2중으로 했을 때 열관류율 배율. 공기층이 열저항을 더해 1겹 6.6 → 2중 약 4.1 W m⁻² K⁻¹(이중 피복 관행값 3.5–4.5 수준).'),

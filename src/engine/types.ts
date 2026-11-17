@@ -3,9 +3,10 @@
  */
 import type { ControlSettings, GhSetup, GhState } from './greenhouse/types';
 import type { World } from './world';
+import type { CropState, PlantOrder } from './crop/types';
 
 /** 엔진 상태 구조 버전. 상태 구조가 바뀌면 올린다(옛 스냅샷은 버리고 조치 로그로 다시 계산). */
-export const ENGINE_STATE_VERSION = 3;
+export const ENGINE_STATE_VERSION = 4;
 
 /** 내부 계산 스텝: 1시간(헌법 6항). */
 export const HOURS_PER_DAY = 24;
@@ -28,6 +29,8 @@ export interface SimConfig {
   /** 작기 시작 시점의 시설·장비 구성과 제어 설정(이후 변경은 조치 로그에 남는다). */
   setup: GhSetup;
   settings: ControlSettings;
+  /** 정식 계획: 작기 시작 후 day일째 아침에 심는다(없으면 작물 탭에서 직접 정식). */
+  crop?: { day: number; order: PlantOrder } | null;
 }
 
 /** 하루치 외기(생성기가 만든 일 단위 값). */
@@ -109,7 +112,7 @@ export interface WeatherState {
 }
 
 /** 자동 일시정지 대상이 되는 사건 종류. Phase 1은 기상 사건만 실제로 발생한다. */
-export const EVENT_TYPES = ['heatwave', 'coldwave', 'jangma', 'typhoon', 'heavyRain', 'heavySnow', 'hail', 'structure', 'equipment', 'disease', 'news', 'stock'] as const;
+export const EVENT_TYPES = ['heatwave', 'coldwave', 'jangma', 'typhoon', 'heavyRain', 'heavySnow', 'hail', 'structure', 'equipment', 'disease', 'news', 'stock', 'crop'] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 
 export interface SimEvent {
@@ -131,6 +134,8 @@ export interface SimState {
   rng: Record<RngStream, RngState>;
   weather: WeatherState;
   gh: GhState;
+  /** 재배 중인 작물(없으면 null) */
+  crop: CropState | null;
   /** 직전 스텝에서 새로 생긴 사건(스텝마다 비워진다). */
   events: SimEvent[];
 }

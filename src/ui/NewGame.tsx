@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { ENGINE_DATA } from '../data';
-import { defaultSetup, sunDay, MONTH_DAYS, type GhSetup } from '../engine';
+import { defaultSetup, sunDay, MONTH_DAYS, type GhSetup, type PlantOrder } from '../engine';
+import { OrderEditor, defaultOrderUi } from './CropScreen';
+import { Num, Toggle } from './Num';
 import { SetupEditor } from './SetupEditor';
 import { session, todayKst } from '../sim/session';
 
@@ -120,11 +122,14 @@ export function NewGame({ onDone, onCancel }: { onDone?: () => void; onCancel?: 
   const [name, setName] = useState('');
   const [confirm, setConfirm] = useState(false);
   const [setup, setSetup] = useState<GhSetup>(defaultSetup());
+  const [withCrop, setWithCrop] = useState(true);
+  const [order, setOrder] = useState<PlantOrder>(defaultOrderUi());
+  const [plantDay, setPlantDay] = useState(1);
   const st = stations.find((s) => s.id === regionId)!;
   const validDate = /^\d{4}-\d{2}-\d{2}$/.test(startDate);
 
   const start = async () => {
-    await session.newGame({ name: name || `${st.name} ${startDate}`, regionId, startDate, seed, setup });
+    await session.newGame({ name: name || `${st.name} ${startDate}`, regionId, startDate, seed, setup, crop: withCrop ? { day: plantDay, order } : null });
     onDone?.();
   };
 
@@ -176,6 +181,17 @@ export function NewGame({ onDone, onCancel }: { onDone?: () => void; onCancel?: 
         <h2 id="ng-setup">3. 시설 · 장비</h2>
         <SetupEditor value={setup} onChange={setSetup} />
         <p className="muted small">작기 중에도 "환경 → 시설·장비"에서 바꿀 수 있습니다. 제어 설정값은 시작한 뒤 "환경 → 제어"에서 정합니다.</p>
+      </section>
+
+      <section className="card" aria-labelledby="ng-crop">
+        <h2 id="ng-crop">4. 작물 · 정식</h2>
+        <Toggle label="정식 계획 넣기" checked={withCrop} onChange={setWithCrop} hint="끄면 빈 온실로 시작해 작물 탭에서 직접 심습니다" />
+        {withCrop && (
+          <>
+            <OrderEditor value={order} onChange={setOrder} />
+            <Num label="정식일" value={plantDay} min={0} max={120} unit="일째" hint="작기 시작일로부터(아침 7시에 심음)" onChange={setPlantDay} testId="plant-day" />
+          </>
+        )}
       </section>
 
       {confirm ? (

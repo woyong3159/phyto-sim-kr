@@ -34,6 +34,7 @@ export const EVENT_LABEL: Record<EventType, { name: string; fromPhase: number }>
   disease: { name: '병해충 발견', fromPhase: 6 },
   news: { name: '뉴스', fromPhase: 7 },
   stock: { name: '재고 부족', fromPhase: 4 },
+  crop: { name: '작물 고사·첫 수확', fromPhase: 3 },
 };
 
 export const DEVICE_LABEL: Record<DeviceId, string> = {
@@ -74,6 +75,12 @@ export function eventText(e: SimEvent): string {
       return e.code === 'collapse' ? `적설로 시설 붕괴 — 지붕 적설 ${v.toFixed(0)} cm` : `강풍으로 피복 파손 — 순간풍속 ${v.toFixed(0)} m/s`;
     case 'equipment':
       return `장비 고장 — ${DEVICE_LABEL[e.code as DeviceId] ?? e.code}`;
+    case 'crop': {
+      if (e.code === 'firstHarvest') return `첫 수확 — 정식 후 ${v.toFixed(0)}일`;
+      if (e.code === 'removed') return `작물 철거 — 누적 수확 ${(v * 1000).toFixed(0)} kg/10a`;
+      const cause: Record<string, string> = { 'dead:frost': '동해', 'dead:chill': '저온 장해', 'dead:heat': '고온 장해', 'dead:collapse': '잎 소실' };
+      return `작물 고사 — ${cause[e.code] ?? e.code} (실내 ${v.toFixed(1)}°C)`;
+    }
     default:
       return EVENT_LABEL[e.type].name;
   }

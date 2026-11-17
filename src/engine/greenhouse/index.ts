@@ -51,7 +51,8 @@ export const controlModule: EngineModule = {
           gh = { ...gh, settings: a.payload as ControlSettings };
           break;
         case 'gh/setup': {
-          const setup = a.payload as GhSetup;
+          // 시험용 군락(testLai)은 작기 설정값으로 고정한다(검증 전용, 화면에서는 바꿀 수 없다)
+          const setup = { ...(a.payload as GhSetup), testLai: world.config.setup.testLai };
           const rebuilt = setup.facility !== gh.setup.facility || gh.destroyed;
           gh = rebuilt ? { ...gh, setup, destroyed: false, breached: false, roofSnow: 0, dust: 0 } : { ...gh, setup };
           break;

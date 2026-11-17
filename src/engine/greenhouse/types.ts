@@ -173,6 +173,12 @@ export interface GhHour {
   cIn: number;
   cOut: number;
   cStore: number;
+  /** 작물: 총광합성·유지호흡·호흡 부족분(g CH2O m⁻², 이 한 시간), 군락 PAR 흡수율, 산란광 비율 */
+  cGross: number;
+  cMaint: number;
+  cStarve: number;
+  parAbsorbed: number;
+  diffuse: number;
 }
 
 /** 하루 요약. */
@@ -252,7 +258,7 @@ export function defaultSetup(facility: FacilityId = 'multi_pe'): GhSetup {
     dehumidifier: false,
     solutionChiller: false,
     solutionHeater: false,
-    testLai: 2,
+    testLai: 0,
   };
 }
 
@@ -298,7 +304,7 @@ export function defaultSettings(): ControlSettings {
 export const emptyHour = (): GhHour => ({
   tIn: 0, rhIn: 0, vpd: 0, co2: 0, ppfd: 0, tLeaf: 0, dewPoint: 0, tSurface: 0, tMass: 0, tSolution: 0, ach: 0,
   vent: 0, curtain: 0, shade: 0, heat: 0, cool: 0, fog: 0, dehum: 0, co2Dose: 0, light: 0, heatW: 0, transpiration: 0,
-  condensation: 0, leafWet: 0, heatDeficit: 0, roofSnow: 0, transmissivity: 0, fuelL: 0, kWh: 0, co2Kg: 0, won: 0, eIn: 0, eOut: 0, eStore: 0, wIn: 0, wOut: 0, wStore: 0, cIn: 0, cOut: 0, cStore: 0,
+  condensation: 0, leafWet: 0, heatDeficit: 0, roofSnow: 0, transmissivity: 0, fuelL: 0, kWh: 0, co2Kg: 0, won: 0, eIn: 0, eOut: 0, eStore: 0, wIn: 0, wOut: 0, wStore: 0, cIn: 0, cOut: 0, cStore: 0, cGross: 0, cMaint: 0, cStarve: 0, parAbsorbed: 0, diffuse: 0,
 });
 
 export const emptyDay = (dayIndex: number): GhDay => ({ dayIndex, tMin: 99, tMax: -99, tMean: 0, rhMean: 0, dli: 0, condensationH: 0, leafWetH: 0, heatDeficitH: 0, fuelL: 0, kWh: 0, co2Kg: 0, won: 0 });

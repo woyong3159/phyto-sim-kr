@@ -118,9 +118,6 @@ export function SetupEditor({ value, onChange }: { value: GhSetup; onChange: (s:
       <Toggle label="양액 냉각기(chiller)" checked={s.solutionChiller} onChange={(v) => set('solutionChiller', v)} hint="와사비 필수" />
       <Toggle label="양액 가온기(heater)" checked={s.solutionHeater} onChange={(v) => set('solutionHeater', v)} />
 
-      <h3>시험용 군락</h3>
-      <Num label="엽면적지수(LAI)" value={s.testLai} step={0.5} min={0} max={5} hint="작물 모델 전 임시 · 0 = 빈 온실" onChange={(v) => set('testLai', v)} />
-
       <details className="cost-box">
         <summary>
           설치비 견적 <strong>{won(cost.total)}</strong> <span className="muted small">({(cost.total / s.area / 10000).toFixed(1)}만 원/m²)</span>

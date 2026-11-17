@@ -14,7 +14,7 @@ const SUBS: [Sub, string][] = [['now', '현황'], ['control', '제어'], ['setup
 const axis = { fontSize: 11, fill: 'var(--muted)' } as const;
 const tip = { contentStyle: { background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13 }, labelStyle: { color: 'var(--text)' } } as const;
 
-function Chart({ title, data, lines, domain, testId, short }: { title: string; data: Record<string, number | string>[]; lines: [key: string, color: string, dash?: string][]; domain?: [number | string, number | string]; testId?: string; short?: boolean }) {
+export function Chart({ title, data, lines, domain, testId, short }: { title: string; data: Record<string, number | string>[]; lines: [key: string, color: string, dash?: string][]; domain?: [number | string, number | string]; testId?: string; short?: boolean }) {
   return (
     <section className="card" data-testid={testId}>
       <h2>{title}</h2>

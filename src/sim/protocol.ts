@@ -1,4 +1,4 @@
-import type { ControlSettings, DayWx, DeviceId, EventType, GhDay, GhHour, GhSetup, HourWx, SimConfig, SimEvent, SimState, UserAction } from '../engine';
+import type { ControlSettings, CropDay, CropState, DayWx, DeviceId, EventType, GhDay, GhHour, GhSetup, HourWx, SimConfig, SimEvent, SimState, UserAction } from '../engine';
 
 /** 배속: 실제 1초당 게임 시간(h). 0 = 일시정지. */
 export const SPEEDS = [
@@ -27,6 +27,15 @@ export interface GhView {
   contractKw: number;
 }
 
+/** 화면에 보여줄 작물 현황(마디·과실 목록은 그림에 쓸 만큼만 줄여서 보낸다). */
+export interface CropView extends Omit<CropState, 'nodes' | 'fruits' | 'tips' | 'cum'> {
+  /** 잎(아래→위): 면적 m², 곁순 여부 */
+  leaves: { area: number; lat: 0 | 1; age: number }[];
+  /** 과실: 마디, 개수(분수), 생체중 g, 개화 후 생리일수 */
+  fruitList: { node: number; n: number; fw: number; age: number }[];
+  laterals: number;
+}
+
 /** 화면에 보여줄 현재 외기·온실 요약. */
 export interface WxView {
   now: HourWx;
@@ -35,6 +44,7 @@ export interface WxView {
   sunset: number;
   daylength: number;
   gh: GhView;
+  crop: CropView | null;
 }
 
 /** 시간 단위 원장 한 줄(내부 vs 외부 그래프용). */
@@ -58,6 +68,7 @@ export interface DayRow {
   dayIndex: number;
   wx: DayWx;
   gh: GhDay | null;
+  crop?: CropDay | null;
 }
 
 export type ToWorker =

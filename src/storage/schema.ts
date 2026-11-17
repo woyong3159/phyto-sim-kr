@@ -5,7 +5,7 @@
  */
 import { defaultSettings, defaultSetup, type EventType, type SimConfig, type SimState, type UserAction } from '../engine';
 
-export const SAVE_SCHEMA_VERSION = 3;
+export const SAVE_SCHEMA_VERSION = 4;
 /** v1(Phase 0) 세이브에는 지역이 없었다. 옮겨올 때 넣는 기본 지역. */
 export const DEFAULT_REGION_ID = 'buyeo';
 export const EXPORT_FORMAT = 'phyto-sim-kr-save';
@@ -65,6 +65,13 @@ export const MIGRATIONS: Record<number, Migration> = {
     const config = { ...(old.config as Record<string, unknown>) };
     if (!config.setup) config.setup = defaultSetup();
     if (!config.settings) config.settings = defaultSettings();
+    return { ...old, config };
+  },
+  // v3 → v4 (Phase 3a): 정식 계획 추가. 옛 작기의 시험용 군락(testLai)은 없앤다(작물 모델이 대신한다).
+  3: (old) => {
+    const config = { ...(old.config as Record<string, unknown>) };
+    if (config.crop === undefined) config.crop = null;
+    if (config.setup) config.setup = { ...(config.setup as Record<string, unknown>), testLai: 0 };
     return { ...old, config };
   },
 };

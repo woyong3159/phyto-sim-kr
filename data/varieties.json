@@ -1,9 +1,704 @@
 {
   "_meta": {
     "file": "varieties",
-    "title": "품종",
-    "plannedPhase": 2,
+    "title": "품종 데이터베이스",
+    "plannedPhase": 3,
     "schemaVersion": 1
   },
-  "params": {}
+  "params": {
+    "cucumber": {
+      "cheongchun": {
+        "name": "청춘 백다다기",
+        "type": "백다다기형",
+        "desc": "다다기 계통 ‘청춘’(해오름종묘). 절성형, 겨울·봄 작형.",
+        "real": true,
+        "female": {
+          "value": 0.85,
+          "unit": "-",
+          "range": [
+            0.2,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건(야온 15°C, 일장 12시간)에서 원줄기 마디 암꽃 비율. 절성형(마디마다 암꽃)."
+        },
+        "pmaxFactor": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "품종별 광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitWMax": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과실 잠재 크기 배수."
+        },
+        "harvestWeight": {
+          "value": 180,
+          "unit": "g",
+          "range": [
+            100,
+            400
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 수확 무게."
+        },
+        "lenA": {
+          "value": 2.9,
+          "unit": "cm g^-b",
+          "range": [
+            2,
+            4.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과장 계수(과형)."
+        },
+        "curveSens": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.5,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "곡과 민감도 배수."
+        },
+        "coldTol": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 시작 온도의 이동(음수 = 저온에 강함)."
+        },
+        "heatTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 장해·착과 상한의 이동(양수 = 고온에 강함)."
+        },
+        "firstHarvestDays": {
+          "value": 35,
+          "unit": "일",
+          "range": [
+            20,
+            60
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값, 모델이 계산한 결과와 비교용)."
+        },
+        "potentialYield": {
+          "value": 10500,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            5000,
+            25000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "반촉성 표준 관리 때 기대 수량(참고값, 계산에는 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성(5 = 강). Phase 6에서 사용."
+          },
+          "downyMildew": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "노균병 저항성. Phase 6에서 사용."
+          }
+        },
+        "pricePremium": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "백다다기 표준 대비 가격 배수(Phase 7에서 사용)."
+        },
+        "seedlingPrice": {
+          "value": 700,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "접목묘 1주 가격(Phase 7에서 사용)."
+        }
+      },
+      "ipchu": {
+        "name": "입추백다다기",
+        "type": "백다다기형",
+        "desc": "억제·촉성 작형에서 추천된 백다다기(자원식물학회지 19(2), 2006). 고온기 암꽃 착생이 안정적.",
+        "real": true,
+        "female": {
+          "value": 0.8,
+          "unit": "-",
+          "range": [
+            0.2,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건(야온 15°C, 일장 12시간)에서 원줄기 마디 암꽃 비율. 고온·장일에서도 암꽃이 덜 줄어드는 계통으로 보고됨(수치는 추정)."
+        },
+        "pmaxFactor": {
+          "value": 0.98,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "품종별 광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 1.05,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitWMax": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과실 잠재 크기 배수."
+        },
+        "harvestWeight": {
+          "value": 180,
+          "unit": "g",
+          "range": [
+            100,
+            400
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 수확 무게."
+        },
+        "lenA": {
+          "value": 2.9,
+          "unit": "cm g^-b",
+          "range": [
+            2,
+            4.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과장 계수(과형)."
+        },
+        "curveSens": {
+          "value": 0.9,
+          "unit": "-",
+          "range": [
+            0.5,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "곡과 민감도 배수."
+        },
+        "coldTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 시작 온도의 이동(음수 = 저온에 강함)."
+        },
+        "heatTol": {
+          "value": 1,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 장해·착과 상한의 이동(양수 = 고온에 강함)."
+        },
+        "firstHarvestDays": {
+          "value": 36,
+          "unit": "일",
+          "range": [
+            20,
+            60
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값, 모델이 계산한 결과와 비교용)."
+        },
+        "potentialYield": {
+          "value": 10000,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            5000,
+            25000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "반촉성 표준 관리 때 기대 수량(참고값, 계산에는 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성(5 = 강). Phase 6에서 사용."
+          },
+          "downyMildew": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "노균병 저항성. Phase 6에서 사용."
+          }
+        },
+        "pricePremium": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "백다다기 표준 대비 가격 배수(Phase 7에서 사용)."
+        },
+        "seedlingPrice": {
+          "value": 700,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "접목묘 1주 가격(Phase 7에서 사용)."
+        }
+      },
+      "gyeousari": {
+        "name": "겨우살이청장",
+        "type": "취청형",
+        "desc": "청장(취청)계. 촉성 작형 추천 품종(자원식물학회지 19(2), 2006). 저온 신장성이 좋고 과실이 길다.",
+        "real": true,
+        "female": {
+          "value": 0.6,
+          "unit": "-",
+          "range": [
+            0.2,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건(야온 15°C, 일장 12시간)에서 원줄기 마디 암꽃 비율. 취청계는 마디성이 낮아 원줄기+곁순 착과."
+        },
+        "pmaxFactor": {
+          "value": 1.02,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "품종별 광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 1.1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitWMax": {
+          "value": 1.25,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과실 잠재 크기 배수."
+        },
+        "harvestWeight": {
+          "value": 230,
+          "unit": "g",
+          "range": [
+            100,
+            400
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 수확 무게."
+        },
+        "lenA": {
+          "value": 3.3,
+          "unit": "cm g^-b",
+          "range": [
+            2,
+            4.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과장 계수(과형)."
+        },
+        "curveSens": {
+          "value": 1.15,
+          "unit": "-",
+          "range": [
+            0.5,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "곡과 민감도 배수."
+        },
+        "coldTol": {
+          "value": -1.5,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 시작 온도의 이동(음수 = 저온에 강함)."
+        },
+        "heatTol": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 장해·착과 상한의 이동(양수 = 고온에 강함)."
+        },
+        "firstHarvestDays": {
+          "value": 40,
+          "unit": "일",
+          "range": [
+            20,
+            60
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값, 모델이 계산한 결과와 비교용)."
+        },
+        "potentialYield": {
+          "value": 10500,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            5000,
+            25000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "반촉성 표준 관리 때 기대 수량(참고값, 계산에는 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성(5 = 강). Phase 6에서 사용."
+          },
+          "downyMildew": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "노균병 저항성. Phase 6에서 사용."
+          }
+        },
+        "pricePremium": {
+          "value": 0.95,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "백다다기 표준 대비 가격 배수(Phase 7에서 사용)."
+        },
+        "seedlingPrice": {
+          "value": 700,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "접목묘 1주 가격(Phase 7에서 사용)."
+        }
+      },
+      "gasiA": {
+        "name": "가시계 A (가상, 실제 계통 특성 기반)",
+        "type": "가시계",
+        "desc": "남부 지방 가시오이(흑진주계) 특성을 본뜬 가상 품종. 과실이 길고 가시가 많으며 고온에 강하다.",
+        "real": false,
+        "female": {
+          "value": 0.55,
+          "unit": "-",
+          "range": [
+            0.2,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건(야온 15°C, 일장 12시간)에서 원줄기 마디 암꽃 비율. 혼성형."
+        },
+        "pmaxFactor": {
+          "value": 1.03,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "품종별 광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 1.15,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitWMax": {
+          "value": 1.4,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과실 잠재 크기 배수."
+        },
+        "harvestWeight": {
+          "value": 260,
+          "unit": "g",
+          "range": [
+            100,
+            400
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "표준 수확 무게."
+        },
+        "lenA": {
+          "value": 3.6,
+          "unit": "cm g^-b",
+          "range": [
+            2,
+            4.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과장 계수(과형)."
+        },
+        "curveSens": {
+          "value": 1.3,
+          "unit": "-",
+          "range": [
+            0.5,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "곡과 민감도 배수."
+        },
+        "coldTol": {
+          "value": 1,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 시작 온도의 이동(음수 = 저온에 강함)."
+        },
+        "heatTol": {
+          "value": 1.5,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 장해·착과 상한의 이동(양수 = 고온에 강함)."
+        },
+        "firstHarvestDays": {
+          "value": 42,
+          "unit": "일",
+          "range": [
+            20,
+            60
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값, 모델이 계산한 결과와 비교용)."
+        },
+        "potentialYield": {
+          "value": 9500,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            5000,
+            25000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "반촉성 표준 관리 때 기대 수량(참고값, 계산에는 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성(5 = 강). Phase 6에서 사용."
+          },
+          "downyMildew": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "노균병 저항성. Phase 6에서 사용."
+          }
+        },
+        "pricePremium": {
+          "value": 0.9,
+          "unit": "-",
+          "range": [
+            0.6,
+            1.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "백다다기 표준 대비 가격 배수(Phase 7에서 사용)."
+        },
+        "seedlingPrice": {
+          "value": 650,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "접목묘 1주 가격(Phase 7에서 사용)."
+        }
+      }
+    }
+  }
 }

@@ -16,6 +16,8 @@ export const ENGINE_DATA: EngineData = {
   facilities: DATA.facilities!.params,
   equipment: DATA.equipment!.params,
   prices: DATA.prices!.params,
+  crops: DATA.crops!.params,
+  varieties: DATA.varieties!.params,
 };
 
 /** 화면에서 시설·장비 정보를 보여줄 때 쓰는 값 묶음(지온은 지역마다 달라 여기서는 0으로 둔다). */

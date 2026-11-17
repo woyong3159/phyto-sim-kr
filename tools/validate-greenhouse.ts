@@ -1,9 +1,9 @@
-// Phase 2 검증(V3) 실행기: npx vite-node tools/validate-greenhouse.ts → docs/VALIDATION_PHASE2.md
+// Phase 2 검증(V3) 실행기: RUN=greenhouse npx vite-node tools/validate-greenhouse.ts → docs/VALIDATION_PHASE2.md
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createInitialState, createWorld, defaultSettings, defaultSetup, stepHour, type ControlSettings, type EngineData, type GhHour, type GhSetup, type HourWx, type SimConfig, type SimState, type UserAction } from '../src/engine';
 
 const load = (f: string) => JSON.parse(readFileSync(new URL(`../data/${f}.json`, import.meta.url), 'utf8')).params;
-export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events'), facilities: load('facilities'), equipment: load('equipment'), prices: load('prices') };
+export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events'), facilities: load('facilities'), equipment: load('equipment'), prices: load('prices'), crops: load('crops'), varieties: load('varieties') };
 
 export interface Run {
   hours: { hour: number; hod: number; out: HourWx; gh: GhHour; month: number; day: number }[];
@@ -16,7 +16,7 @@ export function run(opts: { regionId?: string; startDate: string; seed?: string;
     seed: opts.seed ?? 'gh-validate',
     startDate: opts.startDate,
     regionId: opts.regionId ?? 'buyeo',
-    setup: { ...defaultSetup(opts.setup?.facility ?? 'multi_pe'), ...opts.setup },
+    setup: { ...defaultSetup(opts.setup?.facility ?? 'multi_pe'), testLai: 2, ...opts.setup },
     settings: { ...defaultSettings(), ...opts.settings },
   };
   const world = createWorld(config, data);
@@ -156,7 +156,7 @@ export function scenario6() {
   });
 }
 
-if (!process.env.VITEST) {
+if (process.env.RUN === 'greenhouse') {
   const f1 = (v: number) => v.toFixed(1);
   const L: string[] = ['# Phase 2 검증 결과 (V3)', '', '이 파일은 `npx vite-node tools/validate-greenhouse.ts`가 자동으로 만든다. 날씨는 Phase 1 기상 생성기가 만든 것이고, 비교 대상끼리는 같은 seed(같은 날씨)를 쓴다.', '시험용 군락 LAI 2.0, 면적 1,000 m² 기준.', ''];
 

@@ -5,7 +5,7 @@
  *   저장에는 워커 왕복이 필요 없다: 메인 스레드가 아는 "마지막 게임 시각 + 조치 로그"만 쓰면 된다.
  */
 import EngineWorker from './engine.worker?worker&inline';
-import { ENGINE_STATE_VERSION, EVENT_TYPES, defaultSettings, defaultSetup, type ControlSettings, type DayWx, type DeviceId, type EventType, type GhSetup, type SimConfig, type SimEvent } from '../engine';
+import { ENGINE_STATE_VERSION, EVENT_TYPES, defaultSettings, defaultSetup, type ControlSettings, type DayWx, type DeviceId, type EventType, type GhSetup, type PlantOrder, type SimConfig, type SimEvent, type WorkPlan, type WorkTask } from '../engine';
 import { getDailyRows, getHourlyRows, pruneHourly, putHourlyRows, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putDailyRows, putSave, putSnapshot, type Db } from '../storage/db';
 import { SAVE_SCHEMA_VERSION, type SaveRecord } from '../storage/schema';
 import { decodeBundle, encodeBundle, exportFileName, shareOrDownload } from '../storage/exportImport';
@@ -42,11 +42,14 @@ export interface NewGameOptions {
   seed?: string;
   setup?: GhSetup;
   settings?: ControlSettings;
+  /** 정식 계획(시작 후 며칠째에 무엇을 심을지) */
+  crop?: { day: number; order: PlantOrder } | null;
 }
 
 const AUTOSAVE_MS = 5000;
 const KV_CURRENT = 'currentSaveId';
-const HISTORY_DAYS = 60;
+/** 화면에 들고 있는 일 단위 원장(작기 전체 그래프용). */
+const HISTORY_DAYS = 500;
 const HISTORY_HOURS = 14 * 24;
 const EVENT_LOG_MAX = 50;
 
@@ -258,6 +261,18 @@ export class Session {
   repairCover() {
     this.addAction('gh/repairCover', null);
   }
+  plantCrop(order: PlantOrder) {
+    this.addAction('crop/plant', order);
+  }
+  setPlan(plan: WorkPlan) {
+    this.addAction('crop/plan', plan);
+  }
+  cropWork(task: WorkTask) {
+    this.addAction('crop/work', { task });
+  }
+  removeCrop() {
+    this.addAction('crop/remove', null);
+  }
 
   async saveNow(): Promise<void> {
     const save = this.view.save;
@@ -291,7 +306,7 @@ export class Session {
   async newGame(opts: NewGameOptions): Promise<void> {
     await this.saveNow();
     const now = Date.now();
-    const config: SimConfig = { seed: opts.seed?.trim() || newSeed(), startDate: opts.startDate, regionId: opts.regionId, setup: opts.setup ?? defaultSetup(), settings: opts.settings ?? defaultSettings() };
+    const config: SimConfig = { seed: opts.seed?.trim() || newSeed(), startDate: opts.startDate, regionId: opts.regionId, setup: opts.setup ?? defaultSetup(), settings: opts.settings ?? defaultSettings(), crop: opts.crop ?? null };
     const save: SaveRecord = {
       schemaVersion: SAVE_SCHEMA_VERSION,
       id: `save-${now.toString(36)}`,

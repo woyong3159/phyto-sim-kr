@@ -8,6 +8,7 @@ export interface FacilityParams {
   name: string;
   desc: string;
   transmissivity: number;
+  haze: number;
   uValue: number;
   coverRatio: number;
   eaveHeight: number;

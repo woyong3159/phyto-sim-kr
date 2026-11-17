@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createInitialState, createWorld, defaultSettings, defaultSetup, fingerprint, listRegions, stepHour, type EngineData, type SimConfig, type SimState } from '../src/engine';
 
 const load = (f: string) => JSON.parse(readFileSync(new URL(`../data/${f}.json`, import.meta.url), 'utf8')).params;
-export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events'), facilities: load('facilities'), equipment: load('equipment'), prices: load('prices') };
+export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events'), facilities: load('facilities'), equipment: load('equipment'), prices: load('prices'), crops: load('crops'), varieties: load('varieties') };
 const cfg = (seed: string, startDate: string, regionId: string): SimConfig => ({ seed, startDate, regionId, setup: defaultSetup(), settings: defaultSettings() });
 
 const YEARS = 30;

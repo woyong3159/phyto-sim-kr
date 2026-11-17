@@ -16,6 +16,8 @@ export { ALL_MODULES, STEP_ORDER } from './modules';
 export { createStream, hashSeed, nextFloat, nextUint32 } from './rng';
 export { createWorld, listRegions, type EngineData, type World } from './world';
 export * from './greenhouse/types';
+export * from './crop/types';
+export { defaultOrder, defaultPlan, cropCanopy, beta, canopyPhoto, leafEnv, diffuseFraction, trap, type CanopyView } from './crop';
 export { curtainSaving, contractKw, buildGhParams, type GhParams, type FacilityParams } from './greenhouse';
 export { installCost, type CostLine } from './greenhouse/cost';
 export { sunDay, MONTH_DAYS, type RegionInfo, type MonthlyNormals, type Climate } from './weather';
@@ -29,6 +31,7 @@ export function createInitialState(world: World): SimState {
     rng: { ...rng, weather: init.weatherRng, events: init.eventsRng },
     weather: init.weather,
     gh: initGreenhouse(world, init.weather.now.temp, init.weather.now.rh),
+    crop: null,
     events: init.events,
   };
 }

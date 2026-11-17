@@ -19,6 +19,9 @@
  *   설정값에 못 미치는지는 "용량이 모자라서 그런 것"이 계산에서 그대로 드러난다.
  */
 import { dexp, dpow } from '../dmath';
+import { cropCanopy } from '../crop';
+import { canopyPhoto, diffuseFraction, leafEnv } from '../crop/canopy';
+import { sinElevation } from '../weather/astro';
 import { nextFloat } from '../rng';
 import type { RngState, SimEvent, SimState } from '../types';
 import type { World } from '../world';
@@ -180,8 +183,15 @@ export function stepGreenhouse(state: SimState, world: World): GhStepResult {
 
   // ── 고정 계수 ──
   const h = fac.meanHeight;
-  const lai = s.testLai;
-  const fc = lai > 0 ? 1 - dexp(-ph.extinction * lai) : 0;
+  // 군락: 작물이 있으면 작물 모듈이 준 요약을 쓰고, 없으면 시험용 군락(testLai, 검증 전용)을 쓴다
+  const view = cropCanopy(state, world);
+  const core = world.crops.core.photo;
+  const lai = view ? view.lai : s.testLai;
+  const kExt = view ? view.kdf : ph.extinction;
+  const rsMin = view ? view.stomatalMin / (view.waterStress > 0.05 ? view.waterStress : 0.05) : ph.stomatalMin;
+  const haze = 1 - (1 - fac.haze) * (s.coverLayers === 2 ? 1 - fac.haze : 1);
+  let poolLocal = view ? view.pool : 0;
+  const fc = lai > 0 ? 1 - dexp(-kExt * lai) : 0;
   const Ca = RHO_CP * h + (ph.airExtraCapacity + ph.canopyCapacityPerLai * lai) * 1000;
   const Cm = ph.thermalMass * 1000;
   const dbl = s.coverLayers === 2;
@@ -216,7 +226,7 @@ export function stepGreenhouse(state: SimState, world: World): GhStepResult {
   const store0 = Ca * T + Cm * Tm;
   const w0 = absHumidity(vp, T) * h;
   const c0 = C * CO2_KG_PER_PPM * h;
-  const acc = { t: 0, rh: 0, vpd: 0, co2: 0, ppfd: 0, tLeaf: 0, tSurf: 0, ach: 0, vent: 0, curtain: 0, shade: 0, heat: 0, cool: 0, fog: 0, dehum: 0, dose: 0, light: 0, heatW: 0, E: 0, cond: 0, wet: 0, deficit: 0, fuelJ: 0, elecJ: 0, co2Kg: 0, burnerL: 0, eIn: 0, eOut: 0, wIn: 0, wOut: 0, cIn: 0, cOut: 0 };
+  const acc = { t: 0, rh: 0, vpd: 0, co2: 0, ppfd: 0, tLeaf: 0, tSurf: 0, ach: 0, vent: 0, curtain: 0, shade: 0, heat: 0, cool: 0, fog: 0, dehum: 0, dose: 0, light: 0, heatW: 0, E: 0, cond: 0, wet: 0, deficit: 0, gross: 0, maint: 0, starve: 0, parAbs: 0, dif: 0, fuelJ: 0, elecJ: 0, co2Kg: 0, burnerL: 0, eIn: 0, eOut: 0, wIn: 0, wOut: 0, cIn: 0, cOut: 0 };
   const ran: Partial<Record<DeviceId, boolean>> = {};
 
   for (let k = 0; k < SUB; k++) {
@@ -327,7 +337,7 @@ export function stepGreenhouse(state: SimState, world: World): GhStepResult {
       // 온도 항은 적온보다 더울 때만 적용한다(고온 기공 폐쇄). 저온 쪽까지 적용하면 겨울밤 증산이 사라져 실내가 비현실적으로 건조해진다.
       const dTs = T > ph.stomatalTempOpt ? T - ph.stomatalTempOpt : 0;
       const cs = (C > 1100 ? 1100 : C) - 200;
-      const rs = ((ph.stomatalMin * (is + 4.3)) / (is + 0.54)) * (1 + ph.stomatalTemp * dTs * dTs) * (1 + ph.stomatalCo2 * cs * cs) * (1 + ph.stomatalVpd * vpd * vpd);
+      const rs = ((rsMin * (is + 4.3)) / (is + 0.54)) * (1 + ph.stomatalTemp * dTs * dTs) * (1 + ph.stomatalCo2 * cs * cs) * (1 + ph.stomatalVpd * vpd * vpd);
       const ra = rb / (2 * lai);
       const rc = rs / lai;
       const slope = satSlope(T);
@@ -375,7 +385,28 @@ export function stepGreenhouse(state: SimState, world: World): GhStepResult {
     // ════ CO2 공급량 결정 ════
     const gAll = gVent + gFan;
     let uptake = 0; // kg m⁻² s⁻¹ (순흡수, 음수면 방출)
-    if (lai > 0) {
+    if (view) {
+      const sinB = sinElevation(sun, t);
+      const sunPpfd = iIn * ph.parFraction * ph.parPhotonPerJoule;
+      const fDif = diffuseFraction(wx.solarW, sinB);
+      // 피복재가 직달광의 일부를 산란광으로 바꾼다. 보광등 빛은 산란광으로 본다.
+      const dir = sunPpfd * (1 - fDif) * (1 - haze);
+      const dif = sunPpfd - dir + lampPpfd;
+      const cp = canopyPhoto(view, core, leafEnv(core, view.tempCurve, tLeaf, C, vpd), dir, dif, sinB);
+      const gross = cp.gross * 30e-6; // g CH2O m⁻² s⁻¹
+      const rmPot = view.rm25 * dpow(core.q10, (T - 25) / 10);
+      // 유지호흡은 저장된 당이 있는 만큼만 일어난다(모자란 몫은 작물 모듈이 기아 스트레스로 처리)
+      const can = gross + poolLocal / DT;
+      const rm = rmPot < can ? rmPot : can;
+      poolLocal += (gross - rm) * DT;
+      if (poolLocal < 0) poolLocal = 0;
+      uptake = ((gross - rm) * 44) / 30 / 1000 - view.growthResp;
+      acc.gross += gross * DT;
+      acc.maint += rm * DT;
+      acc.starve += (rmPot - rm) * DT;
+      acc.parAbs += cp.absorbed;
+      acc.dif += ppfd > 0 ? dif / ppfd : 1;
+    } else if (lai > 0) {
       const fC = clamp((2 * (C - 50)) / (C + 300), 0, 2.2);
       const fT = clamp(1 - ((tLeaf - 25) / 18) * ((tLeaf - 25) / 18), 0, 1);
       const pMax = (ph.testCanopyAmax * fC * fT * fc) / ph.extinction;
@@ -643,6 +674,11 @@ export function stepGreenhouse(state: SimState, world: World): GhStepResult {
     cIn: acc.cIn,
     cOut: acc.cOut,
     cStore: C * CO2_KG_PER_PPM * h - c0,
+    cGross: acc.gross,
+    cMaint: acc.maint,
+    cStarve: acc.starve,
+    parAbsorbed: acc.parAbs / n,
+    diffuse: acc.dif / n,
   };
   const t2: GhDay = {
     ...today,

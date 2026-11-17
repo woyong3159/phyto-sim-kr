@@ -7,10 +7,11 @@ import { stubModule, type EngineModule } from './types';
 import { timeModule } from './time';
 import { weatherModule } from './weather';
 import { controlModule, greenhouseModule } from './greenhouse';
+import { cropModule } from './crop';
 
 export const eventsModule = stubModule('events', '뉴스·재해·시장 충격(기상 특보는 weather가 낸다)', 7);
 export const rootzoneModule = stubModule('rootzone', '배지·양액·관수·이온 흡수', 4);
-export const cropModule = stubModule('crop', '생육 코어 + 작물별 모듈(딸기·와사비·오이)', 3);
+export { cropModule };
 export const physiologyModule = stubModule('physiology', '생리장해·생장조절제(PGR)', 5);
 export const protectionModule = stubModule('protection', '병해·해충·바이러스·천적·농약·저항성·방역', 6);
 export const laborModule = stubModule('labor', '작업과 노동 시간', 5);

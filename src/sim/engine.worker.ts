@@ -6,9 +6,9 @@
  *   (백그라운드에서 돌아온 직후 밀린 시간을 한꺼번에 계산하지 않기 위해).
  * - 사건이 생기면(자동 일시정지가 켜진 종류) 그 시각에서 멈춘다.
  */
-import { contractKw, createInitialState, createWorld, fingerprint, stepHour, type ControlSettings, type EventType, type GhSetup, type SimEvent, type SimState, type UserAction, type World } from '../engine';
+import { contractKw, createInitialState, createWorld, fingerprint, stepHour, type ControlSettings, type CropState, type EventType, type GhSetup, type SimEvent, type SimState, type UserAction, type WorkPlan, type World } from '../engine';
 import { ENGINE_DATA } from '../data';
-import type { DayRow, FromWorker, HourRow, ToWorker, WxView } from './protocol';
+import type { CropView, DayRow, FromWorker, HourRow, ToWorker, WxView } from './protocol';
 
 const SNAPSHOT_INTERVAL_HOURS = 7 * 24;
 const LOOP_MS = 25;
@@ -32,14 +32,29 @@ let eventBuffer: SimEvent[] = [];
 
 const post = (msg: FromWorker) => (self as unknown as DedicatedWorkerGlobalScope).postMessage(msg);
 
+function cropView(c: CropState | null, plan: WorkPlan | null): CropView | null {
+  if (!c) return null;
+  const dmc = world!.crops.cucumber.fruit.dmc + world!.crops.cucumber.fruit.dmcLight * (c.dliAvg - world!.crops.cucumber.leaf.slaDliRef);
+  const { nodes, fruits, tips, cum: _cum, ...rest } = c;
+  return {
+    ...rest,
+    plan: plan ?? c.plan,
+    leaves: nodes.map((n) => ({ area: n.area, lat: n.lat, age: n.age })),
+    fruitList: fruits.map((f) => ({ node: f.node, n: f.n, fw: f.w / (dmc > 0.025 ? dmc : 0.025), age: f.age })),
+    laterals: tips.filter((t) => t.made >= 1).length,
+  };
+}
+
 function view(): WxView {
   const s = state!;
   const sun = world!.clim.sun[s.weather.cur.di]!;
   // 방금 넣었지만 아직 스텝이 돌지 않은 설정·구성 변경을 화면에는 바로 보여준다
   let setup = s.gh.setup;
   let settings = s.gh.settings;
+  let plan: WorkPlan | null = null;
   for (const a of actions) {
     if (a.hour !== s.hour) continue;
+    if (a.type === 'crop/plan') plan = a.payload as WorkPlan;
     if (a.type === 'gh/setup') setup = a.payload as GhSetup;
     if (a.type === 'gh/control') settings = a.payload as ControlSettings;
   }
@@ -51,6 +66,7 @@ function view(): WxView {
     sunset: sun.sunset,
     daylength: sun.daylength,
     gh: { out: g.out, today: g.today, total: g.total, setup, settings, failures: g.failures, breached: g.breached, destroyed: g.destroyed, dust: g.dust, roofSnow: g.roofSnow, contractKw: contractKw(world!, { ...g, setup }) },
+    crop: cropView(s.crop, plan),
   };
 }
 
@@ -63,7 +79,9 @@ function stepOnce(live: boolean): boolean {
   hourBuffer.push({ hour: h, tOut: wx.temp, rhOut: wx.rh, solarW: wx.solarW, tIn: o.tIn, rhIn: o.rhIn, vpd: o.vpd, co2: o.co2, ppfd: o.ppfd, vent: o.vent, heatW: o.heatW, won: o.won });
   if (state.hour % 24 === 0) {
     const d = state.gh.today;
-    dayBuffer.push({ dayIndex: state.weather.prev.dayIndex, wx: state.weather.prev, gh: { ...d, tMean: d.tMean / 24, rhMean: d.rhMean / 24 } });
+    const ct = state.crop?.today;
+    const cropDay = ct && ct.dayIndex === state.weather.prev.dayIndex ? { ...ct, sPhoto: ct.sPhoto / 24, sExpand: ct.sExpand / 24, sFruit: ct.sFruit / 24, sSet: ct.sSet / 24 } : null;
+    dayBuffer.push({ dayIndex: state.weather.prev.dayIndex, wx: state.weather.prev, gh: { ...d, tMean: d.tMean / 24, rhMean: d.rhMean / 24 }, crop: cropDay });
   }
   if (live && state.hour % SNAPSHOT_INTERVAL_HOURS === 0) post({ type: 'snapshot', state, fingerprint: fingerprint(state) });
   if (live && state.events.length) {

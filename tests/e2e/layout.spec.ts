@@ -290,3 +290,77 @@ test('오프라인에서도 열리고 이어진다(서비스 워커)', async ({ 
   await expect(page.getByTestId('outdoor-card')).toBeVisible();
   await context.setOffline(false);
 });
+
+async function advanceWeeks(page: Page, weeks: number) {
+  for (let i = 0; i < weeks; i++) {
+    await page.locator('[data-turn="168"]').tap();
+    await expect(page.locator('[data-turn="168"]')).toBeEnabled();
+    // 자동 일시정지(첫 수확 등)가 뜨면 닫고 계속
+    if (await page.getByTestId('pause-banner').isVisible()) await page.getByTestId('pause-banner').getByRole('button').tap();
+  }
+}
+
+test('작물 탭: 정식 계획 → 생육 현황·그림·스트레스 → 작업 계획 변경 → 생육 그래프', async ({ page }, info) => {
+  await startGame(page, { region: 'buyeo', date: '2026-03-01', seed: 'e2e-crop' });
+  await advanceWeeks(page, 8);
+  await page.locator('[data-tab="crop"]').tap();
+  await expect(page.getByTestId('crop-status')).toBeVisible();
+  await expect(page.getByTestId('plant-icon')).toBeVisible();
+  expect(parseFloat((await page.getByTestId('crop-lai').textContent()) ?? '0')).toBeGreaterThan(0.5);
+  await expect(page.getByTestId('crop-stress')).toContainText('광합성');
+  await noOverflow(page);
+  for (const r of await page.locator('.subtabs button').evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ w: b.width, h: b.height })))) {
+    expect(r.w).toBeGreaterThanOrEqual(44);
+    expect(r.h).toBeGreaterThanOrEqual(44);
+  }
+  await page.screenshot({ path: info.outputPath('20-crop-status.png'), fullPage: true });
+
+  await page.locator('[data-sub="work"]').tap();
+  await expect(page.getByTestId('work-plan')).toBeVisible();
+  for (const r of await page.locator('[data-work]').evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ w: b.width, h: b.height })))) {
+    expect(r.w).toBeGreaterThanOrEqual(44);
+    expect(r.h).toBeGreaterThanOrEqual(44);
+  }
+  // 적엽 간격을 0(방치)으로 바꾸고 확인 단계를 거친다
+  const deleaf = page.getByTestId('plan-deleaf');
+  await deleaf.fill('0');
+  await deleaf.blur();
+  await page.getByTestId('apply-plan').tap();
+  await page.getByTestId('confirm-plan').tap();
+  await expect(page.getByTestId('apply-plan')).toHaveCount(0);
+  await expect(deleaf).toHaveValue('0');
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('21-crop-work.png'), fullPage: true });
+
+  await advanceWeeks(page, 3);
+  await page.locator('[data-sub="graph"]').tap();
+  await expect(page.getByTestId('chart-lai')).toBeVisible();
+  await expect(page.getByTestId('chart-harvest')).toBeVisible();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('22-crop-graph.png'), fullPage: true });
+  await page.locator('[data-sub="now"]').tap();
+  expect(parseFloat(((await page.getByTestId('yield-top').textContent()) ?? '0').replace(/,/g, ''))).toBeGreaterThan(100);
+});
+
+test('빈 온실로 시작 → 작물 탭에서 직접 정식 → 새로고침 후에도 작물이 남아 있다', async ({ page }, info) => {
+  await page.goto('./');
+  await page.getByTestId('start-date').fill('2026-04-01');
+  await page.getByRole('switch', { name: '정식 계획 넣기' }).tap();
+  await page.getByTestId('start-game').tap();
+  await page.getByTestId('confirm-start').tap();
+  await expect(page.getByTestId('clock')).toBeVisible();
+  await page.locator('[data-tab="crop"]').tap();
+  await expect(page.getByTestId('plant-form')).toBeVisible();
+  await page.locator('[data-variety="gyeousari"]').tap();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('23-plant-form.png'), fullPage: true });
+  await page.getByTestId('plant-now').tap();
+  await page.getByTestId('confirm-plant').tap();
+  await page.locator('[data-turn="24"]').tap();
+  await expect(page.getByTestId('crop-status')).toContainText('겨우살이청장');
+  await page.locator('[data-turn="24"]').tap();
+  await expect(page.locator('[data-turn="24"]')).toBeEnabled();
+  await page.reload();
+  await page.locator('[data-tab="crop"]').tap();
+  await expect(page.getByTestId('crop-status')).toContainText('겨우살이청장');
+});
