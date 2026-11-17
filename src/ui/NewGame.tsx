@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ENGINE_DATA } from '../data';
-import { sunDay, MONTH_DAYS } from '../engine';
+import { defaultSetup, sunDay, MONTH_DAYS, type GhSetup } from '../engine';
+import { SetupEditor } from './SetupEditor';
 import { session, todayKst } from '../sim/session';
 
 const stations = ENGINE_DATA.regions.stations;
@@ -118,11 +119,12 @@ export function NewGame({ onDone, onCancel }: { onDone?: () => void; onCancel?: 
   const [seed, setSeed] = useState('');
   const [name, setName] = useState('');
   const [confirm, setConfirm] = useState(false);
+  const [setup, setSetup] = useState<GhSetup>(defaultSetup());
   const st = stations.find((s) => s.id === regionId)!;
   const validDate = /^\d{4}-\d{2}-\d{2}$/.test(startDate);
 
   const start = async () => {
-    await session.newGame({ name: name || `${st.name} ${startDate}`, regionId, startDate, seed });
+    await session.newGame({ name: name || `${st.name} ${startDate}`, regionId, startDate, seed, setup });
     onDone?.();
   };
 
@@ -168,6 +170,12 @@ export function NewGame({ onDone, onCancel }: { onDone?: () => void; onCancel?: 
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={`${st.name} ${startDate}`} />
         </label>
         <p className="muted small">같은 지역 · 같은 시작일 · 같은 seed면 날씨가 날짜 하나까지 똑같이 다시 나옵니다. 재배 방법만 바꿔 비교할 때 씁니다.</p>
+      </section>
+
+      <section className="card" aria-labelledby="ng-setup">
+        <h2 id="ng-setup">3. 시설 · 장비</h2>
+        <SetupEditor value={setup} onChange={setSetup} />
+        <p className="muted small">작기 중에도 "환경 → 시설·장비"에서 바꿀 수 있습니다. 제어 설정값은 시작한 뒤 "환경 → 제어"에서 정합니다.</p>
       </section>
 
       {confirm ? (

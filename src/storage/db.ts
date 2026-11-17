@@ -93,6 +93,27 @@ export async function getDailyRows<T>(db: Db, saveId: string, fromDay: number, t
   return rows.map((r) => r.data as T);
 }
 
+/** 시간 단위 원장(최근 14일만 보존). */
+export async function putHourlyRows(db: Db, saveId: string, rows: { hour: number; data: unknown }[]): Promise<void> {
+  if (!rows.length) return;
+  const tx = db.transaction('ledgerHourly', 'readwrite');
+  for (const r of rows) void tx.store.put({ saveId, hour: r.hour, data: r.data });
+  await tx.done;
+}
+
+export async function getHourlyRows<T>(db: Db, saveId: string, fromHour: number, toHour: number): Promise<T[]> {
+  const from = Math.max(0, fromHour);
+  if (toHour < from) return [];
+  const rows = await db.getAll('ledgerHourly', IDBKeyRange.bound([saveId, from], [saveId, toHour]));
+  return rows.map((r) => r.data as T);
+}
+
+/** beforeHour보다 오래된 시간 원장을 지운다(보존 정책). */
+export async function pruneHourly(db: Db, saveId: string, beforeHour: number): Promise<void> {
+  if (beforeHour <= 0) return;
+  await db.delete('ledgerHourly', IDBKeyRange.bound([saveId, 0], [saveId, beforeHour - 1]));
+}
+
 export async function kvGet<T>(db: Db, key: string): Promise<T | undefined> {
   return (await db.get('kv', key)) as T | undefined;
 }

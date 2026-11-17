@@ -1,9 +1,133 @@
 {
-  "_meta": {
-    "file": "prices",
-    "title": "가격",
-    "plannedPhase": 7,
-    "schemaVersion": 1
-  },
-  "params": {}
+ "_meta": {
+  "file": "prices",
+  "title": "가격(에너지·자재·농산물)",
+  "plannedPhase": 2,
+  "schemaVersion": 1
+ },
+ "params": {
+  "energy": {
+   "taxFreeDiesel": {
+    "value": 1300,
+    "unit": "원/L",
+    "range": [
+     900,
+     1700
+    ],
+    "tag": "SRC",
+    "source": "오피넷 면세유 평균가 보도(헤럴드경제·경향신문 2026-04): 면세 경유 2026-03-01 약 1,104원 → 2026-04-25 약 1,499원",
+    "note": "농업용 면세 경유. 급등 전후의 중간값. 시장 변동은 Phase 7에서."
+   },
+   "taxFreeKerosene": {
+    "value": 1250,
+    "unit": "원/L",
+    "range": [
+     850,
+     1700
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "농업용 면세 등유. 면세 경유와 비슷한 수준으로 움직인다는 점에 따른 추정(면세 등유 고시가 미확보)."
+   },
+   "diesel": {
+    "value": 1750,
+    "unit": "원/L",
+    "range": [
+     1300,
+     2200
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "과세 경유(면세유 한도 초과분)."
+   },
+   "kerosene": {
+    "value": 1500,
+    "unit": "원/L",
+    "range": [
+     1100,
+     2000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "과세 실내등유."
+   },
+   "dieselHeat": {
+    "value": 35.25,
+    "unit": "MJ/L",
+    "range": [
+     34,
+     36.5
+    ],
+    "tag": "SRC",
+    "source": "에너지법 시행규칙 에너지열량 환산기준: 경유 순발열량 0.842×10⁻³ toe/L (1 toe = 41.868 GJ)",
+    "note": "순발열량."
+   },
+   "keroseneHeat": {
+    "value": 34.12,
+    "unit": "MJ/L",
+    "range": [
+     33,
+     35.5
+    ],
+    "tag": "SRC",
+    "source": "에너지법 시행규칙 에너지열량 환산기준: 등유 순발열량 0.815×10⁻³ toe/L",
+    "note": "순발열량."
+   },
+   "elecEnergy": {
+    "value": 57,
+    "unit": "원/kWh",
+    "range": [
+     35,
+     90
+    ],
+    "tag": "EST",
+    "source": "해양수산부 보도자료: 농사용(을) 전력량요금 34.2원(2022.1) → 53원(2023.12)",
+    "note": "농사용(을) 저압 전력량요금. 53원에 이후 분할 인상분(3.8원)을 한 번 더한 추정. 현행 요금표 미확보."
+   },
+   "elecLevy": {
+    "value": 14,
+    "unit": "원/kWh",
+    "range": [
+     5,
+     25
+    ],
+    "tag": "EST",
+    "source": "연료비조정단가 kWh당 +5원 유지(2025년 보도)",
+    "note": "기후환경요금(약 9원) + 연료비조정요금(5원)."
+   },
+   "elecBasic": {
+    "value": 1150,
+    "unit": "원/kW·월",
+    "range": [
+     300,
+     3000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "농사용(을) 저압 기본요금(계약전력 kW당). 현행 요금표 미확보."
+   },
+   "elecSurcharge": {
+    "value": 1.127,
+    "unit": "-",
+    "range": [
+     1.1,
+     1.15
+    ],
+    "tag": "SRC",
+    "source": "부가가치세 10% + 전력산업기반기금 2.7%(2025-07부터)",
+    "note": "요금 합계에 곱하는 배율."
+   },
+   "liquidCo2": {
+    "value": 500,
+    "unit": "원/kg",
+    "range": [
+     200,
+     1000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "액화탄산가스 공급가(벌크·용기 구분 없이 대략). 가격 자료 미확보."
+   }
+  }
+ }
 }

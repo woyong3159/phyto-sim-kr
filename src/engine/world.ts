@@ -5,6 +5,7 @@
  */
 import { dexp, dlog } from './dmath';
 import type { SimConfig } from './types';
+import { buildGhParams, type GhParams } from './greenhouse/params';
 import { buildClimate, type Climate, type ClimateClass, type JangmaZone, type RegionInfo } from './weather/climate';
 
 interface P {
@@ -34,6 +35,9 @@ export interface EngineData {
     generator: Record<string, unknown>;
   };
   events: { weather: Record<string, unknown> };
+  facilities: unknown;
+  equipment: unknown;
+  prices: unknown;
 }
 
 export interface GenParams {
@@ -87,6 +91,7 @@ export interface World {
   clim: Climate;
   gen: GenParams;
   ev: EventParams;
+  gh: GhParams;
 }
 
 const num = (o: Record<string, unknown>, k: string): number => {
@@ -163,10 +168,13 @@ export function createWorld(config: SimConfig, data: EngineData): World {
     { precip: ordPrecip, wetDays: ordWet },
   );
 
+  const annualMean = nm.TAVG.values.reduce((a, v, m) => a + v * [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m]!, 0) / 365;
+
   return {
     config,
     region,
     clim,
+    gh: buildGhParams(data.facilities, data.equipment, data.prices, annualMean),
     gen: {
       tempSd: arr(g, 'tempSdMonthly').map((v) => v * classFactor),
       arFastPhi: num(g, 'arFastPhi'),

@@ -1,9 +1,1671 @@
 {
-  "_meta": {
-    "file": "equipment",
-    "title": "장비(난방·환기·보광 등)",
-    "plannedPhase": 1,
-    "schemaVersion": 1
+ "_meta": {
+  "file": "equipment",
+  "title": "장비(보온·차광·환기·냉난방·CO2·보광·제습·양액 온도)",
+  "plannedPhase": 2,
+  "schemaVersion": 1
+ },
+ "params": {
+  "curtain": {
+   "motor": {
+    "name": "커튼 개폐기",
+    "installCost": {
+     "value": 2500,
+     "unit": "원/m²",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 10,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 8000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 8,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    }
+   },
+   "materials": {
+    "pe": {
+     "name": "PE 필름",
+     "saving": {
+      "value": 0.25,
+      "unit": "-",
+      "range": [
+       0.1,
+       0.4
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "1겹의 열절감률(피복 열손실 감소 비율)."
+     },
+     "shade": {
+      "value": 0.12,
+      "unit": "-",
+      "range": [
+       0,
+       0.3
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "펼쳤을 때 차광률."
+     },
+     "vapor": {
+      "value": 0.08,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "닫힌 커튼 1겹을 수증기가 통과하는 정도(커튼 없음 = 1). 필름이라 습기가 거의 통하지 않는다(틈새로만). 통과한 습기는 찬 피복면에 맺힌다."
+     },
+     "cost": {
+      "value": 1500,
+      "unit": "원/m²",
+      "range": [
+       500,
+       5000
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "겹당 자재비."
+     }
+    },
+    "nonwoven": {
+     "name": "부직포",
+     "saving": {
+      "value": 0.3,
+      "unit": "-",
+      "range": [
+       0.15,
+       0.45
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "1겹의 열절감률."
+     },
+     "shade": {
+      "value": 0.45,
+      "unit": "-",
+      "range": [
+       0.2,
+       0.7
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "펼쳤을 때 차광률."
+     },
+     "vapor": {
+      "value": 0.5,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "닫힌 커튼 1겹을 수증기가 통과하는 정도(커튼 없음 = 1). 직물이라 습기가 잘 통한다. 통과한 습기는 찬 피복면에 맺힌다."
+     },
+     "cost": {
+      "value": 2500,
+      "unit": "원/m²",
+      "range": [
+       1000,
+       6000
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "겹당 자재비."
+     }
+    },
+    "aluminum": {
+     "name": "알루미늄 스크린",
+     "saving": {
+      "value": 0.4,
+      "unit": "-",
+      "range": [
+       0.25,
+       0.6
+      ],
+      "tag": "SRC",
+      "source": "생물환경조절학회지 수록 부여 16연동 PO 온실 난방부하 실험(2013–2014): 알루미늄 스크린 차광 85%, 보온 40%",
+      "note": "1겹의 열절감률."
+     },
+     "shade": {
+      "value": 0.85,
+      "unit": "-",
+      "range": [
+       0.5,
+       1
+      ],
+      "tag": "SRC",
+      "source": "위와 같음",
+      "note": "펼쳤을 때 차광률."
+     },
+     "vapor": {
+      "value": 0.3,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "닫힌 커튼 1겹을 수증기가 통과하는 정도(커튼 없음 = 1). 띠 사이로 일부 통한다. 통과한 습기는 찬 피복면에 맺힌다."
+     },
+     "cost": {
+      "value": 6000,
+      "unit": "원/m²",
+      "range": [
+       3000,
+       12000
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "겹당 자재비."
+     }
+    },
+    "multilayer": {
+     "name": "다겹보온커튼",
+     "saving": {
+      "value": 0.55,
+      "unit": "-",
+      "range": [
+       0.4,
+       0.7
+      ],
+      "tag": "EST",
+      "source": "농촌진흥청 다겹보온커튼 보급 자료(난방비 절감 46–50% 수준으로 홍보)",
+      "note": "1겹(한 벌)의 열절감률."
+     },
+     "shade": {
+      "value": 0.98,
+      "unit": "-",
+      "range": [
+       0.9,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "펼쳤을 때 차광률(거의 암막)."
+     },
+     "vapor": {
+      "value": 0.08,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "닫힌 커튼 1겹을 수증기가 통과하는 정도(커튼 없음 = 1). 필름층이 있어 거의 통하지 않는다. 통과한 습기는 찬 피복면에 맺힌다."
+     },
+     "cost": {
+      "value": 9000,
+      "unit": "원/m²",
+      "range": [
+       5000,
+       20000
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "자재비."
+     }
+    }
+   }
   },
-  "params": {}
+  "shade": {
+   "motor": {
+    "name": "차광막 개폐기",
+    "installCost": {
+     "value": 2500,
+     "unit": "원/m²",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 10,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 8000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 8,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    }
+   },
+   "screens": {
+    "s35": {
+     "name": "차광 35%",
+     "shade": {
+      "value": 0.35,
+      "unit": "-",
+      "range": [
+       0.3,
+       0.4
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "차광률(제품 규격)."
+     },
+     "cost": {
+      "value": 2000,
+      "unit": "원/m²",
+      "range": [
+       1000,
+       5000
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "자재비."
+     }
+    },
+    "s55": {
+     "name": "차광 55%",
+     "shade": {
+      "value": 0.55,
+      "unit": "-",
+      "range": [
+       0.5,
+       0.6
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "차광률(제품 규격)."
+     },
+     "cost": {
+      "value": 2500,
+      "unit": "원/m²",
+      "range": [
+       1000,
+       6000
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "자재비."
+     }
+    },
+    "s75": {
+     "name": "차광 75%",
+     "shade": {
+      "value": 0.75,
+      "unit": "-",
+      "range": [
+       0.7,
+       0.8
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "차광률(제품 규격)."
+     },
+     "cost": {
+      "value": 3000,
+      "unit": "원/m²",
+      "range": [
+       1000,
+       7000
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "자재비."
+     }
+    }
+   }
+  },
+  "vent": {
+   "name": "측창·천창 자동 개폐기",
+   "installCost": {
+    "value": 4000,
+    "unit": "원/m²",
+    "range": [
+     0,
+     5000000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+   },
+   "life": {
+    "value": 10,
+    "unit": "yr",
+    "range": [
+     1,
+     30
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "내용연수."
+   },
+   "mtbf": {
+    "value": 6000,
+    "unit": "h",
+    "range": [
+     500,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+   },
+   "repairHours": {
+    "value": 6,
+    "unit": "h",
+    "range": [
+     1,
+     240
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+   }
+  },
+  "insectNet": {
+   "m10": {
+    "name": "방충망 1.0 mm",
+    "ventFactor": {
+     "value": 0.8,
+     "unit": "-",
+     "range": [
+      0.6,
+      0.95
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "환기량 배율. 방충망 연구에서 망이 촘촘할수록 환기량이 20–50% 준다는 일반 결과에 따른 추정."
+    },
+    "exclusion": {
+     "aphid": {
+      "value": 0.3,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "진딧물 유입 차단율(Phase 6에서 사용)."
+     },
+     "whitefly": {
+      "value": 0.1,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "가루이 차단율."
+     },
+     "thrips": {
+      "value": 0,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "총채벌레 차단율."
+     }
+    },
+    "cost": {
+     "value": 800,
+     "unit": "원/m²",
+     "range": [
+      300,
+      3000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 면적당 환산 자재비."
+    }
+   },
+   "m06": {
+    "name": "방충망 0.6 mm",
+    "ventFactor": {
+     "value": 0.62,
+     "unit": "-",
+     "range": [
+      0.45,
+      0.8
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "환기량 배율."
+    },
+    "exclusion": {
+     "aphid": {
+      "value": 0.9,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "진딧물 차단율."
+     },
+     "whitefly": {
+      "value": 0.6,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "가루이 차단율."
+     },
+     "thrips": {
+      "value": 0.1,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "총채벌레 차단율."
+     }
+    },
+    "cost": {
+     "value": 1200,
+     "unit": "원/m²",
+     "range": [
+      300,
+      3000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 면적당 환산 자재비."
+    }
+   },
+   "m04": {
+    "name": "방충망 0.4 mm",
+    "ventFactor": {
+     "value": 0.45,
+     "unit": "-",
+     "range": [
+      0.3,
+      0.65
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "환기량 배율."
+    },
+    "exclusion": {
+     "aphid": {
+      "value": 0.99,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "진딧물 차단율."
+     },
+     "whitefly": {
+      "value": 0.95,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "가루이 차단율."
+     },
+     "thrips": {
+      "value": 0.5,
+      "unit": "-",
+      "range": [
+       0,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "총채벌레 차단율(성충 몸 폭 약 0.2 mm라 완전 차단 불가)."
+     }
+    },
+    "cost": {
+     "value": 1800,
+     "unit": "원/m²",
+     "range": [
+      300,
+      4000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 면적당 환산 자재비."
+    }
+   }
+  },
+  "circFan": {
+   "name": "순환팬(유동팬)",
+   "installCost": {
+    "value": 1500,
+    "unit": "원/m²",
+    "range": [
+     0,
+     5000000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+   },
+   "life": {
+    "value": 8,
+    "unit": "yr",
+    "range": [
+     1,
+     30
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "내용연수."
+   },
+   "mtbf": {
+    "value": 15000,
+    "unit": "h",
+    "range": [
+     500,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+   },
+   "repairHours": {
+    "value": 4,
+    "unit": "h",
+    "range": [
+     1,
+     240
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+   },
+   "power": {
+    "value": 2,
+    "unit": "W/m²",
+    "range": [
+     0.5,
+     6
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "소비전력(10a당 60 W급 30여 대)."
+   }
+  },
+  "fog": {
+   "name": "포그(고압 미스트)",
+   "installCost": {
+    "value": 6000,
+    "unit": "원/m²",
+    "range": [
+     0,
+     5000000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+   },
+   "life": {
+    "value": 8,
+    "unit": "yr",
+    "range": [
+     1,
+     30
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "내용연수."
+   },
+   "mtbf": {
+    "value": 3000,
+    "unit": "h",
+    "range": [
+     500,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+   },
+   "repairHours": {
+    "value": 8,
+    "unit": "h",
+    "range": [
+     1,
+     240
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+   },
+   "rate": {
+    "value": 300,
+    "unit": "g m⁻² h⁻¹",
+    "range": [
+     50,
+     800
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "분무량."
+   },
+   "evapFraction": {
+    "value": 0.8,
+    "unit": "-",
+    "range": [
+     0.4,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "분무량 중 공기 중에서 증발하는 비율(나머지는 바닥·잎에 떨어진다)."
+   },
+   "power": {
+    "value": 3,
+    "unit": "W/m²",
+    "range": [
+     0.5,
+     10
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "펌프 소비전력."
+   }
+  },
+  "heater": {
+   "oil": {
+    "name": "온풍기(경유·등유)",
+    "installCost": {
+     "value": 60000,
+     "unit": "원/kW",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 10,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 3000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 12,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "efficiency": {
+     "value": 0.85,
+     "unit": "-",
+     "range": [
+      0.7,
+      0.95
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "열효율(순발열량 기준)."
+    },
+    "blowerPower": {
+     "value": 0.02,
+     "unit": "W/W",
+     "range": [
+      0,
+      0.05
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "난방 출력 대비 송풍기 전력."
+    }
+   },
+   "electric": {
+    "name": "전기 온풍기",
+    "installCost": {
+     "value": 40000,
+     "unit": "원/kW",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 10,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 8000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 8,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "efficiency": {
+     "value": 0.98,
+     "unit": "-",
+     "range": [
+      0.9,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전기 → 열 변환 효율."
+    }
+   },
+   "heatpump": {
+    "name": "공기열 히트펌프",
+    "installCost": {
+     "value": 600000,
+     "unit": "원/kW",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 12,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 5000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 24,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "copBase": {
+     "value": 2,
+     "unit": "-",
+     "range": [
+      1.2,
+      3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "외기 −10°C에서의 난방 성능계수(COP)."
+    },
+    "copSlope": {
+     "value": 0.06,
+     "unit": "°C⁻¹",
+     "range": [
+      0,
+      0.15
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "외기온 1°C 오를 때 COP 증가(상한 4.0, 하한 1.6). 외기가 추울수록 효율이 떨어지는 성질."
+    }
+   },
+   "geothermal": {
+    "name": "지열 히트펌프",
+    "installCost": {
+     "value": 1500000,
+     "unit": "원/kW",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 15,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 6000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 24,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "cop": {
+     "value": 3.8,
+     "unit": "-",
+     "range": [
+      3,
+      5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "난방 COP(지중 열원이라 외기온과 거의 무관)."
+    }
+   }
+  },
+  "cooling": {
+   "padfan": {
+    "name": "패드앤팬",
+    "installCost": {
+     "value": 12000,
+     "unit": "원/m²",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 8,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 4000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 8,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "efficiency": {
+     "value": 0.8,
+     "unit": "-",
+     "range": [
+      0.6,
+      0.9
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "포화 효율: 유입 공기가 습구온도에 접근하는 정도."
+    },
+    "airflow": {
+     "value": 0.05,
+     "unit": "m³ m⁻² s⁻¹",
+     "range": [
+      0.02,
+      0.1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "팬 풍량(바닥 면적당). 분당 환기 1회 설계의 절반 수준."
+    },
+    "power": {
+     "value": 8,
+     "unit": "W/m²",
+     "range": [
+      2,
+      20
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "팬 + 펌프 소비전력."
+    }
+   },
+   "heatpump": {
+    "name": "히트펌프 냉방",
+    "installCost": {
+     "value": 600000,
+     "unit": "원/kW",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 12,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 5000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 24,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "cop": {
+     "value": 3,
+     "unit": "-",
+     "range": [
+      2,
+      4.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "냉방 COP."
+    }
+   }
+  },
+  "co2": {
+   "liquid": {
+    "name": "액화탄산가스",
+    "installCost": {
+     "value": 3000,
+     "unit": "원/m²",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 10,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 10000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 6,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "rate": {
+     "value": 10,
+     "unit": "g m⁻² h⁻¹",
+     "range": [
+      2,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "최대 공급량(ha당 100 kg/h 수준)."
+    }
+   },
+   "burner": {
+    "name": "연소식 발생기(등유)",
+    "installCost": {
+     "value": 2500,
+     "unit": "원/m²",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 8,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 4000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 8,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "rate": {
+     "value": 6,
+     "unit": "g m⁻² h⁻¹",
+     "range": [
+      2,
+      20
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "최대 CO2 발생량."
+    },
+    "co2PerLiter": {
+     "value": 2.48,
+     "unit": "kg/L",
+     "range": [
+      2.3,
+      2.7
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "등유 1 L 연소 시 CO2. 화학량론: 밀도 0.8 kg/L × 탄소 질량비 → 0.8 × (12×44/170)."
+    },
+    "waterPerLiter": {
+     "value": 1.1,
+     "unit": "kg/L",
+     "range": [
+      0.9,
+      1.3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "등유 1 L 연소 시 수증기(화학량론). 실내 습도를 올린다."
+    },
+    "heatFraction": {
+     "value": 0.95,
+     "unit": "-",
+     "range": [
+      0.8,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "연소열 중 실내에 남는 비율(무배기형)."
+    }
+   }
+  },
+  "light": {
+   "led": {
+    "name": "LED 보광등",
+    "installCost": {
+     "value": 600,
+     "unit": "원/(μmol m⁻² s⁻¹·m²)",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 10,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 20000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 12,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "efficacy": {
+     "value": 2.7,
+     "unit": "μmol/J",
+     "range": [
+      2,
+      3.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "광양자 효율(원예용 LED 통상 2.5–3.0)."
+    },
+    "radiantFraction": {
+     "value": 0.5,
+     "unit": "-",
+     "range": [
+      0.3,
+      0.7
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "소비전력 중 아래로 복사되는 비율(나머지는 등기구에서 대류열)."
+    }
+   },
+   "hps": {
+    "name": "고압나트륨등(HPS)",
+    "installCost": {
+     "value": 300,
+     "unit": "원/(μmol m⁻² s⁻¹·m²)",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 6,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 10000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 12,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "efficacy": {
+     "value": 1.8,
+     "unit": "μmol/J",
+     "range": [
+      1.5,
+      2.1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "광양자 효율(통상 1.7–1.85)."
+    },
+    "radiantFraction": {
+     "value": 0.75,
+     "unit": "-",
+     "range": [
+      0.5,
+      0.9
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "복사열 비율이 높아 작물체를 데운다."
+    }
+   }
+  },
+  "dehumidifier": {
+   "name": "제습기",
+   "installCost": {
+    "value": 8000,
+    "unit": "원/m²",
+    "range": [
+     0,
+     5000000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+   },
+   "life": {
+    "value": 8,
+    "unit": "yr",
+    "range": [
+     1,
+     30
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "내용연수."
+   },
+   "mtbf": {
+    "value": 5000,
+    "unit": "h",
+    "range": [
+     500,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+   },
+   "repairHours": {
+    "value": 12,
+    "unit": "h",
+    "range": [
+     1,
+     240
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+   },
+   "rate": {
+    "value": 15,
+    "unit": "g m⁻² h⁻¹",
+    "range": [
+     3,
+     50
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "제습량(10a당 시간당 15 L 수준)."
+   },
+   "energyPerKg": {
+    "value": 0.4,
+    "unit": "kWh/kg",
+    "range": [
+     0.2,
+     0.8
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "물 1 kg 제거에 드는 전력(응축식)."
+   },
+   "minRh": {
+    "value": 45,
+    "unit": "%",
+    "range": [
+     30,
+     60
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "이 습도 아래로는 제습 능력이 사라진다."
+   }
+  },
+  "solution": {
+   "chiller": {
+    "name": "양액 냉각기",
+    "installCost": {
+     "value": 15000,
+     "unit": "원/m²",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 8,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 5000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 24,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "capacity": {
+     "value": 40,
+     "unit": "W/m²",
+     "range": [
+      10,
+      100
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "냉각 능력(바닥 면적당)."
+    },
+    "cop": {
+     "value": 2.8,
+     "unit": "-",
+     "range": [
+      2,
+      4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "냉각 COP."
+    }
+   },
+   "heater": {
+    "name": "양액 가온기",
+    "installCost": {
+     "value": 5000,
+     "unit": "원/m²",
+     "range": [
+      0,
+      5000000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비. 국내 시공 견적의 통상 수준에 따른 추정. Phase 7에서 정밀화."
+    },
+    "life": {
+     "value": 8,
+     "unit": "yr",
+     "range": [
+      1,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "내용연수."
+    },
+    "mtbf": {
+     "value": 8000,
+     "unit": "h",
+     "range": [
+      500,
+      100000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 고장 간격(가동 시간 기준). 시간당 고장 확률 = 1 ÷ 이 값."
+    },
+    "repairHours": {
+     "value": 12,
+     "unit": "h",
+     "range": [
+      1,
+      240
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "수리를 맡긴 뒤 복구까지 걸리는 시간."
+    },
+    "capacity": {
+     "value": 40,
+     "unit": "W/m²",
+     "range": [
+      10,
+      100
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "가온 능력(전기 히터)."
+    },
+    "efficiency": {
+     "value": 0.98,
+     "unit": "-",
+     "range": [
+      0.9,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "전기 → 열."
+    }
+   },
+   "capacity": {
+    "value": 42,
+    "unit": "kJ m⁻² K⁻¹",
+    "range": [
+     10,
+     120
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "바닥 면적당 양액·배지 수분의 열용량(약 10 L m⁻²)."
+   },
+   "airCoupling": {
+    "value": 4,
+    "unit": "h",
+    "range": [
+     1,
+     12
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "양액 온도가 실내 기온을 따라가는 시간 상수."
+   }
+  }
+ }
 }

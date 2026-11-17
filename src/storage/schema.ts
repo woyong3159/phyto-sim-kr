@@ -3,9 +3,9 @@
  * 원칙: 세이브는 절대 지우지 않는다. 구조가 바뀌면 SAVE_SCHEMA_VERSION을 올리고
  * MIGRATIONS에 "이전 버전 → 다음 버전" 변환을 추가한다.
  */
-import type { EventType, SimConfig, SimState, UserAction } from '../engine';
+import { defaultSettings, defaultSetup, type EventType, type SimConfig, type SimState, type UserAction } from '../engine';
 
-export const SAVE_SCHEMA_VERSION = 2;
+export const SAVE_SCHEMA_VERSION = 3;
 /** v1(Phase 0) 세이브에는 지역이 없었다. 옮겨올 때 넣는 기본 지역. */
 export const DEFAULT_REGION_ID = 'buyeo';
 export const EXPORT_FORMAT = 'phyto-sim-kr-save';
@@ -60,6 +60,13 @@ export const MIGRATIONS: Record<number, Migration> = {
     if (typeof config.regionId !== 'string') config.regionId = DEFAULT_REGION_ID;
     return { ...old, config, prefs: { autoPause: {} } };
   },
+  // v2 → v3 (Phase 2): 시설·장비 구성과 제어 설정 추가(기본값: 연동 비닐하우스)
+  2: (old) => {
+    const config = { ...(old.config as Record<string, unknown>) };
+    if (!config.setup) config.setup = defaultSetup();
+    if (!config.settings) config.settings = defaultSettings();
+    return { ...old, config };
+  },
 };
 
 export class SaveVersionError extends Error {}
@@ -88,6 +95,7 @@ export function validateSave(s: SaveRecord): string[] {
   if (typeof s.id !== 'string' || s.id === '') errs.push('id 누락');
   if (typeof s.name !== 'string') errs.push('name 누락');
   if (!s.config || typeof s.config.seed !== 'string' || typeof s.config.startDate !== 'string' || typeof s.config.regionId !== 'string') errs.push('config(seed, startDate, regionId) 누락');
+  else if (!s.config.setup || !s.config.settings) errs.push('config(setup, settings) 누락');
   if (!Array.isArray(s.actions)) errs.push('actions 누락');
   if (typeof s.hour !== 'number' || s.hour < 0) errs.push('hour 오류');
   return errs;

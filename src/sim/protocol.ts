@@ -1,4 +1,4 @@
-import type { DayWx, EventType, HourWx, SimConfig, SimEvent, SimState, UserAction } from '../engine';
+import type { ControlSettings, DayWx, DeviceId, EventType, GhDay, GhHour, GhSetup, HourWx, SimConfig, SimEvent, SimState, UserAction } from '../engine';
 
 /** 배속: 실제 1초당 게임 시간(h). 0 = 일시정지. */
 export const SPEEDS = [
@@ -11,13 +11,53 @@ export const SPEEDS = [
 ] as const;
 export type SpeedId = (typeof SPEEDS)[number]['id'];
 
-/** 화면에 보여줄 현재 외기 요약. */
+/** 화면에 보여줄 온실 현황. */
+export interface GhView {
+  out: GhHour;
+  today: GhDay;
+  total: { fuelL: number; kWh: number; co2Kg: number; won: number };
+  /** 지금 적용 중인 구성·설정(방금 넣은 변경 포함) */
+  setup: GhSetup;
+  settings: ControlSettings;
+  failures: Record<DeviceId, number>;
+  breached: boolean;
+  destroyed: boolean;
+  dust: number;
+  roofSnow: number;
+  contractKw: number;
+}
+
+/** 화면에 보여줄 현재 외기·온실 요약. */
 export interface WxView {
   now: HourWx;
   today: DayWx;
   sunrise: number;
   sunset: number;
   daylength: number;
+  gh: GhView;
+}
+
+/** 시간 단위 원장 한 줄(내부 vs 외부 그래프용). */
+export interface HourRow {
+  hour: number;
+  tOut: number;
+  rhOut: number;
+  solarW: number;
+  tIn: number;
+  rhIn: number;
+  vpd: number;
+  co2: number;
+  ppfd: number;
+  vent: number;
+  heatW: number;
+  won: number;
+}
+
+/** 일 단위 원장 한 줄. */
+export interface DayRow {
+  dayIndex: number;
+  wx: DayWx;
+  gh: GhDay | null;
 }
 
 export type ToWorker =
@@ -27,7 +67,8 @@ export type ToWorker =
   /** 턴 버튼: 지정한 시간만큼 최대 속도로 진행한 뒤 멈춘다. */
   | { type: 'advance'; hours: number }
   | { type: 'setAutoPause'; types: EventType[] }
-  | { type: 'action'; action: UserAction }
+  /** 조치. 적용 시각은 워커가 현재 게임 시각으로 찍는다(화면이 아는 시각은 0.1초 늦을 수 있다). */
+  | { type: 'action'; actionType: string; payload: unknown }
   | { type: 'requestState'; requestId: number };
 
 export type FromWorker =
@@ -36,7 +77,10 @@ export type FromWorker =
   /** 스냅샷 시점(7일 간격)을 지날 때마다 보낸다. */
   | { type: 'snapshot'; state: SimState; fingerprint: string }
   /** 끝난 날들의 일 기상(일 단위 원장). */
-  | { type: 'days'; rows: DayWx[] }
+  | { type: 'days'; rows: DayRow[] }
+  | { type: 'hours'; rows: HourRow[] }
+  /** 조치가 로그에 기록됨(세이브에 넣을 확정본) */
+  | { type: 'action'; action: UserAction; view: WxView }
   /** 새로 생긴 사건. paused = 이 사건 때문에 자동 일시정지했는지. */
   | { type: 'events'; events: SimEvent[]; paused: boolean }
   | { type: 'state'; requestId: number; state: SimState; fingerprint: string; actions: UserAction[] }

@@ -2,7 +2,7 @@ import 'fake-indexeddb/auto';
 import { describe, expect, it } from 'vitest';
 import { createInitialState, fingerprint, replay, runTo } from '../../src/engine';
 import { world } from './helpers';
-import { getDailyRows, putDailyRows, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putSave, putSnapshot } from '../../src/storage/db';
+import { getDailyRows, putDailyRows, getHourlyRows, putHourlyRows, pruneHourly, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putSave, putSnapshot } from '../../src/storage/db';
 import { decodeBundle, encodeBundle, exportFileName } from '../../src/storage/exportImport';
 import { SAVE_SCHEMA_VERSION, SaveVersionError, migrateSave, type SaveRecord } from '../../src/storage/schema';
 
@@ -73,6 +73,18 @@ describe('IndexedDB 저장 계층', () => {
     expect(await getDailyRows(db, 's1', 3, 10)).toEqual([{ day: 3, v: 1 }]);
   });
 
+  it('시간 단위 원장: 최근 14일만 남기고 오래된 것은 지운다(다른 세이브는 건드리지 않는다)', async () => {
+    const db = await freshDb();
+    await putHourlyRows(db, 's1', Array.from({ length: 500 }, (_, hour) => ({ hour, data: { hour } })));
+    await putHourlyRows(db, 's2', [{ hour: 3, data: { hour: 3 } }]);
+    await pruneHourly(db, 's1', 500 - 336);
+    const rows = await getHourlyRows<{ hour: number }>(db, 's1', 0, 9999);
+    expect(rows.length).toBe(336);
+    expect(rows[0]!.hour).toBe(164);
+    expect((await getHourlyRows(db, 's2', 0, 9999)).length).toBe(1);
+    expect(await getHourlyRows(db, 's1', -10, -1)).toEqual([]);
+  });
+
   it('설정값(kv) 저장', async () => {
     const db = await freshDb();
     expect(await kvGet(db, 'k')).toBeUndefined();
@@ -110,7 +122,9 @@ describe('세이브 스키마 마이그레이션', () => {
     const v1 = { schemaVersion: 1, id: 'old', name: '시험 작기', createdAt: 1, updatedAt: 2, config: { seed: 'abc', startDate: '2026-11-12' }, actions: [{ hour: 1, seq: 0, type: 'noop', payload: null }], hour: 100, observationMode: 'god' };
     const out = migrateSave(v1);
     expect(out.schemaVersion).toBe(SAVE_SCHEMA_VERSION);
-    expect(out.config).toEqual({ seed: 'abc', startDate: '2026-11-12', regionId: 'buyeo' });
+    expect(out.config).toMatchObject({ seed: 'abc', startDate: '2026-11-12', regionId: 'buyeo' });
+    expect(out.config.setup.facility).toBe('multi_pe');
+    expect(out.config.settings.heatNight).toBeGreaterThan(0);
     expect(out.prefs).toEqual({ autoPause: {} });
     expect(out.actions).toEqual(v1.actions);
     expect(out.hour).toBe(100);
@@ -151,7 +165,7 @@ describe('세이브 내보내기/불러오기', () => {
     expect(() => decodeBundle(enc.encode('hello'))).toThrow();
     expect(() => decodeBundle(enc.encode('{"format":"other"}'))).toThrow();
     expect(() => decodeBundle(new Uint8Array([0x1f, 0x8b, 1, 2, 3]))).toThrow();
-    const broken = { format: 'phyto-sim-kr-save', schemaVersion: 2, save: { schemaVersion: 2, id: 'x' } };
+    const broken = { format: 'phyto-sim-kr-save', schemaVersion: 3, save: { schemaVersion: 3, id: 'x' } };
     expect(() => decodeBundle(enc.encode(JSON.stringify(broken)))).toThrow(/세이브 내용 오류/);
   });
 

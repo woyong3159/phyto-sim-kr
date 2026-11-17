@@ -75,10 +75,14 @@ test('새 작기 → 시간바·외기 카드 → 턴 버튼 → 30일 그래프
   await page.screenshot({ path: info.outputPath('03-dashboard.png') });
 
   await page.locator('[data-tab="env"]').tap();
-  await expect(page.getByTestId('chart-temp')).toBeVisible();
+  await expect(page.getByTestId('inout-card')).toBeVisible();
+  await expect(page.getByTestId('chart-in-temp').locator('svg').first()).toBeVisible();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('04-env-now.png'), fullPage: false });
+  await page.locator('[data-sub="outdoor"]').tap();
   await expect(page.getByTestId('chart-temp').locator('svg').first()).toBeVisible();
   await noOverflow(page);
-  await page.screenshot({ path: info.outputPath('04-env-30days.png'), fullPage: false });
+  await page.screenshot({ path: info.outputPath('04b-env-30days.png'), fullPage: false });
 
   await page.locator('[data-tab="more"]').tap();
   await noOverflow(page);
@@ -105,7 +109,72 @@ test('배속 6종이 동작하고, 화면을 닫았다 열면 저장된 시각�
   await expect(page.getByTestId('temp-now')).toHaveText(temp!);
   // 그래프용 일 기록도 남아 있다
   await page.locator('[data-tab="env"]').tap();
+  await expect(page.getByTestId('chart-in-temp')).toBeVisible();
+  await page.locator('[data-sub="outdoor"]').tap();
   await expect(page.getByTestId('chart-temp')).toBeVisible();
+});
+
+test('시설 선택 → 제어 설정 변경 → 실내가 새 설정온도를 따라가고 비용이 쌓인다', async ({ page }, info) => {
+  await page.goto('./');
+  await page.locator('[data-region="buyeo"]').tap();
+  await page.getByTestId('start-date').fill('2026-01-10');
+  await page.getByTestId('seed').fill('e2e-gh');
+  // 시설: 벤로형 유리온실로 바꾸면 시설 카드가 바뀐다
+  await page.locator('[data-facility="venlo"]').tap();
+  await expect(page.getByTestId('facility-card')).toContainText('벤로형 유리온실');
+  await page.getByTestId('facility-card').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('10-facility.png') });
+  await noOverflow(page);
+  await page.getByTestId('start-game').tap();
+  await page.getByTestId('confirm-start').tap();
+  await expect(page.getByTestId('clock')).toBeVisible();
+  await expect(page.getByTestId('indoor-card')).toBeVisible();
+
+  // 제어: 야간·일출 전 설정온도를 20°C로
+  await page.locator('[data-tab="env"]').tap();
+  await page.locator('[data-sub="control"]').tap();
+  for (const k of ['heatNight', 'heatPreDawn', 'heatDay']) {
+    await page.getByTestId(`set-${k}`).fill('20');
+    await page.getByTestId(`set-${k}`).blur();
+  }
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('11-control.png') });
+  await page.getByTestId('apply-settings').tap();
+  await page.getByTestId('confirm-apply').tap();
+  await expect(page.getByTestId('apply-settings')).toBeHidden();
+  // 설정이 화면에 바로 반영되고, 다시 열어도 남아 있다
+  await expect(page.getByTestId('set-heatNight')).toHaveValue('20');
+
+  // 하루 + 3시간 진행(새벽 3시): 실내가 20°C 근처
+  await page.locator('[data-turn="24"]').tap();
+  await expect(page.locator('[data-turn="24"]')).toBeEnabled();
+  if (await page.getByTestId('pause-banner').isVisible()) await page.getByTestId('pause-banner').getByRole('button').tap();
+  for (let i = 0; i < 3; i++) {
+    await page.locator('[data-turn="1"]').tap();
+    await page.waitForTimeout(150);
+  }
+  await page.locator('[data-sub="now"]').tap();
+  const tIn = parseFloat((await page.getByTestId('in-기온').textContent())!);
+  expect(tIn).toBeGreaterThan(18.5);
+  expect(tIn).toBeLessThan(21.5);
+  const cost = (await page.getByTestId('cost-today').textContent())!;
+  expect(parseInt(cost.replace(/[^0-9]/g, ''), 10)).toBeGreaterThan(1000);
+  await expect(page.getByTestId('device-card')).toContainText('난방기');
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('12-env-now-heated.png') });
+  await page.getByTestId('cost-card').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('13-cost-devices.png') });
+
+  // 새로고침해도 설정과 실내 상태가 그대로(조치 로그 재생)
+  await page.waitForTimeout(400);
+  await page.reload();
+  await page.locator('[data-tab="env"]').tap();
+  await expect(page.getByTestId('in-기온')).toHaveText(`${tIn.toFixed(1)}°C`);
+  await page.locator('[data-sub="control"]').tap();
+  await expect(page.getByTestId('set-heatNight')).toHaveValue('20');
+  await page.locator('[data-sub="setup"]').tap();
+  await expect(page.getByTestId('facility-card')).toContainText('벤로형 유리온실');
+  await noOverflow(page);
 });
 
 test('같은 지역·시작일·seed → 같은 날씨, seed가 다르면 다른 날씨', async ({ page }) => {
@@ -175,6 +244,18 @@ test('모든 탭이 열리고 넘치지 않는다 + 다크 모드', async ({ pag
     await page.locator(`[data-tab="${id}"]`).tap();
     await expect(page.locator(`[data-screen="${id}"]`)).toBeVisible();
     await noOverflow(page);
+    if (id === 'env') {
+      for (const sub of ['control', 'setup', 'outdoor', 'now']) {
+        await page.locator(`[data-sub="${sub}"]`).tap();
+        await noOverflow(page);
+      }
+      // 스테퍼·선택 상자 터치 영역
+      await page.locator('[data-sub="control"]').tap();
+      for (const r of await page.locator('.num-row button, .subtabs button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.getBoundingClientRect()).map((b) => ({ w: b.width, h: b.height })))) {
+        expect(r.w).toBeGreaterThanOrEqual(44);
+        expect(r.h).toBeGreaterThanOrEqual(44);
+      }
+    }
   }
   await page.locator('[data-tab="dashboard"]').tap();
   await page.screenshot({ path: info.outputPath('07-dark-dashboard.png') });

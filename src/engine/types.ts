@@ -1,16 +1,17 @@
 /**
  * 엔진 공용 타입. 엔진은 UI·브라우저 API에 전혀 의존하지 않는 순수 모듈이다(N6).
  */
+import type { ControlSettings, GhSetup, GhState } from './greenhouse/types';
 import type { World } from './world';
 
 /** 엔진 상태 구조 버전. 상태 구조가 바뀌면 올린다(옛 스냅샷은 버리고 조치 로그로 다시 계산). */
-export const ENGINE_STATE_VERSION = 2;
+export const ENGINE_STATE_VERSION = 3;
 
 /** 내부 계산 스텝: 1시간(헌법 6항). */
 export const HOURS_PER_DAY = 24;
 
 /** 랜덤이 허용된 영역(N2). 영역마다 독립된 난수 흐름을 써서 서로 영향을 주지 않게 한다. */
-export const RNG_STREAMS = ['weather', 'pestIntro', 'market', 'events'] as const;
+export const RNG_STREAMS = ['weather', 'pestIntro', 'market', 'events', 'failure'] as const;
 export type RngStream = (typeof RNG_STREAMS)[number];
 
 /** sfc32 난수 생성기 내부 상태(32비트 정수 4개). */
@@ -24,6 +25,9 @@ export interface SimConfig {
   startDate: string;
   /** 지역(data/regions.json의 지점 id). */
   regionId: string;
+  /** 작기 시작 시점의 시설·장비 구성과 제어 설정(이후 변경은 조치 로그에 남는다). */
+  setup: GhSetup;
+  settings: ControlSettings;
 }
 
 /** 하루치 외기(생성기가 만든 일 단위 값). */
@@ -105,7 +109,7 @@ export interface WeatherState {
 }
 
 /** 자동 일시정지 대상이 되는 사건 종류. Phase 1은 기상 사건만 실제로 발생한다. */
-export const EVENT_TYPES = ['heatwave', 'coldwave', 'jangma', 'typhoon', 'heavyRain', 'heavySnow', 'hail', 'disease', 'equipment', 'news', 'stock'] as const;
+export const EVENT_TYPES = ['heatwave', 'coldwave', 'jangma', 'typhoon', 'heavyRain', 'heavySnow', 'hail', 'structure', 'equipment', 'disease', 'news', 'stock'] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 
 export interface SimEvent {
@@ -126,6 +130,7 @@ export interface SimState {
   hour: number;
   rng: Record<RngStream, RngState>;
   weather: WeatherState;
+  gh: GhState;
   /** 직전 스텝에서 새로 생긴 사건(스텝마다 비워진다). */
   events: SimEvent[];
 }

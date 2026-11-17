@@ -6,9 +6,9 @@
  *   (백그라운드에서 돌아온 직후 밀린 시간을 한꺼번에 계산하지 않기 위해).
  * - 사건이 생기면(자동 일시정지가 켜진 종류) 그 시각에서 멈춘다.
  */
-import { createInitialState, createWorld, fingerprint, stepHour, type DayWx, type EventType, type SimEvent, type SimState, type UserAction, type World } from '../engine';
+import { contractKw, createInitialState, createWorld, fingerprint, stepHour, type ControlSettings, type EventType, type GhSetup, type SimEvent, type SimState, type UserAction, type World } from '../engine';
 import { ENGINE_DATA } from '../data';
-import type { FromWorker, ToWorker, WxView } from './protocol';
+import type { DayRow, FromWorker, HourRow, ToWorker, WxView } from './protocol';
 
 const SNAPSHOT_INTERVAL_HOURS = 7 * 24;
 const LOOP_MS = 25;
@@ -26,7 +26,8 @@ let advanceLeft = 0;
 let carry = 0;
 let lastLoop = 0;
 let lastTick = 0;
-let dayBuffer: DayWx[] = [];
+let dayBuffer: DayRow[] = [];
+let hourBuffer: HourRow[] = [];
 let eventBuffer: SimEvent[] = [];
 
 const post = (msg: FromWorker) => (self as unknown as DedicatedWorkerGlobalScope).postMessage(msg);
@@ -34,16 +35,38 @@ const post = (msg: FromWorker) => (self as unknown as DedicatedWorkerGlobalScope
 function view(): WxView {
   const s = state!;
   const sun = world!.clim.sun[s.weather.cur.di]!;
-  return { now: s.weather.now, today: s.weather.cur, sunrise: sun.sunrise, sunset: sun.sunset, daylength: sun.daylength };
+  // 방금 넣었지만 아직 스텝이 돌지 않은 설정·구성 변경을 화면에는 바로 보여준다
+  let setup = s.gh.setup;
+  let settings = s.gh.settings;
+  for (const a of actions) {
+    if (a.hour !== s.hour) continue;
+    if (a.type === 'gh/setup') setup = a.payload as GhSetup;
+    if (a.type === 'gh/control') settings = a.payload as ControlSettings;
+  }
+  const g = s.gh;
+  return {
+    now: s.weather.now,
+    today: s.weather.cur,
+    sunrise: sun.sunrise,
+    sunset: sun.sunset,
+    daylength: sun.daylength,
+    gh: { out: g.out, today: g.today, total: g.total, setup, settings, failures: g.failures, breached: g.breached, destroyed: g.destroyed, dust: g.dust, roofSnow: g.roofSnow, contractKw: contractKw(world!, { ...g, setup }) },
+  };
 }
 
 /** 한 스텝 진행. 자동 일시정지 대상 사건이 생기면 true. */
-function stepOnce(collect: boolean): boolean {
+function stepOnce(live: boolean): boolean {
   const h = state!.hour;
+  const wx = state!.weather.now;
   state = stepHour(state!, world!, actions.length ? actions.filter((a) => a.hour === h) : actions);
-  if (state.hour % 24 === 0) dayBuffer.push(state.weather.prev);
-  if (collect && state.hour % SNAPSHOT_INTERVAL_HOURS === 0) post({ type: 'snapshot', state, fingerprint: fingerprint(state) });
-  if (collect && state.events.length) {
+  const o = state.gh.out;
+  hourBuffer.push({ hour: h, tOut: wx.temp, rhOut: wx.rh, solarW: wx.solarW, tIn: o.tIn, rhIn: o.rhIn, vpd: o.vpd, co2: o.co2, ppfd: o.ppfd, vent: o.vent, heatW: o.heatW, won: o.won });
+  if (state.hour % 24 === 0) {
+    const d = state.gh.today;
+    dayBuffer.push({ dayIndex: state.weather.prev.dayIndex, wx: state.weather.prev, gh: { ...d, tMean: d.tMean / 24, rhMean: d.rhMean / 24 } });
+  }
+  if (live && state.hour % SNAPSHOT_INTERVAL_HOURS === 0) post({ type: 'snapshot', state, fingerprint: fingerprint(state) });
+  if (live && state.events.length) {
     eventBuffer.push(...state.events);
     return state.events.some((e) => autoPause.has(e.type));
   }
@@ -51,6 +74,10 @@ function stepOnce(collect: boolean): boolean {
 }
 
 function flush(paused: boolean) {
+  if (hourBuffer.length) {
+    post({ type: 'hours', rows: hourBuffer });
+    hourBuffer = [];
+  }
   if (dayBuffer.length) {
     post({ type: 'days', rows: dayBuffer });
     dayBuffer = [];
@@ -104,6 +131,7 @@ self.onmessage = (ev: MessageEvent<ToWorker>) => {
         state = msg.state ?? createInitialState(world);
         const fresh = !msg.state && msg.targetHour === 0;
         dayBuffer = [];
+        hourBuffer = [];
         eventBuffer = [];
         // 스냅샷 → 저장 시각까지 조치 로그 재생(사건으로 멈추지 않는다)
         while (state.hour < msg.targetHour) stepOnce(false);
@@ -130,7 +158,12 @@ self.onmessage = (ev: MessageEvent<ToWorker>) => {
         autoPause = new Set(msg.types);
         break;
       case 'action':
-        actions.push(msg.action);
+        if (state) {
+          const hour = state.hour;
+          const action: UserAction = { hour, seq: actions.filter((a) => a.hour === hour).length, type: msg.actionType, payload: msg.payload };
+          actions.push(action);
+          post({ type: 'action', action, view: view() });
+        }
         break;
       case 'requestState':
         if (state) post({ type: 'state', requestId: msg.requestId, state, fingerprint: fingerprint(state), actions });

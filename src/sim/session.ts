@@ -5,11 +5,11 @@
  *   저장에는 워커 왕복이 필요 없다: 메인 스레드가 아는 "마지막 게임 시각 + 조치 로그"만 쓰면 된다.
  */
 import EngineWorker from './engine.worker?worker&inline';
-import { ENGINE_STATE_VERSION, EVENT_TYPES, type DayWx, type EventType, type SimConfig, type SimEvent, type UserAction } from '../engine';
-import { getDailyRows, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putDailyRows, putSave, putSnapshot, type Db } from '../storage/db';
+import { ENGINE_STATE_VERSION, EVENT_TYPES, defaultSettings, defaultSetup, type ControlSettings, type DayWx, type DeviceId, type EventType, type GhSetup, type SimConfig, type SimEvent } from '../engine';
+import { getDailyRows, getHourlyRows, pruneHourly, putHourlyRows, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putDailyRows, putSave, putSnapshot, type Db } from '../storage/db';
 import { SAVE_SCHEMA_VERSION, type SaveRecord } from '../storage/schema';
 import { decodeBundle, encodeBundle, exportFileName, shareOrDownload } from '../storage/exportImport';
-import type { FromWorker, ToWorker, WxView } from './protocol';
+import type { DayRow, FromWorker, HourRow, ToWorker, WxView } from './protocol';
 
 export interface SessionView {
   /** nosave = 아직 작기가 없음(새 작기 화면을 보여준다) */
@@ -21,8 +21,10 @@ export interface SessionView {
   /** 턴 버튼으로 진행 중 */
   advancing: boolean;
   wx: WxView | null;
-  /** 최근 일 기상(오래된 것부터, 최대 60일) */
-  days: DayWx[];
+  /** 최근 일 기록(오래된 것부터, 최대 60일) */
+  days: DayRow[];
+  /** 최근 시간 기록(오래된 것부터, 최대 14일 = 336시간) */
+  hours: HourRow[];
   /** 최근 사건(새것부터, 최대 50건) */
   eventLog: SimEvent[];
   /** 방금 자동 일시정지를 일으킨 사건들. 사용자가 닫으면 비운다. */
@@ -38,11 +40,14 @@ export interface NewGameOptions {
   startDate: string;
   /** 비우면 자동 생성 */
   seed?: string;
+  setup?: GhSetup;
+  settings?: ControlSettings;
 }
 
 const AUTOSAVE_MS = 5000;
 const KV_CURRENT = 'currentSaveId';
 const HISTORY_DAYS = 60;
+const HISTORY_HOURS = 14 * 24;
 const EVENT_LOG_MAX = 50;
 
 export function newSeed(): string {
@@ -63,7 +68,7 @@ export function isAutoPauseOn(save: SaveRecord | undefined, type: EventType): bo
 const enabledTypes = (save: SaveRecord): EventType[] => EVENT_TYPES.filter((t) => isAutoPauseOn(save, t));
 
 export class Session {
-  private view: SessionView = { status: 'loading', hour: 0, hoursPerSecond: 0, advancing: false, wx: null, days: [], eventLog: [], pausedBy: null, persisted: null, lastSavedAt: null };
+  private view: SessionView = { status: 'loading', hour: 0, hoursPerSecond: 0, advancing: false, wx: null, days: [], hours: [], eventLog: [], pausedBy: null, persisted: null, lastSavedAt: null };
   private listeners = new Set<() => void>();
   private db: Db | null = null;
   private worker: Worker | null = null;
@@ -120,10 +125,13 @@ export class Session {
     const db = this.db!;
     await kvSet(db, KV_CURRENT, save.id);
     const today = Math.floor(save.hour / 24);
-    const days = await getDailyRows<DayWx>(db, save.id, today - HISTORY_DAYS, today - 1);
+    // Phase 1 세이브의 일 기록은 외기만 들어 있다 → 새 형식으로 감싼다
+    const rawDays = await getDailyRows<DayRow | DayWx>(db, save.id, today - HISTORY_DAYS, today - 1);
+    const days: DayRow[] = rawDays.map((r) => ('wx' in r ? r : { dayIndex: r.dayIndex, wx: r, gh: null }));
+    const hours = await getHourlyRows<HourRow>(db, save.id, save.hour - HISTORY_HOURS, save.hour - 1);
     const eventLog = ((await kvGet<SimEvent[]>(db, `events:${save.id}`)) ?? []).filter((e) => e.hour <= save.hour);
     this.dirty = false;
-    this.set({ status: 'loading', save, hour: save.hour, hoursPerSecond: 0, advancing: false, wx: null, days, eventLog, pausedBy: null, error: undefined });
+    this.set({ status: 'loading', save, hour: save.hour, hoursPerSecond: 0, advancing: false, wx: null, days, hours, eventLog, pausedBy: null, error: undefined });
 
     this.worker?.terminate();
     const snap = await latestSnapshot(db, save.id, save.hour);
@@ -164,7 +172,29 @@ export class Session {
         for (const d of msg.rows) known.set(d.dayIndex, d);
         const days = [...known.values()].sort((a, b) => a.dayIndex - b.dayIndex).slice(-HISTORY_DAYS);
         this.set({ days });
-        if (this.db) void putDailyRows(this.db, save.id, msg.rows.map((d) => ({ day: d.dayIndex, data: d })));
+        if (this.db) {
+          void putDailyRows(this.db, save.id, msg.rows.map((d) => ({ day: d.dayIndex, data: d })));
+          // 시간 원장 보존 정책: 최근 14일
+          void pruneHourly(this.db, save.id, (msg.rows[msg.rows.length - 1]!.dayIndex + 1) * 24 - HISTORY_HOURS);
+        }
+        break;
+      }
+      case 'hours': {
+        const save = this.view.save;
+        if (!save) break;
+        const last = msg.rows[msg.rows.length - 1]!.hour;
+        const first = msg.rows[0]!.hour;
+        const kept = this.view.hours.filter((r) => r.hour < first && r.hour > last - HISTORY_HOURS);
+        this.set({ hours: [...kept, ...msg.rows].slice(-HISTORY_HOURS) });
+        if (this.db) void putHourlyRows(this.db, save.id, msg.rows.slice(-HISTORY_HOURS).map((r) => ({ hour: r.hour, data: r })));
+        break;
+      }
+      case 'action': {
+        const save = this.view.save;
+        if (!save) break;
+        this.set({ save: { ...save, actions: [...save.actions, msg.action] }, wx: msg.view });
+        this.dirty = true;
+        void this.saveNow();
         break;
       }
       case 'events': {
@@ -207,16 +237,26 @@ export class Session {
     this.dirty = true;
   }
 
-  /** 사용자 조치를 로그에 추가한다(Phase 2부터 실제 조치가 생긴다). */
+  /** 사용자 조치. 적용 시각은 워커가 찍고, 확정된 조치가 돌아오면 세이브에 기록한다. */
   addAction(type: string, payload: unknown) {
-    const save = this.view.save;
-    if (!save) return;
-    const hour = this.view.hour;
-    const seq = save.actions.filter((a) => a.hour === hour).length;
-    const action: UserAction = { hour, seq, type, payload };
-    this.set({ save: { ...save, actions: [...save.actions, action] } });
-    this.send({ type: 'action', action });
-    this.dirty = true;
+    if (this.view.status !== 'ready') return;
+    this.send({ type: 'action', actionType: type, payload });
+  }
+
+  setControl(settings: ControlSettings) {
+    this.addAction('gh/control', settings);
+  }
+  setSetup(setup: GhSetup) {
+    this.addAction('gh/setup', setup);
+  }
+  cleanCover() {
+    this.addAction('gh/clean', null);
+  }
+  repair(device: DeviceId) {
+    this.addAction('gh/repair', { device });
+  }
+  repairCover() {
+    this.addAction('gh/repairCover', null);
   }
 
   async saveNow(): Promise<void> {
@@ -251,7 +291,7 @@ export class Session {
   async newGame(opts: NewGameOptions): Promise<void> {
     await this.saveNow();
     const now = Date.now();
-    const config: SimConfig = { seed: opts.seed?.trim() || newSeed(), startDate: opts.startDate, regionId: opts.regionId };
+    const config: SimConfig = { seed: opts.seed?.trim() || newSeed(), startDate: opts.startDate, regionId: opts.regionId, setup: opts.setup ?? defaultSetup(), settings: opts.settings ?? defaultSettings() };
     const save: SaveRecord = {
       schemaVersion: SAVE_SCHEMA_VERSION,
       id: `save-${now.toString(36)}`,

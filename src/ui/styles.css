@@ -775,3 +775,226 @@ button {
     max-width: 960px;
   }
 }
+
+/* ───────── Phase 2 ───────── */
+.subtabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--border);
+}
+
+.subtabs button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.subtabs button[aria-selected='true'] {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.setup,
+.fold {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.setup h3 {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.num {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.num-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.num-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.num-row button {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.num-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 17px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.num-unit {
+  flex: none;
+  min-width: 44px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.field select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  width: 100%;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.fold > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  margin: -8px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.fold > summary h2::after {
+  content: ' ▾';
+}
+
+.fold[open] > summary h2::after {
+  content: ' ▴';
+}
+
+.fold > summary h2 {
+  color: var(--text);
+  font-size: 17px;
+}
+
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.block-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.apply-bar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--accent-strong);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+}
+
+.inout {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.inout th,
+.inout td {
+  padding: 8px 4px;
+  text-align: right;
+  border-top: 1px solid var(--border);
+}
+
+.inout thead th {
+  border-top: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.inout tbody th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.inout td:nth-child(2) {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.cost-box summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+@media (min-width: 900px) {
+  .subtabs,
+  .apply-bar {
+    grid-column: 1 / -1;
+  }
+}

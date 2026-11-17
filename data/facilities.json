@@ -1,9 +1,1020 @@
 {
-  "_meta": {
-    "file": "facilities",
-    "title": "시설(온실 유형)",
-    "plannedPhase": 1,
-    "schemaVersion": 1
+ "_meta": {
+  "file": "facilities",
+  "title": "시설(온실 유형)",
+  "plannedPhase": 2,
+  "schemaVersion": 1
+ },
+ "params": {
+  "types": {
+   "single_pe": {
+    "name": "단동 비닐하우스",
+    "desc": "폭 6–8 m 아치형, PE 필름 1겹",
+    "transmissivity": {
+     "value": 0.72,
+     "unit": "-",
+     "range": [
+      0.4,
+      0.95
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "온실 전체 일사 투과율(피복재 + 골조 그늘 + 입사각 손실, 산란광 평균). 새 피복재 자체는 0.87–0.92이나 골조·이중 구조로 낮아진다. PE 0.1 mm."
+    },
+    "uValue": {
+     "value": 6.6,
+     "unit": "W m⁻² K⁻¹",
+     "range": [
+      2,
+      9
+     ],
+     "tag": "EST",
+     "source": "온실 난방부하 설계 관행값(유리 5.3, 폴리에틸렌 5.7 kcal m⁻² h⁻¹ °C⁻¹ 수준)을 W 단위로 환산",
+     "note": "피복면 열관류율(보온커튼 없음). PE 1겹."
+    },
+    "coverRatio": {
+     "value": 1.75,
+     "unit": "m² m⁻²",
+     "range": [
+      1,
+      2.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 면적 대비 피복 면적(지붕 + 측벽). 1,000 m²(약 300평) 안팎 규모 기준 기하 추정."
+    },
+    "eaveHeight": {
+     "value": 1.5,
+     "unit": "m",
+     "range": [
+      1,
+      8
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측고(처마 높이). 국내 보급형 규격의 통상 범위."
+    },
+    "meanHeight": {
+     "value": 2.3,
+     "unit": "m",
+     "range": [
+      1.5,
+      9
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 높이 = 공기 부피 ÷ 바닥 면적."
+    },
+    "leakage": {
+     "value": 1.5,
+     "unit": "h⁻¹",
+     "range": [
+      0.1,
+      4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "창을 다 닫았을 때 틈새 환기 횟수(풍속 4 m/s 기준). 비닐 단동 > 연동 > PO > 유리 순으로 기밀."
+    },
+    "sideVentArea": {
+     "value": 0.3,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "roofVentArea": {
+     "value": 0,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "천창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "snowLimit": {
+     "value": 25,
+     "unit": "cm",
+     "range": [
+      10,
+      80
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 적설심 20–40 cm대)의 범위를 참고",
+     "note": "지붕 적설 한계. 넘으면 붕괴. 비규격 파이프 하우스는 더 약하다."
+    },
+    "windLimit": {
+     "value": 26,
+     "unit": "m/s",
+     "range": [
+      15,
+      50
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 풍속 22–40 m/s)의 범위를 참고",
+     "note": "최대순간풍속 한계. 넘으면 피복 파손."
+    },
+    "snowShed": {
+     "value": 0.6,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "지붕 형상에 따른 눈 흘러내림 정도(시간당 감소 비율 계수). 아치형 단동은 잘 흘러내리고 연동 곡부·유리 지붕은 쌓인다."
+    },
+    "agingLoss": {
+     "value": 0.04,
+     "unit": "yr⁻¹",
+     "range": [
+      0,
+      0.1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 노후로 인한 연간 투과율 감소."
+    },
+    "coverLife": {
+     "value": 3,
+     "unit": "yr",
+     "range": [
+      1,
+      40
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 교체 주기."
+    },
+    "buildCost": {
+     "value": 35000,
+     "unit": "원/m²",
+     "range": [
+      10000,
+      800000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "골조 + 피복 시공비(장비 제외). 평당 약 12만 원. 지역·시기·자동화 수준에 따라 ±40% 차이. Phase 7에서 정밀화."
+    }
+   },
+   "multi_pe": {
+    "name": "연동 비닐하우스",
+    "desc": "1-2W형 등 연동, PE 필름",
+    "transmissivity": {
+     "value": 0.68,
+     "unit": "-",
+     "range": [
+      0.4,
+      0.95
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "온실 전체 일사 투과율(피복재 + 골조 그늘 + 입사각 손실, 산란광 평균). 새 피복재 자체는 0.87–0.92이나 골조·이중 구조로 낮아진다. 연동 곡부·골조 그늘이 더 많다."
+    },
+    "uValue": {
+     "value": 6.6,
+     "unit": "W m⁻² K⁻¹",
+     "range": [
+      2,
+      9
+     ],
+     "tag": "EST",
+     "source": "온실 난방부하 설계 관행값(유리 5.3, 폴리에틸렌 5.7 kcal m⁻² h⁻¹ °C⁻¹ 수준)을 W 단위로 환산",
+     "note": "피복면 열관류율(보온커튼 없음). PE 1겹."
+    },
+    "coverRatio": {
+     "value": 1.35,
+     "unit": "m² m⁻²",
+     "range": [
+      1,
+      2.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 면적 대비 피복 면적(지붕 + 측벽). 1,000 m²(약 300평) 안팎 규모 기준 기하 추정."
+    },
+    "eaveHeight": {
+     "value": 3,
+     "unit": "m",
+     "range": [
+      1,
+      8
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측고(처마 높이). 국내 보급형 규격의 통상 범위."
+    },
+    "meanHeight": {
+     "value": 3.8,
+     "unit": "m",
+     "range": [
+      1.5,
+      9
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 높이 = 공기 부피 ÷ 바닥 면적."
+    },
+    "leakage": {
+     "value": 1,
+     "unit": "h⁻¹",
+     "range": [
+      0.1,
+      4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "창을 다 닫았을 때 틈새 환기 횟수(풍속 4 m/s 기준). 비닐 단동 > 연동 > PO > 유리 순으로 기밀."
+    },
+    "sideVentArea": {
+     "value": 0.1,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "roofVentArea": {
+     "value": 0.08,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "천창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "snowLimit": {
+     "value": 30,
+     "unit": "cm",
+     "range": [
+      10,
+      80
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 적설심 20–40 cm대)의 범위를 참고",
+     "note": "지붕 적설 한계. 넘으면 붕괴. 곡부에 눈이 쌓인다."
+    },
+    "windLimit": {
+     "value": 30,
+     "unit": "m/s",
+     "range": [
+      15,
+      50
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 풍속 22–40 m/s)의 범위를 참고",
+     "note": "최대순간풍속 한계. 넘으면 피복 파손."
+    },
+    "snowShed": {
+     "value": 0.15,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "지붕 형상에 따른 눈 흘러내림 정도(시간당 감소 비율 계수). 아치형 단동은 잘 흘러내리고 연동 곡부·유리 지붕은 쌓인다."
+    },
+    "agingLoss": {
+     "value": 0.04,
+     "unit": "yr⁻¹",
+     "range": [
+      0,
+      0.1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 노후로 인한 연간 투과율 감소."
+    },
+    "coverLife": {
+     "value": 3,
+     "unit": "yr",
+     "range": [
+      1,
+      40
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 교체 주기."
+    },
+    "buildCost": {
+     "value": 110000,
+     "unit": "원/m²",
+     "range": [
+      10000,
+      800000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "골조 + 피복 시공비(장비 제외). 평당 약 36만 원. 지역·시기·자동화 수준에 따라 ±40% 차이. Phase 7에서 정밀화."
+    }
+   },
+   "multi_po": {
+    "name": "연동 PO필름 온실",
+    "desc": "광폭·고측고, PO 필름 0.15 mm",
+    "transmissivity": {
+     "value": 0.74,
+     "unit": "-",
+     "range": [
+      0.4,
+      0.95
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "온실 전체 일사 투과율(피복재 + 골조 그늘 + 입사각 손실, 산란광 평균). 새 피복재 자체는 0.87–0.92이나 골조·이중 구조로 낮아진다. PO 필름은 투과율과 내구성이 PE보다 좋다."
+    },
+    "uValue": {
+     "value": 6.2,
+     "unit": "W m⁻² K⁻¹",
+     "range": [
+      2,
+      9
+     ],
+     "tag": "EST",
+     "source": "온실 난방부하 설계 관행값(유리 5.3, 폴리에틸렌 5.7 kcal m⁻² h⁻¹ °C⁻¹ 수준)을 W 단위로 환산",
+     "note": "피복면 열관류율(보온커튼 없음). PO는 장파 차단이 PE보다 나아 약간 낮게 잡았다."
+    },
+    "coverRatio": {
+     "value": 1.3,
+     "unit": "m² m⁻²",
+     "range": [
+      1,
+      2.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 면적 대비 피복 면적(지붕 + 측벽). 1,000 m²(약 300평) 안팎 규모 기준 기하 추정."
+    },
+    "eaveHeight": {
+     "value": 4.5,
+     "unit": "m",
+     "range": [
+      1,
+      8
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측고(처마 높이). 국내 보급형 규격의 통상 범위."
+    },
+    "meanHeight": {
+     "value": 5.3,
+     "unit": "m",
+     "range": [
+      1.5,
+      9
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 높이 = 공기 부피 ÷ 바닥 면적."
+    },
+    "leakage": {
+     "value": 0.6,
+     "unit": "h⁻¹",
+     "range": [
+      0.1,
+      4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "창을 다 닫았을 때 틈새 환기 횟수(풍속 4 m/s 기준). 비닐 단동 > 연동 > PO > 유리 순으로 기밀."
+    },
+    "sideVentArea": {
+     "value": 0.08,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "roofVentArea": {
+     "value": 0.12,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "천창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "snowLimit": {
+     "value": 40,
+     "unit": "cm",
+     "range": [
+      10,
+      80
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 적설심 20–40 cm대)의 범위를 참고",
+     "note": "지붕 적설 한계. 넘으면 붕괴. "
+    },
+    "windLimit": {
+     "value": 35,
+     "unit": "m/s",
+     "range": [
+      15,
+      50
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 풍속 22–40 m/s)의 범위를 참고",
+     "note": "최대순간풍속 한계. 넘으면 피복 파손."
+    },
+    "snowShed": {
+     "value": 0.15,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "지붕 형상에 따른 눈 흘러내림 정도(시간당 감소 비율 계수). 아치형 단동은 잘 흘러내리고 연동 곡부·유리 지붕은 쌓인다."
+    },
+    "agingLoss": {
+     "value": 0.015,
+     "unit": "yr⁻¹",
+     "range": [
+      0,
+      0.1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 노후로 인한 연간 투과율 감소."
+    },
+    "coverLife": {
+     "value": 6,
+     "unit": "yr",
+     "range": [
+      1,
+      40
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 교체 주기."
+    },
+    "buildCost": {
+     "value": 220000,
+     "unit": "원/m²",
+     "range": [
+      10000,
+      800000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "골조 + 피복 시공비(장비 제외). 평당 약 73만 원. 지역·시기·자동화 수준에 따라 ±40% 차이. Phase 7에서 정밀화."
+    }
+   },
+   "venlo": {
+    "name": "벤로형 유리온실",
+    "desc": "벤로(Venlo) 지붕, 4 mm 유리",
+    "transmissivity": {
+     "value": 0.78,
+     "unit": "-",
+     "range": [
+      0.4,
+      0.95
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "온실 전체 일사 투과율(피복재 + 골조 그늘 + 입사각 손실, 산란광 평균). 새 피복재 자체는 0.87–0.92이나 골조·이중 구조로 낮아진다. 유리 + 가는 골조."
+    },
+    "uValue": {
+     "value": 6.2,
+     "unit": "W m⁻² K⁻¹",
+     "range": [
+      2,
+      9
+     ],
+     "tag": "EST",
+     "source": "온실 난방부하 설계 관행값(유리 5.3, 폴리에틸렌 5.7 kcal m⁻² h⁻¹ °C⁻¹ 수준)을 W 단위로 환산",
+     "note": "피복면 열관류율(보온커튼 없음). 유리 1겹."
+    },
+    "coverRatio": {
+     "value": 1.25,
+     "unit": "m² m⁻²",
+     "range": [
+      1,
+      2.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 면적 대비 피복 면적(지붕 + 측벽). 1,000 m²(약 300평) 안팎 규모 기준 기하 추정."
+    },
+    "eaveHeight": {
+     "value": 6,
+     "unit": "m",
+     "range": [
+      1,
+      8
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측고(처마 높이). 국내 보급형 규격의 통상 범위."
+    },
+    "meanHeight": {
+     "value": 6.8,
+     "unit": "m",
+     "range": [
+      1.5,
+      9
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "평균 높이 = 공기 부피 ÷ 바닥 면적."
+    },
+    "leakage": {
+     "value": 0.4,
+     "unit": "h⁻¹",
+     "range": [
+      0.1,
+      4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "창을 다 닫았을 때 틈새 환기 횟수(풍속 4 m/s 기준). 비닐 단동 > 연동 > PO > 유리 순으로 기밀."
+    },
+    "sideVentArea": {
+     "value": 0,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "측창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "roofVentArea": {
+     "value": 0.18,
+     "unit": "m² m⁻²",
+     "range": [
+      0,
+      0.4
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "천창을 100% 열었을 때 개구 면적 ÷ 바닥 면적."
+    },
+    "snowLimit": {
+     "value": 50,
+     "unit": "cm",
+     "range": [
+      10,
+      80
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 적설심 20–40 cm대)의 범위를 참고",
+     "note": "지붕 적설 한계. 넘으면 붕괴. "
+    },
+    "windLimit": {
+     "value": 40,
+     "unit": "m/s",
+     "range": [
+      15,
+      50
+     ],
+     "tag": "EST",
+     "source": "원예특작시설 내재해 설계기준(지역별 설계 풍속 22–40 m/s)의 범위를 참고",
+     "note": "최대순간풍속 한계. 넘으면 피복 파손."
+    },
+    "snowShed": {
+     "value": 0.1,
+     "unit": "-",
+     "range": [
+      0,
+      1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "지붕 형상에 따른 눈 흘러내림 정도(시간당 감소 비율 계수). 아치형 단동은 잘 흘러내리고 연동 곡부·유리 지붕은 쌓인다."
+    },
+    "agingLoss": {
+     "value": 0.002,
+     "unit": "yr⁻¹",
+     "range": [
+      0,
+      0.1
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 노후로 인한 연간 투과율 감소."
+    },
+    "coverLife": {
+     "value": 25,
+     "unit": "yr",
+     "range": [
+      1,
+      40
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "피복재 교체 주기."
+    },
+    "buildCost": {
+     "value": 400000,
+     "unit": "원/m²",
+     "range": [
+      10000,
+      800000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "골조 + 피복 시공비(장비 제외). 평당 약 130만 원. 지역·시기·자동화 수준에 따라 ±40% 차이. Phase 7에서 정밀화."
+    }
+   }
   },
-  "params": {}
+  "physics": {
+   "doubleCoverU": {
+    "value": 0.62,
+    "unit": "-",
+    "range": [
+     0.45,
+     0.8
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "피복을 2중으로 했을 때 열관류율 배율. 공기층이 열저항을 더해 1겹 6.6 → 2중 약 4.1 W m⁻² K⁻¹(이중 피복 관행값 3.5–4.5 수준)."
+   },
+   "doubleCoverTau": {
+    "value": 0.9,
+    "unit": "-",
+    "range": [
+     0.8,
+     0.95
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "피복을 2중으로 했을 때 투과율 배율(필름 한 장 더 통과)."
+   },
+   "thermalMass": {
+    "value": 200,
+    "unit": "kJ m⁻² K⁻¹",
+    "range": [
+     50,
+     500
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "바닥·토양 표층의 유효 열용량(토양 약 10 cm, 체적열용량 2 MJ m⁻³ K⁻¹). 낮에 받은 열을 밤에 내놓는 축열 효과."
+   },
+   "floorDirectFraction": {
+    "value": 0.5,
+    "unit": "-",
+    "range": [
+     0,
+     0.9
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "바닥이 흡수한 일사 가운데 뜨거워진 표면에서 곧바로 공기로 돌아가는 비율. 나머지만 축열체에 저장된다. 표면 온도 절점을 따로 두지 않은 데 대한 보정."
+   },
+   "massExchange": {
+    "value": 6,
+    "unit": "W m⁻² K⁻¹",
+    "range": [
+     2,
+     12
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "바닥 표면과 실내 공기 사이 대류 열전달 계수."
+   },
+   "deepConductance": {
+    "value": 1,
+    "unit": "W m⁻² K⁻¹",
+    "range": [
+     0.2,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "표층과 심층 토양 사이 열전도(토양 열전도율 약 1 W m⁻¹ K⁻¹, 깊이 약 1 m)."
+   },
+   "deepTempOffset": {
+    "value": 1.5,
+    "unit": "°C",
+    "range": [
+     0,
+     4
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "심층 지온 = 지역 연평균기온 + 이 값(지중 온도는 연평균기온보다 약간 높다)."
+   },
+   "airExtraCapacity": {
+    "value": 8,
+    "unit": "kJ m⁻² K⁻¹",
+    "range": [
+     0,
+     30
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "공기와 함께 빠르게 데워지고 식는 골조·자재의 열용량."
+   },
+   "canopyCapacityPerLai": {
+    "value": 4,
+    "unit": "kJ m⁻² K⁻¹",
+    "range": [
+     0,
+     10
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "엽면적지수 1당 작물체 열용량(생체중 약 1 kg m⁻²)."
+   },
+   "innerSurfaceCoeff": {
+    "value": 7.5,
+    "unit": "W m⁻² K⁻¹",
+    "range": [
+     4,
+     12
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "피복 안쪽 면의 대류 + 복사 열전달 계수. 피복면 온도와 결로량 계산에 쓴다."
+   },
+   "radiativeCoeff": {
+    "value": 4.6,
+    "unit": "W m⁻² K⁻¹",
+    "range": [
+     3,
+     6
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "잎·바닥과 피복면 사이 장파 복사 교환의 선형화 계수(4εσT³, ε≈0.85, T≈288 K)."
+   },
+   "shortwaveAbsorbed": {
+    "value": 0.85,
+    "unit": "-",
+    "range": [
+     0.6,
+     0.95
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "실내로 들어온 일사 중 흡수되는 비율(나머지는 반사되어 다시 나간다)."
+   },
+   "extinction": {
+    "value": 0.7,
+    "unit": "-",
+    "range": [
+     0.4,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "군락 흡광계수 k. 군락이 가로채는 비율 = 1 − e^(−k·LAI)."
+   },
+   "parFraction": {
+    "value": 0.47,
+    "unit": "-",
+    "range": [
+     0.42,
+     0.52
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "전천 일사 중 광합성유효광(PAR) 에너지 비율. 통상 0.45–0.50."
+   },
+   "parPhotonPerJoule": {
+    "value": 4.57,
+    "unit": "μmol J⁻¹",
+    "range": [
+     4.4,
+     4.7
+    ],
+    "tag": "SRC",
+    "source": "McCree (1972) 태양광 PAR 환산 계수(통용값)",
+    "note": "PAR 에너지 → 광양자."
+   },
+   "dischargeCoeff": {
+    "value": 0.65,
+    "unit": "-",
+    "range": [
+     0.4,
+     0.8
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "창 유량 계수 Cd(온실 환기 연구의 통상 범위 0.6–0.7)."
+   },
+   "windCoeff": {
+    "value": 0.1,
+    "unit": "-",
+    "range": [
+     0.03,
+     0.2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "풍압 계수 Cw(온실 환기 연구의 통상 범위 0.07–0.14)."
+   },
+   "boundaryResistance": {
+    "value": 200,
+    "unit": "s m⁻¹",
+    "range": [
+     80,
+     400
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "잎 경계층 저항(바람 없는 온실). 유동팬을 켜면 boundaryResistanceFan 값을 쓴다."
+   },
+   "boundaryResistanceFan": {
+    "value": 120,
+    "unit": "s m⁻¹",
+    "range": [
+     50,
+     300
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "유동팬 가동 시 잎 경계층 저항."
+   },
+   "stomatalMin": {
+    "value": 82,
+    "unit": "s m⁻¹",
+    "range": [
+     50,
+     200
+    ],
+    "tag": "SRC",
+    "source": "Stanghellini (1987) 온실 토마토 증산 모델의 기공저항 식 rs = 82·(Is+4.30)/(Is+0.54)",
+    "note": "최소 기공저항(광 항). 온도·VPD·CO2 항은 아래 stomatal* 파라미터."
+   },
+   "stomatalVpd": {
+    "value": 0.5,
+    "unit": "kPa⁻²",
+    "range": [
+     0,
+     5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "기공저항의 수증기압차 항 (1 + a·VPD²): 형태는 Stanghellini(1987)식 곱셈 구조를 따르고, 계수는 과채류 기공이 VPD 2–3 kPa에서 뚜렷이 닫힌다는 일반 지식에 맞춘 추정(1 kPa에서 1.5배, 2 kPa에서 3배, 3 kPa에서 5.5배). 공기가 건조해도 증산이 무한정 늘지 않게 한다."
+   },
+   "stomatalTemp": {
+    "value": 0.023,
+    "unit": "°C⁻²",
+    "range": [
+     0,
+     0.06
+    ],
+    "tag": "EST",
+    "source": "Stanghellini (1987) 기공저항 식의 온도 항 (1 + b·(T − Topt)²) — 계수는 학습 지식",
+    "note": "적온보다 더우면 기공저항 증가(고온 쪽에만 적용 — 저온 쪽 계수는 근거가 약해 쓰지 않는다)."
+   },
+   "stomatalTempOpt": {
+    "value": 24.5,
+    "unit": "°C",
+    "range": [
+     18,
+     30
+    ],
+    "tag": "EST",
+    "source": "Stanghellini (1987) — 학습 지식",
+    "note": "기공이 가장 잘 열리는 엽온(토마토 기준)."
+   },
+   "stomatalCo2": {
+    "value": 6.1e-7,
+    "unit": "ppm⁻²",
+    "range": [
+     0,
+     0.000002
+    ],
+    "tag": "EST",
+    "source": "Stanghellini (1987) 기공저항 식의 CO2 항 (1 + c·(CO2 − 200)²), 1,100 ppm 이상은 일정 — 계수는 학습 지식",
+    "note": "CO2가 높으면 기공이 닫힌다."
+   },
+   "dustRate": {
+    "value": 0.0002,
+    "unit": "d⁻¹",
+    "range": [
+     0,
+     0.002
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "먼지로 인한 투과율 감소가 하루에 쌓이는 양(연 7%쯤). 세척으로 0이 된다."
+   },
+   "dustMax": {
+    "value": 0.2,
+    "unit": "-",
+    "range": [
+     0,
+     0.4
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "먼지로 인한 투과율 감소 상한."
+   },
+   "rainWash": {
+    "value": 0.2,
+    "unit": "-",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "하루 10 mm 이상 비가 오면 씻겨 나가는 먼지 비율."
+   },
+   "snowLightDepth": {
+    "value": 2,
+    "unit": "cm",
+    "range": [
+     0.5,
+     10
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "지붕 적설이 이 깊이면 투과광이 e⁻¹(37%)로 준다."
+   },
+   "snowMeltOut": {
+    "value": 0.15,
+    "unit": "cm h⁻¹ °C⁻¹",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "외기온 0°C 초과분 1°C당 지붕 눈 녹는 속도."
+   },
+   "snowMeltIn": {
+    "value": 0.03,
+    "unit": "cm h⁻¹ °C⁻¹",
+    "range": [
+     0,
+     0.3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "실내 기온 1°C당 지붕 눈 녹는 속도(보온커튼이 닫혀 있으면 그만큼 줄어든다). 난방하는 온실은 눈이 덜 쌓인다."
+   },
+   "co2Outside": {
+    "value": 425,
+    "unit": "ppm",
+    "range": [
+     380,
+     480
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "외기 CO2 농도(2020년대 중반 전 지구 평균 수준)."
+   },
+   "testCanopyAmax": {
+    "value": 25,
+    "unit": "μmol m⁻² s⁻¹",
+    "range": [
+     10,
+     40
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "[임시] 작물 모델(Phase 3) 전까지 쓰는 시험용 군락의 잎 최대 광합성(400 ppm 기준). 과채류 통상 범위."
+   },
+   "testCanopyQuantumYield": {
+    "value": 0.05,
+    "unit": "mol mol⁻¹",
+    "range": [
+     0.03,
+     0.08
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "[임시] 흡수 광양자당 CO2 고정."
+   },
+   "testCanopyRespiration": {
+    "value": 1.2,
+    "unit": "μmol m⁻² s⁻¹",
+    "range": [
+     0.3,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "[임시] 25°C에서 엽면적당 호흡. 10°C마다 2배."
+   }
+  }
+ }
 }

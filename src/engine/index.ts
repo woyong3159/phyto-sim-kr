@@ -6,6 +6,7 @@ import { createAllStreams } from './rng';
 import { STEP_ORDER } from './modules';
 import { ENGINE_STATE_VERSION, type SimState, type UserAction } from './types';
 import { initWeather } from './weather';
+import { initGreenhouse } from './greenhouse';
 import type { World } from './world';
 
 export * from './types';
@@ -14,6 +15,9 @@ export { fingerprint, stableStringify } from './hash';
 export { ALL_MODULES, STEP_ORDER } from './modules';
 export { createStream, hashSeed, nextFloat, nextUint32 } from './rng';
 export { createWorld, listRegions, type EngineData, type World } from './world';
+export * from './greenhouse/types';
+export { curtainSaving, contractKw, buildGhParams, type GhParams, type FacilityParams } from './greenhouse';
+export { installCost, type CostLine } from './greenhouse/cost';
 export { sunDay, MONTH_DAYS, type RegionInfo, type MonthlyNormals, type Climate } from './weather';
 
 export function createInitialState(world: World): SimState {
@@ -24,6 +28,7 @@ export function createInitialState(world: World): SimState {
     hour: 0,
     rng: { ...rng, weather: init.weatherRng, events: init.eventsRng },
     weather: init.weather,
+    gh: initGreenhouse(world, init.weather.now.temp, init.weather.now.rh),
     events: init.events,
   };
 }

@@ -1,4 +1,4 @@
-import { calendarAt, type EventType, type SimConfig, type SimEvent } from '../engine';
+import { calendarAt, type DeviceId, type EventType, type SimConfig, type SimEvent } from '../engine';
 
 export const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -29,11 +29,29 @@ export const EVENT_LABEL: Record<EventType, { name: string; fromPhase: number }>
   heavyRain: { name: '호우', fromPhase: 1 },
   heavySnow: { name: '대설', fromPhase: 1 },
   hail: { name: '우박', fromPhase: 1 },
-  disease: { name: '병해충 발견', fromPhase: 6 },
+  structure: { name: '시설 붕괴·파손', fromPhase: 2 },
   equipment: { name: '장비 고장', fromPhase: 2 },
+  disease: { name: '병해충 발견', fromPhase: 6 },
   news: { name: '뉴스', fromPhase: 7 },
   stock: { name: '재고 부족', fromPhase: 4 },
 };
+
+export const DEVICE_LABEL: Record<DeviceId, string> = {
+  vent: '창 개폐기',
+  curtain: '보온커튼',
+  shade: '차광막',
+  circFan: '순환팬',
+  fog: '포그',
+  heater: '난방기',
+  cooling: '냉방',
+  co2: 'CO2 공급',
+  light: '보광등',
+  dehumidifier: '제습기',
+  solutionChiller: '양액 냉각기',
+  solutionHeater: '양액 가온기',
+};
+
+export const won = (v: number) => `${Math.round(v).toLocaleString('ko-KR')}원`;
 
 export function eventText(e: SimEvent): string {
   const v = e.value;
@@ -52,6 +70,10 @@ export function eventText(e: SimEvent): string {
       return `${e.level === 'warning' ? '대설경보' : '대설주의보'} 수준 — 신적설 ${v.toFixed(0)} cm`;
     case 'hail':
       return '우박';
+    case 'structure':
+      return e.code === 'collapse' ? `적설로 시설 붕괴 — 지붕 적설 ${v.toFixed(0)} cm` : `강풍으로 피복 파손 — 순간풍속 ${v.toFixed(0)} m/s`;
+    case 'equipment':
+      return `장비 고장 — ${DEVICE_LABEL[e.code as DeviceId] ?? e.code}`;
     default:
       return EVENT_LABEL[e.type].name;
   }

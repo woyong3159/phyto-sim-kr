@@ -1,5 +1,5 @@
 import type { SessionView } from '../sim/session';
-import { clock, dateLabel, eventText, hoursMinutes } from './format';
+import { clock, dateLabel, eventText, hoursMinutes, won } from './format';
 
 function Metric({ label, value, unit, sub }: { label: string; value: string; unit: string; sub?: string }) {
   return (
@@ -62,10 +62,27 @@ export function Dashboard({ view }: { view: SessionView }) {
         )}
       </section>
 
+      <section className="card" aria-labelledby="gh-h" data-testid="indoor-card">
+        <div className="card-head">
+          <h2 id="gh-h">온실 안</h2>
+          {wx.gh.destroyed ? <span className="badge badge-warn">붕괴</span> : wx.gh.out.heat > 0 ? <span className="badge">난방 중</span> : wx.gh.out.vent > 0.02 ? <span className="badge">환기 {(wx.gh.out.vent * 100).toFixed(0)}%</span> : null}
+        </div>
+        <div className="metrics">
+          <Metric label="기온" value={wx.gh.out.tIn.toFixed(1)} unit="°C" sub={`외기 ${now.temp.toFixed(1)}°C`} />
+          <Metric label="상대습도 · VPD" value={wx.gh.out.rhIn.toFixed(0)} unit="%" sub={`VPD ${wx.gh.out.vpd.toFixed(2)} kPa`} />
+          <Metric label="CO2" value={wx.gh.out.co2.toFixed(0)} unit="ppm" />
+          <Metric label="광(PPFD)" value={wx.gh.out.ppfd.toFixed(0)} unit="μmol" sub={`오늘 DLI ${wx.gh.today.dli.toFixed(1)} mol`} />
+        </div>
+        <p className="muted small">
+          오늘 에너지 비용 {won(wx.gh.today.won)} · 연료 {wx.gh.today.fuelL.toFixed(0)} L · 전력 {wx.gh.today.kWh.toFixed(0)} kWh
+          {wx.gh.today.heatDeficitH > 0 && <strong className="error"> · 난방 용량 부족 {wx.gh.today.heatDeficitH.toFixed(1)}h</strong>}
+        </p>
+      </section>
+
       <section className="card" aria-labelledby="ev-h">
-        <h2 id="ev-h">최근 기상 사건</h2>
+        <h2 id="ev-h">최근 사건</h2>
         {view.eventLog.length === 0 ? (
-          <p className="muted small">아직 없습니다. 폭염·한파·장마·태풍·호우·대설·우박이 생기면 여기에 쌓입니다.</p>
+          <p className="muted small">아직 없습니다. 기상 특보, 장비 고장, 시설 파손이 생기면 여기에 쌓입니다.</p>
         ) : (
           <ul className="rows">
             {view.eventLog.slice(0, 8).map((e, i) => {
@@ -83,7 +100,7 @@ export function Dashboard({ view }: { view: SessionView }) {
 
       <section className="card">
         <h2>아직 없는 것</h2>
-        <p className="muted small">온실·작물·양액·병해충은 다음 Phase부터 들어옵니다. 지금은 바깥 날씨와 시계만 실제로 계산됩니다.</p>
+        <p className="muted small">작물·양액·병해충은 다음 Phase부터 들어옵니다. 지금 온실 안의 증산과 CO2 흡수는 시험용 군락(엽면적지수 고정)으로 계산합니다.</p>
       </section>
     </>
   );

@@ -12,7 +12,7 @@ export function TitleScreen() {
         </svg>
         <h1>PHYTO-SIM KR</h1>
         <p className="hero-sub">대한민국 시설재배 작물 생육 시뮬레이터</p>
-        <p className="muted small">v{__APP_VERSION__} · Phase 1 (시간·지역·기상)</p>
+        <p className="muted small">v{__APP_VERSION__} · Phase 2 (시설·미기상·환경 제어)</p>
       </header>
       <NewGame />
     </>

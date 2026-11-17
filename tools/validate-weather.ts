@@ -1,10 +1,11 @@
 // Phase 1 검증(V3) 실행기: npx vite-node tools/validate-weather.ts
 // 결과를 docs/VALIDATION_PHASE1.md 로 쓴다.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { createInitialState, createWorld, fingerprint, listRegions, stepHour, type EngineData, type SimState } from '../src/engine';
+import { createInitialState, createWorld, defaultSettings, defaultSetup, fingerprint, listRegions, stepHour, type EngineData, type SimConfig, type SimState } from '../src/engine';
 
 const load = (f: string) => JSON.parse(readFileSync(new URL(`../data/${f}.json`, import.meta.url), 'utf8')).params;
-export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events') };
+export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events'), facilities: load('facilities'), equipment: load('equipment'), prices: load('prices') };
+const cfg = (seed: string, startDate: string, regionId: string): SimConfig => ({ seed, startDate, regionId, setup: defaultSetup(), settings: defaultSettings() });
 
 const YEARS = 30;
 const START = '2001-01-01';
@@ -33,7 +34,7 @@ export interface RegionStats {
 }
 
 export function runRegion(regionId: string, seed: string, years = YEARS): RegionStats {
-  const world = createWorld({ seed, startDate: START, regionId }, data);
+  const world = createWorld(cfg(seed, START, regionId), data);
   let s: SimState = createInitialState(world);
   const m = () => Array.from({ length: 12 }, () => 0);
   const sum = { t: m(), tmax: m(), tmin: m(), solar: m(), precip: m(), wet: m(), rh: m(), hours: m(), days: m() };
@@ -114,7 +115,7 @@ if (!process.env.VITEST) {
   for (const r of regions) {
     const st = runRegion(r.id, `validate-${r.id}`);
     all.push(st);
-    const w = createWorld({ seed: 'x', startDate: START, regionId: r.id }, data);
+    const w = createWorld(cfg('x', START, r.id), data);
     const n = w.clim.normals;
     const maxAbs = (a: number[], b: number[]) => Math.max(...a.map((v, i) => Math.abs(v - b[i]!)));
     const dT = maxAbs(st.tavgHourly, n.tavg);
@@ -134,7 +135,7 @@ if (!process.env.VITEST) {
   lines.push('### ①-b 300년 생성(치우침 확인)', '', '| 지점 | 평균기온 최대차(°C) | 일사 최대차(%) | 연강수량 차(%) | 강수일수 차(일/년) |', '|---|---|---|---|---|');
   for (const id of ['buyeo', 'seoul', 'daegwallyeong', 'daegu', 'jeju']) {
     const st = runRegion(id, `long-${id}`, 300);
-    const n = createWorld({ seed: 'x', startDate: START, regionId: id }, data).clim.normals;
+    const n = createWorld(cfg('x', START, id), data).clim.normals;
     const dT = Math.max(...st.tavgHourly.map((v, i) => Math.abs(v - n.tavg[i]!)));
     const dS = Math.max(...st.solar.map((v, i) => Math.abs(v / n.solar[i]! - 1) * 100));
     const pS = st.precip.reduce((a, b) => a + b, 0) / n.precip.reduce((a, b) => a + b, 0);
@@ -144,7 +145,7 @@ if (!process.env.VITEST) {
   lines.push('');
 
   const by = (id: string) => all.find((a) => a.id === id)!;
-  const wOf = (id: string) => createWorld({ seed: 'x', startDate: START, regionId: id }, data).clim.normals;
+  const wOf = (id: string) => createWorld(cfg('x', START, id), data).clim.normals;
   lines.push('### 부여 월별 상세 (생성 / 평년)', '', '| 월 | 평균기온 | 최고 | 최저 | 일사 MJ/m²/d | 강수 mm | 강수일 | 습도 % |', '|---|---|---|---|---|---|---|---|');
   {
     const s = by('buyeo'), n = wOf('buyeo');
@@ -173,7 +174,7 @@ if (!process.env.VITEST) {
 
   lines.push('## ④ 결정론', '');
   {
-    const w = createWorld({ seed: 'det-check', startDate: '2026-03-01', regionId: 'buyeo' }, data);
+    const w = createWorld(cfg('det-check', '2026-03-01', 'buyeo'), data);
     const run = () => {
       let s = createInitialState(w);
       for (let i = 0; i < 365 * 24; i++) s = stepHour(s, w, []);
