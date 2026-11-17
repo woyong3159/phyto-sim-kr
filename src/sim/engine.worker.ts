@@ -34,13 +34,15 @@ const post = (msg: FromWorker) => (self as unknown as DedicatedWorkerGlobalScope
 
 function cropView(c: CropState | null, plan: WorkPlan | null): CropView | null {
   if (!c) return null;
-  const dmc = world!.crops.cucumber.fruit.dmc + world!.crops.cucumber.fruit.dmcLight * (c.dliAvg - world!.crops.cucumber.leaf.slaDliRef);
+  const cu = world!.crops.cucumber;
+  // 화면용 생체중 환산(오이: 최근 광에 따른 건물률, 딸기: 품종 기준 건물률)
+  const dmc = c.cropId === 'strawberry' ? world!.crops.varieties.strawberry[c.varietyId]!.dmc : cu.fruit.dmc + cu.fruit.dmcLight * (c.dliAvg - cu.leaf.slaDliRef);
   const { nodes, fruits, tips, cum: _cum, ...rest } = c;
   return {
     ...rest,
     plan: plan ?? c.plan,
     leaves: nodes.map((n) => ({ area: n.area, lat: n.lat, age: n.age })),
-    fruitList: fruits.map((f) => ({ node: f.node, n: f.n, fw: f.w / (dmc > 0.025 ? dmc : 0.025), age: f.age })),
+    fruitList: fruits.map((f) => ({ node: f.node, n: f.n, fw: f.w / (dmc > 0.025 ? dmc : 0.025), age: f.age, rank: f.rank ?? 0 })),
     laterals: tips.filter((t) => t.made >= 1).length,
   };
 }

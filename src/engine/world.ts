@@ -226,8 +226,8 @@ export function createWorld(config: SimConfig, data: EngineData): World {
 }
 
 function buildCrops(crops: unknown, varieties: unknown): CropData {
-  const c = strip(crops) as { core: CropData['core']; cucumber: CropData['cucumber'] };
+  const c = strip(crops) as { core: CropData['core']; cucumber: CropData['cucumber']; strawberry: CropData['strawberry'] };
   const v = strip(varieties) as CropData['varieties'];
-  if (!c?.core || !c.cucumber || !v?.cucumber) throw new Error('작물·품종 데이터가 올바르지 않습니다.');
-  return { core: c.core, cucumber: c.cucumber, varieties: v };
+  if (!c?.core || !c.cucumber || !c.strawberry || !v?.cucumber || !v.strawberry) throw new Error('작물·품종 데이터가 올바르지 않습니다.');
+  return { core: c.core, cucumber: c.cucumber, strawberry: c.strawberry, varieties: v };
 }

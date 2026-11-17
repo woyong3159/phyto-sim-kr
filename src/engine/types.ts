@@ -6,7 +6,7 @@ import type { World } from './world';
 import type { CropState, PlantOrder } from './crop/types';
 
 /** 엔진 상태 구조 버전. 상태 구조가 바뀌면 올린다(옛 스냅샷은 버리고 조치 로그로 다시 계산). */
-export const ENGINE_STATE_VERSION = 4;
+export const ENGINE_STATE_VERSION = 5;
 
 /** 내부 계산 스텝: 1시간(헌법 6항). */
 export const HOURS_PER_DAY = 24;

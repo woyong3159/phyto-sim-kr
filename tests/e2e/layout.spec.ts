@@ -364,3 +364,42 @@ test('빈 온실로 시작 → 작물 탭에서 직접 정식 → 새로고침 �
   await page.locator('[data-tab="crop"]').tap();
   await expect(page.getByTestId('crop-status')).toContainText('겨우살이청장');
 });
+
+test('딸기: 새 작기에서 딸기 선택 → 화방·당도·수분 정보 → 작업 계획(수정벌)', async ({ page }, info) => {
+  await page.goto('./');
+  await page.getByTestId('start-date').fill('2026-09-01');
+  await page.getByTestId('seed').fill('e2e-sb');
+  await page.locator('[data-crop="strawberry"]').tap();
+  await expect(page.locator('[data-variety="seolhyang"]')).toBeVisible();
+  await page.locator('[data-variety="geumsil"]').tap();
+  const day = page.getByTestId('plant-day');
+  await day.fill('19');
+  await day.blur();
+  await noOverflow(page);
+  await page.getByTestId('start-game').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('30-new-game-strawberry.png') });
+  await page.getByTestId('start-game').tap();
+  await page.getByTestId('confirm-start').tap();
+  await expect(page.getByTestId('clock')).toBeVisible();
+  await advanceWeeks(page, 17);
+  await page.locator('[data-tab="crop"]').tap();
+  await expect(page.getByTestId('crop-status')).toContainText('금실');
+  await expect(page.getByTestId('sb-facts')).toContainText('화아분화');
+  await expect(page.getByTestId('plant-icon')).toBeVisible();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('31-strawberry-status.png') });
+  await expect(page.getByTestId('sb-quality')).toContainText('°Bx');
+  await page.getByTestId('sb-quality').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('32-strawberry-quality.png') });
+  await page.locator('[data-sub="work"]').tap();
+  await page.getByTestId('plan-bees').selectOption('bumble');
+  await page.getByTestId('apply-plan').tap();
+  await page.getByTestId('confirm-plan').tap();
+  await expect(page.getByTestId('plan-bees')).toHaveValue('bumble');
+  for (const r of await page.locator('[data-work]').evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ w: b.width, h: b.height })))) {
+    expect(r.w).toBeGreaterThanOrEqual(44);
+    expect(r.h).toBeGreaterThanOrEqual(44);
+  }
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('33-strawberry-work.png') });
+});

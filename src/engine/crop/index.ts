@@ -7,11 +7,13 @@ import type { EngineModule, SimEvent, SimState } from '../types';
 import type { World } from '../world';
 import type { CanopyView } from './canopy';
 import { canopyOfCucumber, defaultPlan, plantCucumber, stepCucumber, type CropEnv } from './cucumber';
-import type { CropData, CropState, PlantOrder, WorkPlan, WorkTask } from './types';
+import { canopyOfStrawberry, defaultPlanSb, plantStrawberry, stepStrawberry, type Nursery } from './strawberry';
+import type { CropData, CropId, CropState, PlantOrder, WorkPlan, WorkTask } from './types';
 
 export * from './types';
 export { canopyPhoto, diffuseFraction, leafEnv, trap, interp, type CanopyView } from './canopy';
 export { beta, defaultPlan } from './cucumber';
+export { defaultPlanSb, inductionRate } from './strawberry';
 
 /** Phase 4 인터페이스: 근권이 계산하기 전까지 수분 가용도와 양분 스트레스는 1(충분)이다. */
 export function rootzoneSupply(_state: SimState): { water: number; nutrient: number } {
@@ -22,31 +24,54 @@ export function cropCanopy(state: SimState, world: World): CanopyView | null {
   const c = state.crop;
   if (!c) return null;
   const d = world.crops;
+  const water = rootzoneSupply(state).water;
+  if (c.cropId === 'strawberry') {
+    const v = d.varieties.strawberry[c.varietyId];
+    return v ? canopyOfStrawberry(c, d.core, d.strawberry, v, water) : null;
+  }
   const v = d.varieties.cucumber[c.varietyId];
-  if (!v) return null;
-  return canopyOfCucumber(c, d.core, d.cucumber, v, rootzoneSupply(state).water);
+  return v ? canopyOfCucumber(c, d.core, d.cucumber, v, water) : null;
 }
 
-export function defaultOrder(d: CropData, varietyId = 'cheongchun', system = 'semiforcing'): PlantOrder {
+export function defaultOrder(d: CropData, varietyId = 'cheongchun', system?: string, cropId?: CropId): PlantOrder {
+  const crop: CropId = cropId ?? (varietyId in d.varieties.strawberry ? 'strawberry' : 'cucumber');
+  if (crop === 'strawberry') {
+    const id = varietyId in d.varieties.strawberry ? varietyId : 'seolhyang';
+    return { cropId: 'strawberry', varietyId: id, system: system ?? 'forcing', density: d.strawberry.density, plan: defaultPlanSb(), seedling: 'buy', nightChill: false };
+  }
   const v = d.varieties.cucumber[varietyId] ?? Object.values(d.varieties.cucumber)[0]!;
-  return { cropId: 'cucumber', varietyId, system, density: d.cucumber.density, plan: defaultPlan(v) };
+  return { cropId: 'cucumber', varietyId, system: system ?? 'semiforcing', density: d.cucumber.density, plan: defaultPlan(v) };
 }
 
 function envOf(state: SimState, world: World): CropEnv {
   const o = state.gh.out;
   const rz = rootzoneSupply(state);
-  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, area: state.gh.setup.area, water: rz.water, nutrient: rz.nutrient };
+  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, rh: o.rhIn, lamp: o.light, solar: state.weather.now.solarW, area: state.gh.setup.area, water: rz.water, nutrient: rz.nutrient };
 }
 
 function plant(state: SimState, world: World, order: PlantOrder): CropState | null {
-  const v = world.crops.varieties.cucumber[order.varietyId];
+  const d = world.crops;
+  if (order.cropId === 'strawberry') {
+    const v = d.varieties.strawberry[order.varietyId];
+    if (!v) return null;
+    // 육묘장 환경: 정식일 직전의 그 지역 평년 기온과 일장
+    const n = Math.round(d.strawberry.induction.nurseryDays);
+    const nursery: Nursery = { temp: [], daylength: [] };
+    for (let i = n; i >= 1; i--) {
+      const di = (((state.weather.cur.di - i) % 365) + 365) % 365;
+      nursery.temp.push(world.clim.tavg[di]!);
+      nursery.daylength.push(world.clim.sun[di]!.daylength);
+    }
+    return plantStrawberry(order, d.strawberry, v, envOf(state, world), nursery);
+  }
+  const v = d.varieties.cucumber[order.varietyId];
   if (order.cropId !== 'cucumber' || !v) return null;
-  return plantCucumber(order, world.crops.cucumber, v, envOf(state, world));
+  return plantCucumber(order, d.cucumber, v, envOf(state, world));
 }
 
 export const cropModule: EngineModule = {
   id: 'crop',
-  title: '생육 코어 + 작물별 모듈(오이; 딸기·와사비는 3b·3c)',
+  title: '생육 코어 + 작물별 모듈(오이·딸기; 와사비는 3c)',
   plannedPhase: 3,
   implemented: true,
   step(state, { world, actions }): SimState {
@@ -62,10 +87,11 @@ export const cropModule: EngineModule = {
       else if (a.type === 'crop/work' && crop) works.push((a.payload as { task: WorkTask }).task);
     }
     const plan = world.config.crop;
-    if (!crop && plan && state.hour === plan.day * 24 + world.crops.cucumber.labor.workHour) crop = plant(state, world, plan.order);
+    const d = world.crops;
+    if (!crop && plan && state.hour === plan.day * 24 + (plan.order.cropId === 'strawberry' ? d.strawberry : d.cucumber).labor.workHour) crop = plant(state, world, plan.order);
     if (crop && !crop.dead) {
-      const v = world.crops.varieties.cucumber[crop.varietyId]!;
-      const r = stepCucumber(crop, world.crops.core, world.crops.cucumber, v, envOf(state, world), works);
+      const env = envOf(state, world);
+      const r = crop.cropId === 'strawberry' ? stepStrawberry(crop, d.core, d.strawberry, d.varieties.strawberry[crop.varietyId]!, env, works) : stepCucumber(crop, d.core, d.cucumber, d.varieties.cucumber[crop.varietyId]!, env, works);
       crop = r.crop;
       events.push(...r.events);
     }

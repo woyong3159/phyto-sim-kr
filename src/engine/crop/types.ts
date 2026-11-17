@@ -69,14 +69,71 @@ export interface CucumberVariety {
   seedlingPrice: number;
 }
 
+type LeafParams = CucumberParams['leaf'];
+type RespParams = CucumberParams['resp'];
+type PhotoParams = CucumberParams['photo'];
+type DamageParams = CucumberParams['damage'];
+interface BeeParams { name: string; temp: Curve; light: Curve; decay: number; rate: number }
+
+export interface StrawberryParams {
+  name: string;
+  dev: { tBase: number; tOpt: number; tMax: number };
+  photo: PhotoParams;
+  resp: RespParams;
+  leaf: LeafParams;
+  crown: { ratio: number; rootRatio: number; leavesBetween: number; branch: number };
+  induction: { days: number; temp: Curve; freeTemp: number; sdTemp: number; critical: number; criticalBand: number; nSens: number; anthesisAge: number; rankGap: number; nurseryDays: number; nurseryOffset: number; nurseryN: number };
+  dormancy: { photo: Curve; temp: Curve; rateIn: number; rateOut: number; chillTemp: number; chillRelease: number; dwarf: number; slow: number };
+  runner: { rate: number; photo: Curve; temp: Curve; grow: number };
+  fruit: {
+    maturity: number; rankFactor: number[]; rankCount: number[]; receptive: number; pollSinkMin: number; abortWindow: number; abortMax: number; setSsr: Curve; ssrLag: number; growTemp: Curve;
+    flowerFrost: number; flowerFrostRate: number; ssrRef: number; dmcSsr: number; dmcTemp: number; dmcTempRef: number; dmcLight: number; dmcMin: number; dmcMax: number; brixSlope: number; brixOffset: number;
+    acidTemp: number; firmTemp: number; shelf: number; topWeight: number; midWeight: number;
+  };
+  bees: { honey: BeeParams; bumble: BeeParams; self: number; pollenTemp: Curve; pollenRhCurve: Curve };
+  damage: DamageParams;
+  labor: { plant: number; deleaf: number; runner: number; thin: number; bees: number; harvestBase: number; harvestPerTon: number; remove: number; workHour: number };
+  seedling: { leaves: number; leafCap: number; leafArea: number; leafW: number; stemW: number; rootW: number; shockFactor: number; shock: number; inducedMax: number; ownRisk: number; buyRisk: number };
+  density: number;
+  systems: Record<string, { name: string; sowing: string; harvest: string; transplantMonth: number; transplantDay: number; benchYield: number }>;
+}
+
+export interface StrawberryVariety {
+  name: string;
+  type: string;
+  desc: string;
+  real: boolean;
+  pmaxFactor: number;
+  leafArea: number;
+  fruitW: number;
+  flowers: number;
+  dmc: number;
+  acid: number;
+  firmness: number;
+  critical: number;
+  inductionTemp: number;
+  dormancy: number;
+  chillReq: number;
+  pollenCold: number;
+  coldTol: number;
+  heatTol: number;
+  firstHarvestDays: number;
+  potentialYield: number;
+  resistance: Record<string, number>;
+  pricePremium: number;
+  seedlingPrice: number;
+}
+
 export interface CropData {
   core: CoreParams;
   cucumber: CucumberParams;
-  varieties: { cucumber: Record<string, CucumberVariety> };
+  strawberry: StrawberryParams;
+  varieties: { cucumber: Record<string, CucumberVariety>; strawberry: Record<string, StrawberryVariety> };
 }
 
-export type CropId = 'cucumber';
-export type WorkTask = 'train' | 'deleaf' | 'harvest' | 'pinch' | 'thin';
+export type CropId = 'cucumber' | 'strawberry';
+export type WorkTask = 'train' | 'deleaf' | 'harvest' | 'pinch' | 'thin' | 'runner' | 'bees';
+export type BeeType = 'none' | 'honey' | 'bumble';
 
 /** 작업 계획(반복 작업). 간격 0 = 하지 않음(방치). */
 export interface WorkPlan {
@@ -96,6 +153,15 @@ export interface WorkPlan {
   /** 수확 간격(일)과 수확 기준 무게(g, 0 = 품종 표준) */
   harvestEvery: number;
   harvestWeight: number;
+  /** ── 딸기 전용 ── 런너 제거 간격(일), 화방당 남길 꽃 수(0 = 모두 둠), 수정벌, 벌통 교체 간격(일, 0 = 교체 안 함) */
+  runnerEvery?: number;
+  flowersKeep?: number;
+  bees?: BeeType;
+  /** 남길 관부 수(곁관부 정리) */
+  crownsKeep?: number;
+  beesEvery?: number;
+  /** 체내 질소 수준(1 = 표준). Phase 4(양액) 전까지 사용자가 직접 정하는 임시 입력이다. */
+  nLevel?: number;
 }
 
 export interface PlantOrder {
@@ -106,6 +172,9 @@ export interface PlantOrder {
   /** 재식밀도 주 m⁻² */
   density: number;
   plan: WorkPlan;
+  /** 딸기: 묘 종류(구입 / 자가 육묘), 야냉 단일처리 여부 */
+  seedling?: 'buy' | 'own';
+  nightChill?: boolean;
 }
 
 export interface LeafNode {
@@ -134,6 +203,10 @@ export interface Fruit {
   /** 비대기 동안의 동화산물 부족도 적산, 적산 기간 */
   def: number;
   dur: number;
+  /** 딸기: 화방 안 차수(0 = 1번화), 수분 진행(Σ), 비대기 기온 적산(품질 계산용) */
+  rank?: number;
+  poll?: number;
+  tSum?: number;
 }
 
 export interface Tip {
@@ -169,6 +242,9 @@ export interface Stress {
   heat: number;
   starve: number;
   training: number;
+  /** 딸기: 휴면(왜화)에 의한 생장 억제, 오늘의 수분 조건(벌 활동 × 꽃가루 활력) */
+  dormancy: number;
+  pollination: number;
 }
 
 export interface CropDay {
@@ -221,6 +297,8 @@ export interface CropOut {
   /** 가장 큰 과실의 생체중 g */
   biggestFruit: number;
   stress: Stress;
+  /** 딸기 전용 표시값 */
+  sb?: { crowns: number; trusses: number; induction: number; dormancy: number; chill: number; photoperiod: number; runners: number; beeStrength: number; beeActivity: number; nextAnthesis: number; firstFlowerDay: number };
 }
 
 export interface CropState {
@@ -275,4 +353,47 @@ export interface CropState {
   today: CropDay;
   yesterday: CropDay | null;
   out: CropOut;
+  /** 딸기 전용 상태 */
+  sb?: SbState;
+  /** 수확 품질(상품+중품 무게 가중 누적합): 당도·산도·경도·과중 합계와 무게, 기형과 개수 */
+  quality?: Quality;
+}
+
+export interface SbState {
+  seedling: 'buy' | 'own';
+  /** 저온 누적 시간, 휴면 정도(0–1) */
+  chill: number;
+  dorm: number;
+  /** 다음 화방의 화아분화 진행(0–1), 분화한 화방 수, 마지막 분화 때의 엽수 */
+  induction: number;
+  trusses: number;
+  leavesAtInduction: number;
+  /** 관부 수(분얼 포함, 평균값이라 소수) */
+  crowns: number;
+  /** 전조 포함 일장(이동평균)과 오늘 밤 조명 시간 */
+  photoperiod: number;
+  lampNight: number;
+  /** 자라고 있는 런너 수(포기당)와 건물중 g */
+  runners: number;
+  runnerW: number;
+  /** 벌: 봉군 세력(0–1), 마지막 투입일, 오늘 활동 적산 */
+  beeStrength: number;
+  beeDay: number;
+  beeAct: number;
+  beeHours: number;
+  lastRunner: number;
+  /** 첫 꽃이 핀 시각(h, 없으면 −1) */
+  firstFlowerHour: number;
+  /** 탄저병 잠복 위험 지수(Phase 6 인터페이스) */
+  anthracnoseRisk: number;
+}
+
+export interface Quality {
+  kg: number;
+  brix: number;
+  acid: number;
+  firm: number;
+  weight: number;
+  count: number;
+  malformed: number;
 }

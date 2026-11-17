@@ -184,8 +184,8 @@
           ],
           "unit": "상대 수분 가용도",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "",
@@ -200,8 +200,8 @@
           ],
           "unit": "상대 수분 가용도",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "",
@@ -216,8 +216,8 @@
           ],
           "unit": "상대 수분 가용도",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "",
@@ -283,8 +283,8 @@
           ],
           "unit": "°C(엽온)",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "SRC",
           "source": "광도·온도·CO2 농도 및 엽중 질소농도의 변화에 따른 양액재배 오이의 광합성속도에 관한 수리적 모형 (생물환경조절학회지 초록)",
@@ -847,8 +847,8 @@
           ],
           "unit": "source/sink 비",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "Marcelis L.F.M. (1994) A simulation model for dry matter partitioning in cucumber. Annals of Botany 74:43–52 (doi:10.1093/aob/74.1.43); Marcelis (1994) 박사논문 Fruit growth and dry matter partitioning in cucumber, WUR",
@@ -863,8 +863,8 @@
           ],
           "unit": "°C(일평균 실내기온)",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "농촌진흥청(2018) 오이 농업기술길잡이 — 생물환경조절학회지 32(2):148 (2023) 서론 인용",
@@ -879,8 +879,8 @@
           ],
           "unit": "°C(실내기온)",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "농촌진흥청(2018) 오이 농업기술길잡이 — 생물환경조절학회지 32(2):148 (2023) 서론 인용",
@@ -1027,8 +1027,8 @@
           ],
           "unit": "mol m⁻² d⁻¹",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "",
@@ -1133,8 +1133,8 @@
           ],
           "unit": "source/sink 비",
           "range": [
-            -1000,
-            1000
+            -100000,
+            100000
           ],
           "tag": "EST",
           "source": "",
@@ -1583,6 +1583,1641 @@
         "tag": "SRC",
         "source": "Hand D.W. (1984) Crop responses to winter and summer CO2 enrichment, Acta Hort. 162:45–64; Liu et al. (2025) 오이 CO2 시비 메타분석(73편)",
         "note": "문헌의 CO2 시비 효과 범위 참고값: 순광합성 최대 +50%, 수량 +20–40%(335→1000 vpm). 모델 계산에는 쓰지 않고 검증(V3 ⑥)에서 비교한다."
+      }
+    },
+    "strawberry": {
+      "name": "딸기",
+      "dev": {
+        "tBase": {
+          "value": 3,
+          "unit": "°C",
+          "range": [
+            0,
+            6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "발육 기준온도. 딸기는 5°C 안팎에서도 느리게 자란다."
+        },
+        "tOpt": {
+          "value": 23,
+          "unit": "°C",
+          "range": [
+            20,
+            26
+          ],
+          "tag": "SRC",
+          "source": "생물환경조절학회지 32(4) (2023) 관부 난방 논문 서론: 딸기 생육 적온 18–23°C, 야간 난방 개시 5–8°C",
+          "note": "발육 최적온도(생육 적온 18–23°C의 상한)."
+        },
+        "tMax": {
+          "value": 35,
+          "unit": "°C",
+          "range": [
+            32,
+            40
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "발육 상한온도."
+        }
+      },
+      "photo": {
+        "pmax": {
+          "value": 18,
+          "unit": "μmol CO2 m⁻² s⁻¹",
+          "range": [
+            12,
+            25
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "젊은 성엽의 광포화 총광합성(25°C 환산 기준이 아니라 적온 평탄부, 400 ppm). 딸기 순광합성 측정값 12–18 범위의 상단 + 암호흡."
+        },
+        "pmaxTemp": {
+          "values": [
+            2,
+            18,
+            26,
+            36
+          ],
+          "unit": "°C(엽온)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "생물환경조절학회지 32(4) (2023) 관부 난방 논문 서론: 딸기 생육 적온 18–23°C, 야간 난방 개시 5–8°C",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 생육 적온 18–23°C에 맞춘 평탄부 18–26°C. 겨울철 낮은 엽온(10–15°C)에서는 광합성 능력이 50–80%로 떨어진다."
+        },
+        "ageX": {
+          "values": [
+            0,
+            10,
+            35,
+            60,
+            85
+          ],
+          "unit": "pd",
+          "range": [
+            0,
+            300
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "엽령별 Pmax 배수의 x축. 딸기 잎은 오이보다 오래 산다."
+        },
+        "ageY": {
+          "values": [
+            0.5,
+            1,
+            1,
+            0.5,
+            0.15
+          ],
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "엽령별 Pmax 배수."
+        },
+        "kDiffuse": {
+          "value": 0.65,
+          "unit": "-",
+          "range": [
+            0.4,
+            0.9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "산란광 흡광계수. 로제트형이지만 3출엽이 비스듬히 선다."
+        },
+        "kLaiSlope": {
+          "value": 0.02,
+          "unit": "LAI⁻¹",
+          "range": [
+            0,
+            0.1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "LAI 증가에 따른 흡광계수 감소."
+        },
+        "kMin": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0.3,
+            0.8
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "흡광계수 하한."
+        },
+        "lmaExp": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 두께와 면적당 광합성 능력의 관계 지수."
+        },
+        "stomatalMin": {
+          "value": 120,
+          "unit": "s m⁻¹",
+          "range": [
+            70,
+            250
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기공저항 최솟값. 딸기는 오이·토마토보다 증산이 적다(추정)."
+        }
+      },
+      "resp": {
+        "leaf": {
+          "value": 0.03,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.015,
+            0.04
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "잎 유지호흡 계수(25°C)."
+        },
+        "stem": {
+          "value": 0.015,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.008,
+            0.02
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "관부(crown) 유지호흡 계수."
+        },
+        "root": {
+          "value": 0.01,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.005,
+            0.02
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "뿌리 유지호흡 계수."
+        },
+        "fruit": {
+          "value": 0.01,
+          "unit": "g CH2O g⁻¹ d⁻¹",
+          "range": [
+            0.005,
+            0.02
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "과실 유지호흡 계수."
+        },
+        "cvfLeaf": {
+          "value": 0.72,
+          "unit": "g g⁻¹",
+          "range": [
+            0.65,
+            0.78
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "잎 전환효율."
+        },
+        "cvfStem": {
+          "value": 0.69,
+          "unit": "g g⁻¹",
+          "range": [
+            0.62,
+            0.75
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "관부 전환효율."
+        },
+        "cvfRoot": {
+          "value": 0.72,
+          "unit": "g g⁻¹",
+          "range": [
+            0.65,
+            0.78
+          ],
+          "tag": "SRC",
+          "source": "Spitters, van Keulen & van Kraalingen (1989) SUCROS87; Goudriaan (1986) 3점 가우스 적분; Penning de Vries et al. (1989)",
+          "note": "뿌리 전환효율."
+        },
+        "cvfFruit": {
+          "value": 0.8,
+          "unit": "g g⁻¹",
+          "range": [
+            0.72,
+            0.86
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과실 전환효율. 당이 대부분이라 합성 비용이 낮다."
+        },
+        "carbonVeg": {
+          "value": 0.45,
+          "unit": "g C g⁻¹",
+          "range": [
+            0.4,
+            0.48
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "영양기관 탄소 비율."
+        },
+        "carbonFruit": {
+          "value": 0.41,
+          "unit": "g C g⁻¹",
+          "range": [
+            0.38,
+            0.45
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "과실 탄소 비율."
+        }
+      },
+      "leaf": {
+        "rate": {
+          "value": 0.18,
+          "unit": "매 pd⁻¹",
+          "range": [
+            0.08,
+            0.25
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "관부 하나의 엽 출현 속도. 평균 13°C(f_T≈0.58)에서 9–10일에 1매: 촉성 겨울철 관행 관찰(8–10일에 1매)과 일치."
+        },
+        "maxArea": {
+          "value": 0.02,
+          "unit": "m² 매⁻¹",
+          "range": [
+            0.01,
+            0.035
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "3출엽 한 장의 잠재 최대 면적(200 cm²)."
+        },
+        "expandDays": {
+          "value": 14,
+          "unit": "pd",
+          "range": [
+            8,
+            25
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎이 다 펴지는 데 걸리는 생리일수."
+        },
+        "sla": {
+          "value": 0.02,
+          "unit": "m² g⁻¹",
+          "range": [
+            0.013,
+            0.03
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 비엽면적(200 cm² g⁻¹)."
+        },
+        "slaDliRef": {
+          "value": 10,
+          "unit": "mol m⁻² d⁻¹",
+          "range": [
+            5,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA·품질 기준 일적산광량(겨울 온실)."
+        },
+        "slaLightExp": {
+          "value": 0.2,
+          "unit": "-",
+          "range": [
+            0,
+            0.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "약광에서 잎이 얇아지는 정도."
+        },
+        "slaTemp": {
+          "value": 0.015,
+          "unit": "°C⁻¹",
+          "range": [
+            0,
+            0.04
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온에서 잎이 얇아지는 정도."
+        },
+        "slaTempRef": {
+          "value": 15,
+          "unit": "°C",
+          "range": [
+            10,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA 기준 평균기온."
+        },
+        "slaMin": {
+          "value": 0.014,
+          "unit": "m² g⁻¹",
+          "range": [
+            0.01,
+            0.02
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA 하한."
+        },
+        "slaMax": {
+          "value": 0.03,
+          "unit": "m² g⁻¹",
+          "range": [
+            0.022,
+            0.04
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "SLA 상한."
+        },
+        "life": {
+          "value": 65,
+          "unit": "pd",
+          "range": [
+            40,
+            110
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 수명."
+        },
+        "senescence": {
+          "value": 0.08,
+          "unit": "pd⁻¹",
+          "range": [
+            0.02,
+            0.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "수명이 지난 잎의 면적 감소율."
+        },
+        "shadeLight": {
+          "value": 0.05,
+          "unit": "-",
+          "range": [
+            0.01,
+            0.15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "그늘 노화가 시작되는 상대 광."
+        },
+        "shadeSenescence": {
+          "value": 0.03,
+          "unit": "pd⁻¹",
+          "range": [
+            0,
+            0.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "그늘 노화율."
+        },
+        "starveLoss": {
+          "value": 0.05,
+          "unit": "h⁻¹",
+          "range": [
+            0,
+            0.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기아 상태에서 가장 늙은 잎의 시간당 소모 비율."
+        },
+        "acclimDays": {
+          "value": 7,
+          "unit": "d",
+          "range": [
+            3,
+            14
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광·온도 이력 이동평균 기간."
+        }
+      },
+      "crown": {
+        "ratio": {
+          "value": 0.25,
+          "unit": "-",
+          "range": [
+            0.1,
+            0.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "관부(엽병 포함) 잠재 생장 = 잎 잠재 생장 × 이 비율."
+        },
+        "rootRatio": {
+          "value": 0.3,
+          "unit": "-",
+          "range": [
+            0.15,
+            0.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "뿌리 잠재 생장 = (잎+관부) × 이 비율. 딸기는 뿌리 비중이 크다."
+        },
+        "leavesBetween": {
+          "value": 4,
+          "unit": "매",
+          "range": [
+            2,
+            6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방과 다음 화방 사이에 관부 하나가 내는 잎 수(가축분지: 정아가 화방이 되고 액아가 잎 3–5매를 낸 뒤 다시 화방이 된다)."
+        },
+        "branch": {
+          "value": 0.4,
+          "unit": "개 화방⁻¹",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방이 하나 분화할 때마다 늘어나는 곁관부(분얼) 수. 설향은 작기 후반 2–3관부가 된다."
+        }
+      },
+      "induction": {
+        "days": {
+          "value": 20,
+          "unit": "d",
+          "range": [
+            12,
+            35
+          ],
+          "tag": "SRC",
+          "source": "김운섭 등 (1999) 원예과학기술지 17(3):325: 자동화 야냉처리 20일로 화아분화 유기; 전하준 등 (2013) 저온암흑 13°C 14–21일",
+          "note": "완전히 유도적인 조건(저온·단일)에서 화아분화까지 걸리는 날수. 야냉 처리 20일로 분화."
+        },
+        "temp": {
+          "values": [
+            2,
+            8,
+            23,
+            27
+          ],
+          "unit": "°C(일평균)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "SRC",
+          "source": "Ito & Saito (1962) Tohoku J. Agric. Res. 13:191; Heide et al. (2013) — Yamasaki (2020) The Horticulture Journal 89(2) 총설 인용: 25°C 이상에서 화아분화 억제, 15°C 이하에서는 일장과 무관하게 분화",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 화아분화 온도 반응. 25°C부터 크게 억제되고 27°C에서 정지. 저온 쪽은 추정."
+        },
+        "freeTemp": {
+          "value": 15,
+          "unit": "°C",
+          "range": [
+            12,
+            17
+          ],
+          "tag": "SRC",
+          "source": "Ito & Saito (1962) Tohoku J. Agric. Res. 13:191; Heide et al. (2013) — Yamasaki (2020) The Horticulture Journal 89(2) 총설 인용: 25°C 이상에서 화아분화 억제, 15°C 이하에서는 일장과 무관하게 분화",
+          "note": "이 온도 이하에서는 일장과 무관하게 분화한다."
+        },
+        "sdTemp": {
+          "value": 20,
+          "unit": "°C",
+          "range": [
+            18,
+            22
+          ],
+          "tag": "SRC",
+          "source": "CABI Agric. Biosci. (2021) 2:26 총설: 18–20°C 이상에서는 단일이 필요, 저온에서는 장일에서도 분화. 휴면은 일장과 온도가 조절(왜화, 짧은 엽병, 런너 정지)",
+          "note": "이 온도 이상에서는 단일이 완전히 필요하다(15–20°C 사이는 선형으로 섞는다)."
+        },
+        "critical": {
+          "value": 13.5,
+          "unit": "h",
+          "range": [
+            12,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한계 일장(품종값을 더한다). 문헌의 12–15시간 범위 중간."
+        },
+        "criticalBand": {
+          "value": 1.5,
+          "unit": "h",
+          "range": [
+            0.5,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한계 일장을 넘어 분화가 완전히 멈추기까지의 폭."
+        },
+        "nSens": {
+          "value": 0.75,
+          "unit": "-",
+          "range": [
+            0,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "김대영 등 (2013) 시설원예·식물공장 22(4):421 ‘설향’ 육묘기 양분 중단; 최영준 등 (2017) 26(2):49 — 체내 질소가 낮으면 저온·단일에서 화아분화 촉진",
+          "note": "체내 질소 수준(1 = 표준)에 대한 분화 속도 민감도: 속도 배수 = 1 + 민감도 × (1 − 질소 수준). 방향은 문헌, 크기는 추정(질소 중단으로 출뢰가 수일–1주 빨라진다는 보고에 맞춤)."
+        },
+        "anthesisAge": {
+          "value": 36,
+          "unit": "pd",
+          "range": [
+            22,
+            45
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화아분화에서 정화(1번화) 개화까지의 생리일수. 9월 중순 분화 → 10월 하순–11월 상순 개화(40–45일)에 맞춤."
+        },
+        "rankGap": {
+          "value": 3.5,
+          "unit": "pd",
+          "range": [
+            2,
+            6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "같은 화방에서 다음 차수 꽃이 피기까지의 간격."
+        },
+        "nurseryDays": {
+          "value": 40,
+          "unit": "d",
+          "range": [
+            20,
+            60
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 전 육묘장(비가림, 외기 +1°C 가정)에서 화아분화가 진행된 것으로 계산하는 기간. 그 지역 평년 기온과 일장으로 계산한다."
+        },
+        "nurseryOffset": {
+          "value": 1,
+          "unit": "°C",
+          "range": [
+            0,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "비가림 육묘장 기온 − 외기 평년기온."
+        },
+        "nurseryN": {
+          "value": 0.75,
+          "unit": "-",
+          "range": [
+            0.5,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "구입묘(전문 육묘장)의 육묘 후기 질소 수준: 8월 중순 이후 양분을 줄이는 관행."
+        }
+      },
+      "dormancy": {
+        "photo": {
+          "values": [
+            -1000,
+            -999,
+            11.5,
+            13.5
+          ],
+          "unit": "h(전조 포함 일장)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "CABI Agric. Biosci. (2021) 2:26 총설: 18–20°C 이상에서는 단일이 필요, 저온에서는 장일에서도 분화. 휴면은 일장과 온도가 조절(왜화, 짧은 엽병, 런너 정지)",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 휴면 유도의 일장 반응: 짧을수록 유도. 수치는 추정."
+        },
+        "temp": {
+          "values": [
+            -1000,
+            -999,
+            10,
+            17
+          ],
+          "unit": "°C(일평균)",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "CABI Agric. Biosci. (2021) 2:26 총설: 18–20°C 이상에서는 단일이 필요, 저온에서는 장일에서도 분화. 휴면은 일장과 온도가 조절(왜화, 짧은 엽병, 런너 정지)",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 휴면 유도의 온도 반응: 낮을수록 유도."
+        },
+        "rateIn": {
+          "value": 0.04,
+          "unit": "d⁻¹",
+          "range": [
+            0.01,
+            0.15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "유도 조건이 완전할 때 하루에 깊어지는 휴면 정도(품종 휴면 깊이를 곱한다)."
+        },
+        "rateOut": {
+          "value": 0.05,
+          "unit": "d⁻¹",
+          "range": [
+            0.01,
+            0.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "비유도 조건(장일·고온)에서 하루에 풀리는 정도."
+        },
+        "chillTemp": {
+          "value": 7,
+          "unit": "°C",
+          "range": [
+            5,
+            9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 요구량에 셈하는 온도 상한(0–7°C 시간)."
+        },
+        "chillRelease": {
+          "value": 0.15,
+          "unit": "d⁻¹",
+          "range": [
+            0.03,
+            0.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 요구량을 채운 뒤 휴면이 풀리는 속도."
+        },
+        "dwarf": {
+          "value": 0.55,
+          "unit": "-",
+          "range": [
+            0.2,
+            0.8
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "완전 휴면 때 새 잎 크기 감소 비율(왜화)."
+        },
+        "slow": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0,
+            0.8
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "완전 휴면 때 엽 출현 속도 감소 비율."
+        }
+      },
+      "runner": {
+        "rate": {
+          "value": 0.12,
+          "unit": "개 d⁻¹",
+          "range": [
+            0.03,
+            0.3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "장일·고온에서 한 포기가 하루에 내는 런너 수."
+        },
+        "photo": {
+          "values": [
+            12.5,
+            14,
+            999,
+            1000
+          ],
+          "unit": "h",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "CABI Agric. Biosci. (2021) 2:26 총설: 18–20°C 이상에서는 단일이 필요, 저온에서는 장일에서도 분화. 휴면은 일장과 온도가 조절(왜화, 짧은 엽병, 런너 정지)",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 런너 발생의 일장 반응(장일에서 발생)."
+        },
+        "temp": {
+          "values": [
+            12,
+            20,
+            999,
+            1000
+          ],
+          "unit": "°C",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "CABI Agric. Biosci. (2021) 2:26 총설: 18–20°C 이상에서는 단일이 필요, 저온에서는 장일에서도 분화. 휴면은 일장과 온도가 조절(왜화, 짧은 엽병, 런너 정지)",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 런너 발생의 온도 반응(고온에서 발생)."
+        },
+        "grow": {
+          "value": 0.35,
+          "unit": "g pd⁻¹ 개⁻¹",
+          "range": [
+            0.1,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "런너 하나(자묘 포함)의 잠재 생장 속도."
+        }
+      },
+      "fruit": {
+        "maturity": {
+          "value": 26,
+          "unit": "pd",
+          "range": [
+            18,
+            36
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "개화에서 수확 적기까지의 생리일수. 20°C에서 약 28일, 12°C에서 50일 안팎(겨울철 관행 45–55일)."
+        },
+        "rankFactor": {
+          "values": [
+            1,
+            0.72,
+            0.5,
+            0.36
+          ],
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방 안 차수(1번화, 2번화, 3번화, 4번화)별 과실 잠재 크기 배수."
+        },
+        "rankCount": {
+          "values": [
+            1,
+            2,
+            4,
+            8
+          ],
+          "unit": "개",
+          "range": [
+            0,
+            16
+          ],
+          "tag": "SRC",
+          "source": "딸기 화방은 2출 집산화서(dichasial cyme): 차수마다 꽃 수가 2배",
+          "note": "차수별 꽃 수."
+        },
+        "receptive": {
+          "value": 3,
+          "unit": "pd",
+          "range": [
+            1.5,
+            6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "개화 후 수분이 가능한 기간."
+        },
+        "pollSinkMin": {
+          "value": 0.35,
+          "unit": "-",
+          "range": [
+            0.1,
+            0.8
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "수정이 전혀 안 된 과실의 잠재 크기 배수(수정된 수과가 화탁 비대를 이끈다)."
+        },
+        "abortWindow": {
+          "value": 6,
+          "unit": "pd",
+          "range": [
+            2,
+            12
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "개화 후 고차 과실이 퇴화할 수 있는 기간."
+        },
+        "abortMax": {
+          "value": 0.25,
+          "unit": "pd⁻¹",
+          "range": [
+            0.05,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "3번화 이상 어린 과실의 최대 퇴화율(동화산물 부족 시)."
+        },
+        "setSsr": {
+          "values": [
+            0.25,
+            0.6,
+            999,
+            1000
+          ],
+          "unit": "source/sink 비",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 고차 과실 착과 유지의 동화산물 반응."
+        },
+        "ssrLag": {
+          "value": 4,
+          "unit": "d",
+          "range": [
+            1,
+            10
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "착과에 반영되는 공급/수요 비 이동평균 기간."
+        },
+        "growTemp": {
+          "values": [
+            1,
+            6,
+            26,
+            34
+          ],
+          "unit": "°C",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "농사로 고랭지 여름딸기 재배: 저온에서 천천히 자라야 크고 달고 단단, 고온에서는 급히 익어 작고 당도·경도 저하; 생육도일온도 증가에 따라 ‘설향’ 당도 감소(생물환경조절학회지)",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 과실 비대 온도 스트레스."
+        },
+        "flowerFrost": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -3,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "핀 꽃과 어린 과실이 동해를 입는 온도."
+        },
+        "flowerFrostRate": {
+          "value": 0.25,
+          "unit": "h⁻¹",
+          "range": [
+            0.05,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "동해 때 꽃·어린 과실의 시간당 손실 비율."
+        },
+        "ssrRef": {
+          "value": 0.8,
+          "unit": "-",
+          "range": [
+            0.5,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "품질 기준이 되는 비대기 평균 동화산물 공급 비."
+        },
+        "dmcSsr": {
+          "value": 0.25,
+          "unit": "-",
+          "range": [
+            0,
+            0.6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "비대기 동화산물 공급 비(기준 ssrRef)에 따른 과실 건물률 변화: 당이 넉넉하면 건물률(당도)이 높다."
+        },
+        "dmcTemp": {
+          "value": 0.012,
+          "unit": "°C⁻¹",
+          "range": [
+            0,
+            0.04
+          ],
+          "tag": "EST",
+          "source": "농사로 고랭지 여름딸기 재배: 저온에서 천천히 자라야 크고 달고 단단, 고온에서는 급히 익어 작고 당도·경도 저하; 생육도일온도 증가에 따라 ‘설향’ 당도 감소(생물환경조절학회지)",
+          "note": "비대기 평균기온이 기준(12°C)보다 1°C 높을 때 건물률 감소 비율. 방향은 문헌(고온에서 당도 저하), 크기는 추정."
+        },
+        "dmcTempRef": {
+          "value": 12,
+          "unit": "°C",
+          "range": [
+            10,
+            18
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "품질 기준 비대기 평균기온(촉성 겨울철 온실 평균)."
+        },
+        "dmcLight": {
+          "value": 0.12,
+          "unit": "-",
+          "range": [
+            0,
+            0.4
+          ],
+          "tag": "EST",
+          "source": "이규빈 등 (2020) 광부족 조건이 딸기의 생육 및 생산성에 미치는 영향. 한국환경과학회지 29(2):167",
+          "note": "일적산광량이 기준의 2배/절반일 때 건물률 변화 비율(로그 관계). 차광 시 당도 저하 보고에 근거."
+        },
+        "dmcMin": {
+          "value": 0.06,
+          "unit": "g g⁻¹",
+          "range": [
+            0.04,
+            0.08
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "건물률 하한."
+        },
+        "dmcMax": {
+          "value": 0.14,
+          "unit": "g g⁻¹",
+          "range": [
+            0.11,
+            0.18
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "건물률 상한."
+        },
+        "brixSlope": {
+          "value": 1.15,
+          "unit": "°Bx (건물 %)⁻¹",
+          "range": [
+            0.9,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "당도 = 기울기 × 건물률(%) + 절편. 가용성 고형물이 건물의 대부분이라는 관계에서 온 추정."
+        },
+        "brixOffset": {
+          "value": -0.5,
+          "unit": "°Bx",
+          "range": [
+            -2,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "당도 절편."
+        },
+        "acidTemp": {
+          "value": 0.02,
+          "unit": "°C⁻¹",
+          "range": [
+            0,
+            0.05
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준보다 1°C 서늘할 때 산도 증가 비율."
+        },
+        "firmTemp": {
+          "value": 0.03,
+          "unit": "°C⁻¹",
+          "range": [
+            0,
+            0.08
+          ],
+          "tag": "EST",
+          "source": "농사로 고랭지 여름딸기 재배: 저온에서 천천히 자라야 크고 달고 단단, 고온에서는 급히 익어 작고 당도·경도 저하; 생육도일온도 증가에 따라 ‘설향’ 당도 감소(생물환경조절학회지)",
+          "note": "기준보다 1°C 더울 때 경도 감소 비율."
+        },
+        "shelf": {
+          "value": 2.5,
+          "unit": "pd",
+          "range": [
+            1,
+            6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "수확 적기를 이만큼 넘기면 과숙(무름)으로 비상품."
+        },
+        "topWeight": {
+          "value": 15,
+          "unit": "g",
+          "range": [
+            10,
+            25
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "상품 기준 과중(대략 M 이상)."
+        },
+        "midWeight": {
+          "value": 8,
+          "unit": "g",
+          "range": [
+            5,
+            14
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "중품 기준 과중(이보다 작으면 비상품·가공용)."
+        }
+      },
+      "bees": {
+        "honey": {
+          "name": "꿀벌",
+          "temp": {
+            "values": [
+              10,
+              16,
+              26,
+              32
+            ],
+            "unit": "°C",
+            "range": [
+              -100000,
+              100000
+            ],
+            "tag": "EST",
+            "source": "농촌진흥청 보도자료(2022-12) 딸기 화분매개 꿀벌 관리: 벌 활력 저하 시 교체, 660 m²에서 뒤영벌 시간당 7–11마리면 충분; 이상범 등 (2014) 한국잠사곤충학회지 52(2):134",
+            "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 꿀벌 방화 활동 온도 반응(15°C 아래에서 급감)."
+          },
+          "light": {
+            "values": [
+              50,
+              300,
+              99999,
+              100000
+            ],
+            "unit": "μmol m⁻² s⁻¹",
+            "range": [
+              -100000,
+              100000
+            ],
+            "tag": "EST",
+            "source": "농촌진흥청 보도자료(2022-12) 딸기 화분매개 꿀벌 관리: 벌 활력 저하 시 교체, 660 m²에서 뒤영벌 시간당 7–11마리면 충분; 이상범 등 (2014) 한국잠사곤충학회지 52(2):134",
+            "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 꿀벌은 흐린 날 활동이 크게 준다."
+          },
+          "decay": {
+            "value": 0.008,
+            "unit": "d⁻¹",
+            "range": [
+              0.002,
+              0.03
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "봉군 세력의 하루 감소율(겨울 온실에서 서서히 약해진다)."
+          },
+          "rate": {
+            "value": 0.22,
+            "unit": "h⁻¹",
+            "range": [
+              0.05,
+              0.6
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "활동이 최대일 때 꽃 하나의 시간당 수분 진행."
+          }
+        },
+        "bumble": {
+          "name": "뒤영벌",
+          "temp": {
+            "values": [
+              5,
+              10,
+              28,
+              33
+            ],
+            "unit": "°C",
+            "range": [
+              -100000,
+              100000
+            ],
+            "tag": "EST",
+            "source": "농촌진흥청 보도자료(2022-12) 딸기 화분매개 꿀벌 관리: 벌 활력 저하 시 교체, 660 m²에서 뒤영벌 시간당 7–11마리면 충분; 이상범 등 (2014) 한국잠사곤충학회지 52(2):134",
+            "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 뒤영벌은 저온에서도 활동한다."
+          },
+          "light": {
+            "values": [
+              10,
+              100,
+              99999,
+              100000
+            ],
+            "unit": "μmol m⁻² s⁻¹",
+            "range": [
+              -100000,
+              100000
+            ],
+            "tag": "EST",
+            "source": "농촌진흥청 보도자료(2022-12) 딸기 화분매개 꿀벌 관리: 벌 활력 저하 시 교체, 660 m²에서 뒤영벌 시간당 7–11마리면 충분; 이상범 등 (2014) 한국잠사곤충학회지 52(2):134",
+            "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 뒤영벌은 약광에서도 활동한다."
+          },
+          "decay": {
+            "value": 0.02,
+            "unit": "d⁻¹",
+            "range": [
+              0.008,
+              0.05
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "봉군 수명이 6–8주라 빨리 약해진다."
+          },
+          "rate": {
+            "value": 0.2,
+            "unit": "h⁻¹",
+            "range": [
+              0.05,
+              0.6
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "활동이 최대일 때 꽃 하나의 시간당 수분 진행."
+          }
+        },
+        "self": {
+          "value": 0.008,
+          "unit": "h⁻¹",
+          "range": [
+            0,
+            0.05
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "벌이 없을 때 자가·바람·중력에 의한 시간당 수분 진행(낮 시간)."
+        },
+        "pollenTemp": {
+          "values": [
+            4,
+            12,
+            28,
+            35
+          ],
+          "unit": "°C",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "EST",
+          "source": "김대영 등 (2009) 딸기 인공 수분시 화분 활력: 상대습도가 높을수록 화분 활력 급감, 온도보다 습도가 중요",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 꽃가루 발아·수정 온도 반응(품종별 저온 민감도를 더한다)."
+        },
+        "pollenRhCurve": {
+          "values": [
+            -1000,
+            -999,
+            80,
+            98
+          ],
+          "unit": "% 상대습도",
+          "range": [
+            -100000,
+            100000
+          ],
+          "tag": "SRC",
+          "source": "김대영 등 (2009) 딸기 인공 수분시 화분 활력: 상대습도가 높을수록 화분 활력 급감, 온도보다 습도가 중요",
+          "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 습도가 높으면 화분 활력이 급감한다(꽃밥이 터지지 않음)."
+        }
+      },
+      "damage": {
+        "chillTemp": {
+          "value": -3,
+          "unit": "°C",
+          "range": [
+            -6,
+            0
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 저온 장해 시작 온도."
+        },
+        "chillRate": {
+          "value": 0.003,
+          "unit": "h⁻¹ °C⁻¹",
+          "range": [
+            0.001,
+            0.02
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해로 시간당 잃는 엽면적 비율."
+        },
+        "frostTemp": {
+          "value": -9,
+          "unit": "°C",
+          "range": [
+            -15,
+            -5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "관부 동사 온도."
+        },
+        "frostRate": {
+          "value": 0.3,
+          "unit": "h⁻¹",
+          "range": [
+            0.05,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "동사 때 시간당 고사 비율."
+        },
+        "heatTemp": {
+          "value": 42,
+          "unit": "°C",
+          "range": [
+            36,
+            45
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 장해(엽소) 시작 엽온. 모델의 한낮 엽온이 실제보다 높게 나오는 점(KNOWN_LIMITS C6)을 감안해 오이와 같은 값으로 둔다."
+        },
+        "heatRate": {
+          "value": 0.005,
+          "unit": "h⁻¹ °C⁻¹",
+          "range": [
+            0.001,
+            0.03
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 장해로 시간당 잃는 엽면적 비율."
+        }
+      },
+      "labor": {
+        "plant": {
+          "value": 40,
+          "unit": "h (10a)⁻¹",
+          "range": [
+            20,
+            80
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식."
+        },
+        "deleaf": {
+          "value": 12,
+          "unit": "h (10a)⁻¹ 회⁻¹",
+          "range": [
+            5,
+            30
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "적엽(노엽 제거) 1회."
+        },
+        "runner": {
+          "value": 6,
+          "unit": "h (10a)⁻¹ 회⁻¹",
+          "range": [
+            2,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "런너 제거 1회."
+        },
+        "thin": {
+          "value": 10,
+          "unit": "h (10a)⁻¹ 화방⁻¹",
+          "range": [
+            4,
+            25
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "적화·적과(화방 하나)."
+        },
+        "bees": {
+          "value": 1,
+          "unit": "h 회⁻¹",
+          "range": [
+            0.5,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "벌통 투입·교체."
+        },
+        "harvestBase": {
+          "value": 6,
+          "unit": "h (10a)⁻¹ 회⁻¹",
+          "range": [
+            3,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "수확 1회 기본 시간."
+        },
+        "harvestPerTon": {
+          "value": 110,
+          "unit": "h t⁻¹",
+          "range": [
+            60,
+            200
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "수확·선별·포장 무게당 시간(딸기는 낱개 수확이라 오이보다 훨씬 많다)."
+        },
+        "remove": {
+          "value": 30,
+          "unit": "h (10a)⁻¹",
+          "range": [
+            10,
+            60
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "작기 종료."
+        },
+        "workHour": {
+          "value": 7,
+          "unit": "시",
+          "range": [
+            5,
+            12
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "계획 작업 시각."
+        }
+      },
+      "seedling": {
+        "leaves": {
+          "value": 4,
+          "unit": "매",
+          "range": [
+            3,
+            6
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 전개엽 수."
+        },
+        "leafCap": {
+          "value": 0.6,
+          "unit": "-",
+          "range": [
+            0.3,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "육묘 중 나온 잎의 잠재 크기 배수."
+        },
+        "leafArea": {
+          "value": 0.008,
+          "unit": "m² 매⁻¹",
+          "range": [
+            0.004,
+            0.015
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 평균 엽면적."
+        },
+        "leafW": {
+          "value": 1.8,
+          "unit": "g 주⁻¹",
+          "range": [
+            0.8,
+            4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 잎 건물중."
+        },
+        "stemW": {
+          "value": 1.2,
+          "unit": "g 주⁻¹",
+          "range": [
+            0.5,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 관부 건물중(관부 지름 9–10 mm)."
+        },
+        "rootW": {
+          "value": 1,
+          "unit": "g 주⁻¹",
+          "range": [
+            0.3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 묘의 뿌리 건물중."
+        },
+        "shockFactor": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0.1,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "활착 기간의 엽 출현 속도 배수."
+        },
+        "shock": {
+          "value": 4,
+          "unit": "pd",
+          "range": [
+            0,
+            10
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "활착 기간."
+        },
+        "inducedMax": {
+          "value": 8,
+          "unit": "pd",
+          "range": [
+            0,
+            15
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "육묘장에서 분화가 끝난 뒤 정식 전까지 진행될 수 있는 꽃눈 발육의 상한."
+        },
+        "ownRisk": {
+          "value": 0.3,
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "자가 육묘의 탄저병 잠복 위험 지수(Phase 6 인터페이스, 지금은 계산에 쓰지 않음)."
+        },
+        "buyRisk": {
+          "value": 0.1,
+          "unit": "-",
+          "range": [
+            0,
+            1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "구입묘의 탄저병 잠복 위험 지수(Phase 6 인터페이스)."
+        }
+      },
+      "density": {
+        "value": 8.5,
+        "unit": "주 m⁻²",
+        "range": [
+          5,
+          12
+        ],
+        "tag": "EST",
+        "source": "",
+        "note": "기본 재식밀도(고설 수경 10a당 8,500주; 관행 8,000–10,000주)."
+      },
+      "systems": {
+        "forcing": {
+          "name": "촉성",
+          "sowing": "9월 중순 정식(화아분화 확인 후)",
+          "harvest": "11월 하순–5월",
+          "transplantMonth": {
+            "value": 9,
+            "unit": "월",
+            "range": [
+              8,
+              10
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 월."
+          },
+          "transplantDay": {
+            "value": 20,
+            "unit": "일",
+            "range": [
+              1,
+              30
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 일(중부 지방 자연 분화 9월 15–20일 직후)."
+          },
+          "benchYield": {
+            "value": 3534,
+            "unit": "kg (10a)⁻¹",
+            "range": [
+              2000,
+              7000
+            ],
+            "tag": "SRC",
+            "source": "농촌진흥청 2017년산 농산물 소득조사: 딸기(촉성) 3,534 kg/10a; 농촌진흥청 보도(2019-12): 수경 3,684, 토경 2,920 kg/10a",
+            "note": "촉성 10a 수량(V4 벤치마크 기준; 수경 3,684 / 토경 2,920)."
+          }
+        },
+        "semiforcing": {
+          "name": "반촉성",
+          "sowing": "10월 중순 정식, 저온 경과 후 1월부터 보온·가온",
+          "harvest": "2월 하순–5월",
+          "transplantMonth": {
+            "value": 10,
+            "unit": "월",
+            "range": [
+              9,
+              11
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 월."
+          },
+          "transplantDay": {
+            "value": 15,
+            "unit": "일",
+            "range": [
+              1,
+              31
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "정식 권장 일."
+          },
+          "benchYield": {
+            "value": 3000,
+            "unit": "kg (10a)⁻¹",
+            "range": [
+              1500,
+              6000
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "반촉성 10a 수량 추정(조사 수치 미확인, 벤치마크 판정에는 쓰지 않는다)."
+          }
+        }
       }
     }
   }

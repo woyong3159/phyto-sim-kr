@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react';
 import { ENGINE_DATA } from '../data';
-import { defaultPlan, type CropDay, type CucumberVariety, type PlantOrder, type Stress, type WorkPlan, type WorkTask } from '../engine';
+import { defaultPlan, defaultPlanSb, type BeeType, type CropDay, type CropId, type CucumberVariety, type PlantOrder, type StrawberryVariety, type Stress, type WorkPlan, type WorkTask } from '../engine';
 import { strip } from '../engine/greenhouse/params';
 import type { CropView } from '../sim/protocol';
 import { session, type SessionView } from '../sim/session';
 import { Chart } from './EnvScreen';
-import { Num, Select } from './Num';
+import { Num, Select, Toggle } from './Num';
 
+interface SystemUi { name: string; sowing: string; harvest: string; transplantMonth: number; transplantDay: number; benchYield: number }
 interface CropUi {
-  cucumber: { density: number; systems: Record<string, { name: string; sowing: string; harvest: string; transplantMonth: number; transplantDay: number; benchYield: number }>; training: { limit: number } };
+  cucumber: { density: number; systems: Record<string, SystemUi>; training: { limit: number } };
+  strawberry: { density: number; systems: Record<string, SystemUi>; fruit: { maturity: number; topWeight: number; midWeight: number }; induction: { critical: number } };
 }
 export const CROPS = strip(ENGINE_DATA.crops) as CropUi;
-export const VARIETIES = (strip(ENGINE_DATA.varieties) as { cucumber: Record<string, CucumberVariety> }).cucumber;
+const ALL_VARIETIES = strip(ENGINE_DATA.varieties) as { cucumber: Record<string, CucumberVariety>; strawberry: Record<string, StrawberryVariety> };
+export const VARIETIES = ALL_VARIETIES.cucumber;
+export const SB_VARIETIES = ALL_VARIETIES.strawberry;
 export const SYSTEMS = CROPS.cucumber.systems;
+const CROP_NAME: Record<CropId, string> = { cucumber: '오이', strawberry: '딸기' };
+const varietyName = (crop: CropId, id: string) => (crop === 'strawberry' ? SB_VARIETIES[id]?.name : VARIETIES[id]?.name) ?? id;
 
 type Sub = 'now' | 'work' | 'graph';
 const SUBS: [Sub, string][] = [['now', '현황'], ['work', '작업'], ['graph', '생육 그래프']];
@@ -24,43 +30,79 @@ const per10a = (v: number) => Math.round(v * 1000).toLocaleString('ko-KR');
 
 /** 정식 주문 편집기(새 작기 화면과 작물 탭이 함께 쓴다). */
 export function OrderEditor({ value, onChange }: { value: PlantOrder; onChange: (o: PlantOrder) => void }) {
-  const v = VARIETIES[value.varietyId]!;
-  const sys = SYSTEMS[value.system]!;
+  const sbCrop = value.cropId === 'strawberry';
+  const systems = CROPS[value.cropId].systems;
+  const sys = systems[value.system] ?? Object.values(systems)[0]!;
+  const cv = VARIETIES[value.varietyId];
+  const sv = SB_VARIETIES[value.varietyId];
   return (
     <>
-      <p className="muted small">작물: 오이(Cucumber). 딸기·와사비는 다음 단계(3b·3c)에서 열립니다.</p>
+      <div className="segmented" role="group" aria-label="작물 선택">
+        {(['cucumber', 'strawberry'] as const).map((id) => (
+          <button key={id} type="button" aria-pressed={value.cropId === id} data-crop={id} onClick={() => value.cropId !== id && onChange(defaultOrderUi(id))}>
+            {CROP_NAME[id]}
+          </button>
+        ))}
+      </div>
+      <p className="muted small">와사비는 다음 단계(3c)에서 열립니다.</p>
       <div className="chips" role="listbox" aria-label="품종 선택">
-        {Object.entries(VARIETIES).map(([id, x]) => (
-          <button key={id} type="button" role="option" aria-selected={id === value.varietyId} data-variety={id} className="chip" onClick={() => onChange({ ...value, varietyId: id, plan: defaultPlan(x) })}>
+        {Object.entries(sbCrop ? SB_VARIETIES : VARIETIES).map(([id, x]) => (
+          <button key={id} type="button" role="option" aria-selected={id === value.varietyId} data-variety={id} className="chip" onClick={() => onChange({ ...value, varietyId: id, plan: sbCrop ? value.plan : defaultPlan(x as CucumberVariety) })}>
             {x.name}
           </button>
         ))}
       </div>
-      <div className="region-card">
-        <strong>
-          {v.name} <span className="muted small">{v.type}{v.real ? '' : ' · 가상 품종'}</span>
-        </strong>
-        <p className="muted small">{v.desc}</p>
-        <dl className="facts">
-          <div><dt>마디 암꽃 비율(기준)</dt><dd>{Math.round(v.female * 100)}%</dd></div>
-          <div><dt>표준 수확 무게</dt><dd>{v.harvestWeight} g</dd></div>
-          <div><dt>곡과 민감도</dt><dd>×{v.curveSens}</dd></div>
-          <div><dt>저온 / 고온 내성</dt><dd>{v.coldTol <= 0 ? '강' : '약'} / {v.heatTol > 0 ? '강' : '보통'}</dd></div>
-          <div><dt>흰가루 / 노균 저항성</dt><dd>{v.resistance.powderyMildew} / {v.resistance.downyMildew} (5점)</dd></div>
-          <div><dt>접목묘 값</dt><dd>{v.seedlingPrice.toLocaleString('ko-KR')}원/주</dd></div>
-        </dl>
-        <p className="muted small">품종 수치는 계통 특성에 근거한 추정값(EST)입니다.</p>
-      </div>
-      <Select label="작형(cropping type)" value={value.system} options={Object.entries(SYSTEMS).map(([id, s]) => [id, s.name] as const)} onChange={(system) => onChange({ ...value, system })} testId="crop-system" />
+      {sbCrop && sv ? (
+        <div className="region-card">
+          <strong>
+            {sv.name} <span className="muted small">{sv.type}</span>
+          </strong>
+          <p className="muted small">{sv.desc}</p>
+          <dl className="facts">
+            <div><dt>기준 당도</dt><dd>{(1.15 * sv.dmc * 100 - 0.5).toFixed(1)} °Bx</dd></div>
+            <div><dt>화방당 꽃 수</dt><dd>{sv.flowers}개</dd></div>
+            <div><dt>경도(상대)</dt><dd>{sv.firmness}</dd></div>
+            <div><dt>휴면 깊이 / 저온 요구</dt><dd>×{sv.dormancy} / {sv.chillReq} h</dd></div>
+            <div><dt>저온기 기형과</dt><dd>{sv.pollenCold >= 2 ? '잘 생김' : sv.pollenCold >= 1 ? '보통' : '적음'}</dd></div>
+            <div><dt>흰가루 / 잿빛곰팡이 / 탄저</dt><dd>{sv.resistance.powderyMildew} / {sv.resistance.grayMold} / {sv.resistance.anthracnose}</dd></div>
+          </dl>
+          <p className="muted small">당도는 농촌진흥청 발표값(설향·금실·죽향)에 맞췄고, 나머지 수치는 품종 특성에 근거한 추정값(EST)입니다.</p>
+        </div>
+      ) : cv ? (
+        <div className="region-card">
+          <strong>
+            {cv.name} <span className="muted small">{cv.type}{cv.real ? '' : ' · 가상 품종'}</span>
+          </strong>
+          <p className="muted small">{cv.desc}</p>
+          <dl className="facts">
+            <div><dt>마디 암꽃 비율(기준)</dt><dd>{Math.round(cv.female * 100)}%</dd></div>
+            <div><dt>표준 수확 무게</dt><dd>{cv.harvestWeight} g</dd></div>
+            <div><dt>곡과 민감도</dt><dd>×{cv.curveSens}</dd></div>
+            <div><dt>저온 / 고온 내성</dt><dd>{cv.coldTol <= 0 ? '강' : '약'} / {cv.heatTol > 0 ? '강' : '보통'}</dd></div>
+            <div><dt>흰가루 / 노균 저항성</dt><dd>{cv.resistance.powderyMildew} / {cv.resistance.downyMildew} (5점)</dd></div>
+            <div><dt>접목묘 값</dt><dd>{cv.seedlingPrice.toLocaleString('ko-KR')}원/주</dd></div>
+          </dl>
+          <p className="muted small">품종 수치는 계통 특성에 근거한 추정값(EST)입니다.</p>
+        </div>
+      ) : null}
+      <Select label="작형(cropping type)" value={value.system} options={Object.entries(systems).map(([id, x]) => [id, x.name] as const)} onChange={(system) => onChange({ ...value, system })} testId="crop-system" />
       <p className="muted small">
         {sys.name}: {sys.sowing}, 수확 {sys.harvest}. 정식 권장 {sys.transplantMonth}월 {sys.transplantDay}일 무렵. 작형은 안내용 이름표이고, 결과는 실제로 심은 날짜와 환경이 결정합니다.
       </p>
-      <Num label="재식밀도(planting density)" value={value.density} step={0.1} min={1} max={5} unit="주/m²" hint={`10a당 ${Math.round(value.density * 1000).toLocaleString('ko-KR')}주`} onChange={(density) => onChange({ ...value, density })} testId="crop-density" />
+      {sbCrop && (
+        <>
+          <Select label="묘(seedling)" value={value.seedling ?? 'buy'} options={[['buy', '구입묘(전문 육묘장, 후기 질소 조절)'], ['own', '자가 육묘(런너 번식)']] as const} onChange={(seedling) => onChange({ ...value, seedling })} testId="sb-seedling" />
+          <Toggle label="야냉 단일처리 묘" checked={!!value.nightChill} onChange={(nightChill) => onChange({ ...value, nightChill })} hint="화아분화를 끝낸 묘. 8월 말에도 심을 수 있다" />
+          <p className="muted small">야냉 처리를 안 한 묘는 정식일 직전 40일의 그 지역 평년 기온·일장으로 화아분화 진행도를 계산합니다. 중부 지방은 9월 15–20일쯤 분화가 끝납니다. 자가 육묘는 탄저병 잠복 위험이 높습니다(병해충 Phase에서 반영).</p>
+        </>
+      )}
+      <Num label="재식밀도(planting density)" value={value.density} step={sbCrop ? 0.5 : 0.1} min={sbCrop ? 4 : 1} max={sbCrop ? 14 : 5} unit="주/m²" hint={`10a당 ${Math.round(value.density * 1000).toLocaleString('ko-KR')}주`} onChange={(density) => onChange({ ...value, density })} testId="crop-density" />
     </>
   );
 }
 
-export function defaultOrderUi(): PlantOrder {
+export function defaultOrderUi(crop: CropId = 'cucumber'): PlantOrder {
+  if (crop === 'strawberry') return { cropId: 'strawberry', varietyId: 'seolhyang', system: 'forcing', density: CROPS.strawberry.density, plan: defaultPlanSb(), seedling: 'buy', nightChill: false };
   return { cropId: 'cucumber', varietyId: 'cheongchun', system: 'semiforcing', density: CROPS.cucumber.density, plan: defaultPlan(VARIETIES.cheongchun!) };
 }
 
@@ -75,7 +117,7 @@ function PlantForm() {
       {confirm ? (
         <div className="confirm" role="alertdialog" aria-label="정식 확인">
           <p>
-            <strong>{VARIETIES[order.varietyId]!.name}</strong>을(를) <strong>{order.density} 주/m²</strong>로 지금 정식할까요?
+            <strong>{CROP_NAME[order.cropId]} {varietyName(order.cropId, order.varietyId)}</strong>을(를) <strong>{order.density} 주/m²</strong>로 지금 정식할까요?
           </p>
           <div className="btn-row">
             <button type="button" className="btn" data-testid="confirm-plant" onClick={() => { session.plantCrop(order); setConfirm(false); }}>
@@ -90,6 +132,52 @@ function PlantForm() {
         </div>
       )}
     </section>
+  );
+}
+
+/** 딸기 그림: 관부에서 잎이 부채꼴로 나오고, 화방마다 과실(빨강 = 익음, 연두 = 비대 중, 흰 점 = 꽃)이 달린다. */
+function StrawberryIcon({ crop }: { crop: CropView }) {
+  const W = 240;
+  const H = 240;
+  const cx = W / 2;
+  const cy = 138;
+  const leaves = crop.leaves;
+  const n = leaves.length;
+  const maturity = CROPS.strawberry.fruit.maturity;
+  const trusses = [...new Set(crop.fruitList.map((f) => f.node))].sort((a, b) => a - b).slice(-4);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="plant-icon" role="img" aria-label={`딸기 한 포기: 잎 ${n}장, 화방 ${trusses.length}개`} data-testid="plant-icon">
+      {leaves.map((l, i) => {
+        const a = Math.PI * (0.08 + (0.84 * (i + 0.5)) / n);
+        const r = 4 + Math.sqrt(l.area / 0.02) * 12;
+        const d = i % 2 === 0 ? 96 : 60;
+        const x = cx - Math.cos(a) * d;
+        const y = cy - Math.sin(a) * d;
+        return (
+          <g key={i}>
+            <line x1={cx} y1={cy} x2={x} y2={y} stroke="var(--leaf)" strokeWidth={2} opacity={0.6} />
+            <circle cx={x} cy={y} r={r} fill={crop.dead ? 'var(--muted)' : l.age > 55 ? 'var(--sun)' : 'var(--leaf)'} opacity={0.7} />
+          </g>
+        );
+      })}
+      <ellipse cx={cx} cy={cy + 4} rx={12 + 4 * (crop.out.sb?.crowns ?? 1)} ry={9} fill="var(--sun)" />
+      {trusses.map((t, ti) => {
+        const x0 = cx + (ti - (trusses.length - 1) / 2) * 56;
+        const items = crop.fruitList.filter((f) => f.node === t && f.age > -6);
+        return (
+          <g key={t}>
+            <line x1={cx} y1={cy + 6} x2={x0} y2={cy + 40} stroke="var(--leaf)" strokeWidth={1.5} />
+            {items.map((f, i) => {
+              const x = x0 + (i - (items.length - 1) / 2) * 13;
+              const y = cy + 50 + (i % 2) * 20;
+              if (f.age < 0) return <circle key={i} cx={x} cy={y} r={3} fill="var(--surface)" stroke="var(--muted)" />;
+              const ripe = f.age >= maturity;
+              return <circle key={i} cx={x} cy={y} r={4 + Math.min(8, Math.sqrt(f.fw) * 1.5)} fill={ripe ? 'var(--error)' : 'var(--leaf)'} stroke="var(--surface)" strokeWidth={1} opacity={0.5 + 0.5 * Math.min(1, f.n)} />;
+            })}
+          </g>
+        );
+      })}
+    </svg>
   );
 }
 
@@ -137,14 +225,17 @@ function PlantIcon({ crop }: { crop: CropView }) {
 
 const STRESS_LABEL: [keyof Stress, string][] = [
   ['photo', '광합성'], ['expand', '엽 확장'], ['fruit', '과실 비대'], ['set', '착과'],
-  ['water', '수분'], ['nutrient', '양분'], ['sinkFeedback', '당 축적(sink 부족)'], ['tempSet', '착과 온도'], ['tempFruit', '비대 온도'], ['ssr', '동화산물 수급'], ['chill', '저온'], ['heat', '고온'], ['starve', '기아(호흡 부족)'], ['training', '유인 상태'],
+  ['water', '수분'], ['nutrient', '양분'], ['sinkFeedback', '당 축적(sink 부족)'], ['tempSet', '착과 온도'], ['tempFruit', '비대 온도'], ['ssr', '동화산물 수급'], ['chill', '저온'], ['heat', '고온'], ['starve', '기아(호흡 부족)'], ['training', '유인 상태'], ['dormancy', '휴면(왜화)'], ['pollination', '수분 조건(오늘)'],
 ];
 
 const DEATH: Record<string, string> = { frost: '동해(얼어 죽음)', chill: '저온 장해', heat: '고온 장해', collapse: '잎이 모두 소실됨' };
 
 function Now({ crop, hour, area }: { crop: CropView; hour: number; area: number }) {
   const o = crop.out;
-  const v = VARIETIES[crop.varietyId]!;
+  const isSb = crop.cropId === 'strawberry';
+  const sb = o.sb;
+  const q = crop.quality;
+  const bench = CROPS[crop.cropId].systems[crop.system]?.benchYield ?? 0;
   const dap = Math.floor((hour - crop.plantedHour) / 24);
   const stage = crop.dead ? '고사' : crop.firstHarvestHour >= 0 ? '수확 중' : o.fruits > 0.05 ? '착과·비대' : o.flowers > 0.05 ? '개화 전' : crop.pd < 3 ? '활착 중' : '영양생장';
   const total = crop.total;
@@ -153,25 +244,43 @@ function Now({ crop, hour, area }: { crop: CropView; hour: number; area: number 
     <>
       <section className="card" data-testid="crop-status">
         <div className="card-head">
-          <h2>{v.name}</h2>
+          <h2>{varietyName(crop.cropId, crop.varietyId)}</h2>
           <span className={`badge ${crop.dead ? 'badge-warn' : ''}`}>{stage} · 정식 후 {dap}일</span>
         </div>
         {crop.dead && <p className="error">작물이 죽었습니다: {DEATH[crop.deathCause] ?? crop.deathCause}. "작업"에서 작기를 정리(철거)한 뒤 다시 심을 수 있습니다.</p>}
         <div className="crop-figure">
-          <PlantIcon crop={crop} />
+          {isSb ? <StrawberryIcon crop={crop} /> : <PlantIcon crop={crop} />}
           <div className="metrics metrics-col">
             <div className="metric"><span className="muted small">엽면적지수(LAI)</span><span className="metric-value" data-testid="crop-lai">{f2(o.lai)}</span></div>
-            <div className="metric"><span className="muted small">원줄기 마디 / 잎</span><span className="metric-value">{o.nodes}<span className="metric-unit"> / {o.leaves}장</span></span></div>
+            {isSb && sb ? (
+              <div className="metric"><span className="muted small">잎 / 관부 / 화방</span><span className="metric-value">{o.leaves}<span className="metric-unit">장 / {f1(sb.crowns)} / {sb.trusses}</span></span></div>
+            ) : (
+              <div className="metric"><span className="muted small">원줄기 마디 / 잎</span><span className="metric-value">{o.nodes}<span className="metric-unit"> / {o.leaves}장</span></span></div>
+            )}
             <div className="metric"><span className="muted small">달린 과실 / 꽃봉오리</span><span className="metric-value">{f1(o.fruits)}<span className="metric-unit"> / {f1(o.flowers)}</span></span></div>
             <div className="metric"><span className="muted small">가장 큰 과실</span><span className="metric-value">{o.biggestFruit.toFixed(0)}<span className="metric-unit">g</span></span></div>
           </div>
         </div>
-        <p className="muted small">그림: 잎 크기 = 엽면적, 초록 막대 = 과실(길이 = 무게), 노란 점 = 곧 필 암꽃, 누런 잎 = 늙은 잎. 과실 수가 소수인 것은 "평균 한 포기" 기준이기 때문입니다.</p>
+        <p className="muted small">{isSb ? '그림: 잎 크기 = 엽면적, 빨간 과실 = 수확 적기, 연두 = 비대 중, 흰 점 = 꽃봉오리, 가운데 = 관부. 최근 화방 4개까지 보여줍니다.' : '그림: 잎 크기 = 엽면적, 초록 막대 = 과실(길이 = 무게), 노란 점 = 곧 필 암꽃, 누런 잎 = 늙은 잎.'} 과실 수가 소수인 것은 "평균 한 포기" 기준이기 때문입니다.</p>
       </section>
 
       <section className="card">
         <h2>생육 상태</h2>
-        <dl className="facts">
+        {isSb && sb ? (
+          <dl className="facts" data-testid="sb-facts">
+            <div><dt>다음 화방 화아분화</dt><dd>{Math.round(sb.induction * 100)}%</dd></div>
+            <div><dt>다음 개화까지</dt><dd>{sb.nextAnthesis > -900 ? `${f1(-sb.nextAnthesis)} 생리일` : '분화한 꽃 없음'}</dd></div>
+            <div><dt>첫 개화</dt><dd>{sb.firstFlowerDay >= 0 ? `정식 후 ${Math.round(sb.firstFlowerDay)}일` : '아직'}</dd></div>
+            <div><dt>휴면(왜화) 정도</dt><dd>{Math.round(sb.dormancy * 100)}% <span className="muted small">저온 누적 {Math.round(sb.chill)} h</span></dd></div>
+            <div><dt>일장(전조 포함)</dt><dd>{f1(sb.photoperiod)} h</dd></div>
+            <div><dt>런너</dt><dd>{f1(sb.runners)}개/주</dd></div>
+            <div><dt>봉군 세력 / 오늘 활동</dt><dd>{Math.round(sb.beeStrength * 100)}% / {Math.round(sb.beeActivity * 100)}%</dd></div>
+            <div><dt>동화산물 공급/수요</dt><dd>{Math.round(o.ssr * 100)}% <span className="muted small">평균 {Math.round(crop.ssrAvg * 100)}%</span></dd></div>
+            <div><dt>저장 당(assimilate pool)</dt><dd>{f1(o.pool)} g/m²</dd></div>
+            <div><dt>최근 일적산광량 / 평균기온</dt><dd>{f1(crop.dliAvg)} mol · {f1(crop.tAvg)}°C</dd></div>
+          </dl>
+        ) : (
+          <dl className="facts">
           <div><dt>동화산물 공급/수요(source/sink)</dt><dd>{Math.round(o.ssr * 100)}% <span className="muted small">3일 평균 {Math.round(crop.ssrAvg * 100)}%</span></dd></div>
           <div><dt>도장 지수(절간장 ÷ 기준)</dt><dd>{f2(o.etiolation)} <span className="muted small">줄기 {f1(o.stemLength)} m</span></dd></div>
           <div><dt>다음 마디 암꽃 비율</dt><dd>{Math.round(o.femaleRate * 100)}%</dd></div>
@@ -181,13 +290,14 @@ function Now({ crop, hour, area }: { crop: CropView; hour: number; area: number 
           <div><dt>곁순(1마디 이상 자란 것)</dt><dd>{crop.laterals}개/주</dd></div>
           <div><dt>최근 일적산광량 / 야온</dt><dd>{f1(crop.dliAvg)} mol · {f1(crop.nightAvg)}°C</dd></div>
         </dl>
+        )}
         <h3>건물중(dry weight) g/m²</h3>
         <div className="stack-bar" role="img" aria-label="기관별 건물중 비율">
-          {([['잎', o.wLeaf, 'var(--leaf)'], ['줄기', o.wStem, 'var(--muted)'], ['뿌리', o.wRoot, 'var(--hot)'], ['과실', o.wFruit, 'var(--accent)']] as const).map(([k, w, c]) => (
+          {([['잎', o.wLeaf, 'var(--leaf)'], [isSb ? '관부' : '줄기', o.wStem, 'var(--muted)'], ['뿌리', o.wRoot, 'var(--hot)'], ['과실', o.wFruit, 'var(--accent)']] as const).map(([k, w, c]) => (
             <span key={k} style={{ width: `${wAll > 0 ? (w / wAll) * 100 : 0}%`, background: c }} />
           ))}
         </div>
-        <p className="muted small">잎 {f1(o.wLeaf)} · 줄기 {f1(o.wStem)} · 뿌리 {f1(o.wRoot)} · 달린 과실 {f1(o.wFruit)}</p>
+        <p className="muted small">잎 {f1(o.wLeaf)} · {isSb ? '관부' : '줄기'} {f1(o.wStem)} · 뿌리 {f1(o.wRoot)} · 달린 과실 {f1(o.wFruit)}</p>
       </section>
 
       <section className="card" data-testid="crop-stress">
@@ -207,8 +317,8 @@ function Now({ crop, hour, area }: { crop: CropView; hour: number; area: number 
       <section className="card" data-testid="crop-yield">
         <h2>수확</h2>
         <div className="metrics">
-          <div className="metric"><span className="muted small">상품(곧은 규격과)</span><span className="metric-value" data-testid="yield-top">{per10a(total.top)}<span className="metric-unit">kg/10a</span></span></div>
-          <div className="metric"><span className="muted small">중품(곡과·과대과)</span><span className="metric-value">{per10a(total.mid)}<span className="metric-unit">kg/10a</span></span></div>
+          <div className="metric"><span className="muted small">{isSb ? `상품(${CROPS.strawberry.fruit.topWeight} g 이상 정상과)` : '상품(곧은 규격과)'}</span><span className="metric-value" data-testid="yield-top">{per10a(total.top)}<span className="metric-unit">kg/10a</span></span></div>
+          <div className="metric"><span className="muted small">{isSb ? '중품(소과·약한 기형)' : '중품(곡과·과대과)'}</span><span className="metric-value">{per10a(total.mid)}<span className="metric-unit">kg/10a</span></span></div>
           <div className="metric"><span className="muted small">비상품</span><span className="metric-value">{per10a(total.cull)}<span className="metric-unit">kg/10a</span></span></div>
           <div className="metric"><span className="muted small">수확 과실 수</span><span className="metric-value">{Math.round(total.count * area).toLocaleString('ko-KR')}<span className="metric-unit">개</span></span></div>
         </div>
@@ -216,12 +326,24 @@ function Now({ crop, hour, area }: { crop: CropView; hour: number; area: number 
           이 온실({area.toLocaleString('ko-KR')} m²) 실제 수확량 {Math.round((total.top + total.mid) * area).toLocaleString('ko-KR')} kg · 오늘 {Math.round((crop.today.harvest.top + crop.today.harvest.mid) * area)} kg · 퇴화한 어린 과실 {Math.round(crop.abortedTotal * area).toLocaleString('ko-KR')}개
           {crop.firstHarvestHour >= 0 && ` · 첫 수확 정식 후 ${Math.round((crop.firstHarvestHour - crop.plantedHour) / 24)}일`}
         </p>
-        <p className="muted small">참고(반촉성 농가 평균, 농산물소득자료집): {SYSTEMS.semiforcing!.benchYield.toLocaleString('ko-KR')} kg/10a. 지금 모델에는 병해충·양수분 부족이 없어서 평균 농가보다 높게 나옵니다.</p>
+        {isSb && q && q.kg > 0 && (
+          <dl className="facts" data-testid="sb-quality">
+            <div><dt>평균 당도</dt><dd>{f1(q.brix / q.kg)} °Bx</dd></div>
+            <div><dt>평균 산도</dt><dd>{f2(q.acid / q.kg)} %</dd></div>
+            <div><dt>평균 과중</dt><dd>{f1(q.weight / q.kg)} g</dd></div>
+            <div><dt>경도(상대)</dt><dd>{f2(q.firm / q.kg)}</dd></div>
+            <div><dt>기형과율</dt><dd>{q.count > 0 ? Math.round((q.malformed / q.count) * 100) : 0}%</dd></div>
+            <div><dt>당산비</dt><dd>{f1(q.brix / q.acid)}</dd></div>
+          </dl>
+        )}
+        {bench > 0 && <p className="muted small">참고({CROPS[crop.cropId].systems[crop.system]!.name} 농가 평균, 농산물소득조사): {bench.toLocaleString('ko-KR')} kg/10a. 지금 모델에는 병해충·양수분 부족이 없어서 평균 농가보다 높게 나옵니다.</p>}
       </section>
     </>
   );
 }
 
+const SB_TASKS: [WorkTask, string, string][] = [['deleaf', '적엽', '늙은 잎을 따서 관부당 정한 잎 수만 남깁니다.'], ['runner', '런너 제거', '자라고 있는 런너를 모두 자릅니다.'], ['thin', '적화', '화방마다 정한 수만 남기고 아직 안 핀 꽃을 솎습니다.'], ['bees', '벌통 교체', '새 벌통을 넣어 봉군 세력을 100%로 되돌립니다.'], ['harvest', '수확', '익은 과실을 땁니다.']];
+const BEE_OPTIONS: readonly (readonly [BeeType, string])[] = [['honey', '꿀벌'], ['bumble', '뒤영벌'], ['none', '없음']];
 const TASKS: [WorkTask, string, string][] = [['train', '유인·곁순 정리', '새 마디를 줄에 감고 곁순·아랫마디 암꽃을 정리합니다.'], ['deleaf', '적엽', '아래 늙은 잎을 따서 정한 잎 수만 남깁니다.'], ['harvest', '수확', '기준 무게를 넘은 과실을 땁니다.'], ['pinch', '적심', '원줄기 생장점을 자릅니다. 되돌릴 수 없습니다.']];
 
 function Work({ crop }: { crop: CropView }) {
@@ -231,14 +353,35 @@ function Work({ crop }: { crop: CropView }) {
   useEffect(() => setDraft(JSON.parse(saved) as WorkPlan), [saved]);
   const dirty = JSON.stringify(draft) !== saved;
   const set = <K extends keyof WorkPlan>(k: K, v: WorkPlan[K]) => setDraft({ ...draft, [k]: v });
-  const v = VARIETIES[crop.varietyId]!;
+  const isSb = crop.cropId === 'strawberry';
+  const v = VARIETIES[crop.varietyId];
   const labor = Object.entries(crop.laborHours);
-  const LABEL: Record<string, string> = { plant: '정식', train: '유인', deleaf: '적엽', thin: '적과·적화', pinch: '적심', harvest: '수확' };
+  const LABEL: Record<string, string> = { plant: '정식', train: '유인', deleaf: '적엽', thin: '적과·적화', pinch: '적심', harvest: '수확', runner: '런너 제거', bees: '벌통 관리' };
   return (
     <>
       <section className="card" data-testid="work-plan">
         <h2>작업 계획(반복)</h2>
         <p className="muted small">정해 둔 간격마다 아침 7시에 작업합니다. 간격을 0으로 두면 그 작업을 하지 않습니다(방치).</p>
+        {isSb ? (
+          <>
+            <h3>수분(pollination)</h3>
+            <Select label="수정벌" value={draft.bees ?? 'honey'} options={BEE_OPTIONS} onChange={(x) => set('bees', x)} testId="plan-bees" />
+            <Num label="벌통 교체 간격" value={draft.beesEvery ?? 0} step={5} min={0} max={120} unit="일" hint="0 = 교체 안 함" onChange={(x) => set('beesEvery', x)} />
+            <h3>화방·관부</h3>
+            <Num label="화방당 남길 꽃 수(적화)" value={draft.flowersKeep ?? 0} min={0} max={15} unit="개" hint="0 = 모두 둠" onChange={(x) => set('flowersKeep', x)} testId="plan-flowers" />
+            <Num label="남길 관부 수" value={draft.crownsKeep ?? 2} min={1} max={4} unit="개" hint="곁관부(분얼) 정리" onChange={(x) => set('crownsKeep', x)} />
+            <h3>적엽·런너</h3>
+            <Num label="적엽 간격" value={draft.deleafEvery} min={0} max={60} unit="일" onChange={(x) => set('deleafEvery', x)} testId="plan-deleaf" />
+            <Num label="관부당 남길 잎 수" value={draft.leavesKeep} min={4} max={16} unit="장" onChange={(x) => set('leavesKeep', x)} />
+            <Num label="런너 제거 간격" value={draft.runnerEvery ?? 0} min={0} max={60} unit="일" onChange={(x) => set('runnerEvery', x)} />
+            <h3>수확(harvest)</h3>
+            <Num label="수확 간격" value={draft.harvestEvery} min={0} max={10} unit="일" onChange={(x) => set('harvestEvery', x)} testId="plan-harvest" />
+            <h3>체내 질소 수준(임시 입력)</h3>
+            <Num label="질소 수준" value={draft.nLevel ?? 1} step={0.1} min={0.5} max={1.5} unit="배" hint="1 = 표준 · 낮을수록 화아분화 촉진" onChange={(x) => set('nLevel', x)} testId="plan-n" />
+            <p className="muted small">양액·근권 모델(Phase 4)이 들어가면 급액 처방에서 계산됩니다. 지금은 화아분화 속도에만 영향을 줍니다.</p>
+          </>
+        ) : (
+          <>
         <h3>유인(training)</h3>
         <Num label="유인·곁순 정리 간격" value={draft.trainEvery} min={0} max={30} unit="일" onChange={(x) => set('trainEvery', x)} testId="plan-train" />
         <Num label="곁순 남길 마디" value={draft.lateralKeep} min={0} max={4} unit="마디" hint="0 = 모두 제거" onChange={(x) => set('lateralKeep', x)} />
@@ -250,7 +393,9 @@ function Work({ crop }: { crop: CropView }) {
         <Num label="남길 원줄기 잎 수" value={draft.leavesKeep} min={6} max={40} unit="장" onChange={(x) => set('leavesKeep', x)} />
         <h3>수확(harvest)</h3>
         <Num label="수확 간격" value={draft.harvestEvery} min={0} max={7} unit="일" onChange={(x) => set('harvestEvery', x)} testId="plan-harvest" />
-        <Num label="수확 기준 무게" value={draft.harvestWeight} step={10} min={0} max={400} unit="g" hint={`0 = 품종 표준 ${v.harvestWeight} g`} onChange={(x) => set('harvestWeight', x)} />
+        <Num label="수확 기준 무게" value={draft.harvestWeight} step={10} min={0} max={400} unit="g" hint={`0 = 품종 표준 ${v?.harvestWeight ?? 0} g`} onChange={(x) => set('harvestWeight', x)} />
+          </>
+        )}
         {dirty &&
           (confirm === 'plan' ? (
             <div className="confirm" role="alertdialog" aria-label="작업 계획 변경 확인">
@@ -269,7 +414,7 @@ function Work({ crop }: { crop: CropView }) {
 
       <section className="card">
         <h2>지금 바로 작업</h2>
-        {TASKS.map(([task, label, desc]) => (
+        {(isSb ? SB_TASKS : TASKS).map(([task, label, desc]) => (
           <div key={task} className="toggle-row">
             <span>
               {label} <span className="muted small">{desc}</span>
@@ -370,7 +515,7 @@ export function CropScreen({ view }: { view: SessionView }) {
     <>
       <header className="page-head">
         <h1>작물</h1>
-        {crop && <span className="badge">오이 · {crop.density} 주/m²</span>}
+        {crop && <span className="badge">{CROP_NAME[crop.cropId]} · {crop.density} 주/m²</span>}
       </header>
       <div className="subtabs" role="tablist">
         {SUBS.map(([id, label]) => (

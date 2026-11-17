@@ -699,6 +699,1203 @@
           "note": "접목묘 1주 가격(Phase 7에서 사용)."
         }
       }
+    },
+    "strawberry": {
+      "seolhyang": {
+        "name": "설향",
+        "type": "촉성",
+        "desc": "충남농업기술원 2005년 육성. 과실이 크고 수량이 많으며 재배가 쉽다. 과육이 무르고 고온기에 당도·경도가 떨어진다.",
+        "real": true,
+        "pmaxFactor": {
+          "value": 1.03,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 1.1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitW": {
+          "value": 3.2,
+          "unit": "g 건물",
+          "range": [
+            1.5,
+            9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "1번과의 잠재 건물중(수정 완전·양분 충분). 1번과 33 g 안팎."
+        },
+        "flowers": {
+          "value": 11,
+          "unit": "개 화방⁻¹",
+          "range": [
+            5,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방당 꽃 수."
+        },
+        "dmc": {
+          "value": 0.095,
+          "unit": "g g⁻¹",
+          "range": [
+            0.07,
+            0.13
+          ],
+          "tag": "SRC",
+          "source": "농촌진흥청 보도(아주경제 2022-07-14): 설향 10.4, 금실 11.4, 죽향 12.8 °Bx, 매향은 저온기 기형과율이 높음",
+          "note": "기준 조건의 과실 건물률. 당도 10.4 °Bx에 해당."
+        },
+        "acid": {
+          "value": 0.6,
+          "unit": "%",
+          "range": [
+            0.4,
+            1.1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 적정 산도."
+        },
+        "firmness": {
+          "value": 2.6,
+          "unit": "N",
+          "range": [
+            1.5,
+            5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 과실 경도(상대값)."
+        },
+        "critical": {
+          "value": 0,
+          "unit": "h",
+          "range": [
+            -1.5,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한계 일장의 품종 차(양수 = 더 긴 일장에서도 분화 = 조생)."
+        },
+        "inductionTemp": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화아분화 고온 한계의 품종 차."
+        },
+        "dormancy": {
+          "value": 0.6,
+          "unit": "-",
+          "range": [
+            0.1,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 깊이 배수. 휴면이 얕아 무전조 촉성 가능."
+        },
+        "chillReq": {
+          "value": 100,
+          "unit": "h",
+          "range": [
+            0,
+            600
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 타파 저온 요구량(0–7°C 시간)."
+        },
+        "pollenCold": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -2,
+            4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃가루 저온 한계의 품종 차(양수 = 저온에서 기형과가 잘 생김). "
+        },
+        "coldTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 온도의 품종 차."
+        },
+        "heatTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 내성."
+        },
+        "firstHarvestDays": {
+          "value": 80,
+          "unit": "일",
+          "range": [
+            50,
+            130
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값)."
+        },
+        "potentialYield": {
+          "value": 4500,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            2000,
+            9000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "촉성 표준 관리 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 4,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성. 유기재배 비교 시험에서 흰가루병에 강한 저항성 보고."
+          },
+          "grayMold": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "잿빛곰팡이병 저항성."
+          },
+          "anthracnose": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "탄저병 저항성."
+          }
+        },
+        "pricePremium": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.7,
+            2.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "설향 대비 가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 500,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      },
+      "geumsil": {
+        "name": "금실",
+        "type": "촉성",
+        "desc": "경남농업기술원 육성. 당도가 높고 단단해 수출이 가능하다. 초세가 강하고 화아분화가 조금 빠르다.",
+        "real": true,
+        "pmaxFactor": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitW": {
+          "value": 2.4,
+          "unit": "g 건물",
+          "range": [
+            1.5,
+            9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "1번과의 잠재 건물중(수정 완전·양분 충분). 1번과 27 g 안팎."
+        },
+        "flowers": {
+          "value": 10,
+          "unit": "개 화방⁻¹",
+          "range": [
+            5,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방당 꽃 수."
+        },
+        "dmc": {
+          "value": 0.1035,
+          "unit": "g g⁻¹",
+          "range": [
+            0.07,
+            0.13
+          ],
+          "tag": "SRC",
+          "source": "농촌진흥청 보도(아주경제 2022-07-14): 설향 10.4, 금실 11.4, 죽향 12.8 °Bx, 매향은 저온기 기형과율이 높음",
+          "note": "기준 조건의 과실 건물률. 당도 11.4 °Bx에 해당."
+        },
+        "acid": {
+          "value": 0.65,
+          "unit": "%",
+          "range": [
+            0.4,
+            1.1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 적정 산도."
+        },
+        "firmness": {
+          "value": 3.3,
+          "unit": "N",
+          "range": [
+            1.5,
+            5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 과실 경도(상대값)."
+        },
+        "critical": {
+          "value": 0.3,
+          "unit": "h",
+          "range": [
+            -1.5,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한계 일장의 품종 차(양수 = 더 긴 일장에서도 분화 = 조생)."
+        },
+        "inductionTemp": {
+          "value": 0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화아분화 고온 한계의 품종 차."
+        },
+        "dormancy": {
+          "value": 0.7,
+          "unit": "-",
+          "range": [
+            0.1,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 깊이 배수. "
+        },
+        "chillReq": {
+          "value": 120,
+          "unit": "h",
+          "range": [
+            0,
+            600
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 타파 저온 요구량(0–7°C 시간)."
+        },
+        "pollenCold": {
+          "value": 0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃가루 저온 한계의 품종 차(양수 = 저온에서 기형과가 잘 생김). "
+        },
+        "coldTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 온도의 품종 차."
+        },
+        "heatTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 내성."
+        },
+        "firstHarvestDays": {
+          "value": 78,
+          "unit": "일",
+          "range": [
+            50,
+            130
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값)."
+        },
+        "potentialYield": {
+          "value": 4000,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            2000,
+            9000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "촉성 표준 관리 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성. "
+          },
+          "grayMold": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "잿빛곰팡이병 저항성."
+          },
+          "anthracnose": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "탄저병 저항성."
+          }
+        },
+        "pricePremium": {
+          "value": 1.25,
+          "unit": "-",
+          "range": [
+            0.7,
+            2.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "설향 대비 가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 650,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      },
+      "maehyang": {
+        "name": "매향",
+        "type": "촉성",
+        "desc": "충남 논산딸기시험장 육성. 맛과 경도가 뛰어난 수출 품종. 저온기에 기형과가 잘 생기고 수량이 적다.",
+        "real": true,
+        "pmaxFactor": {
+          "value": 0.97,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 0.9,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitW": {
+          "value": 2.4,
+          "unit": "g 건물",
+          "range": [
+            1.5,
+            9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "1번과의 잠재 건물중(수정 완전·양분 충분). 1번과 21 g 안팎, 장원추형."
+        },
+        "flowers": {
+          "value": 9,
+          "unit": "개 화방⁻¹",
+          "range": [
+            5,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방당 꽃 수."
+        },
+        "dmc": {
+          "value": 0.108,
+          "unit": "g g⁻¹",
+          "range": [
+            0.07,
+            0.13
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 과실 건물률. 당도 11.9 °Bx에 해당."
+        },
+        "acid": {
+          "value": 0.69,
+          "unit": "%",
+          "range": [
+            0.4,
+            1.1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 적정 산도."
+        },
+        "firmness": {
+          "value": 3.5,
+          "unit": "N",
+          "range": [
+            1.5,
+            5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 과실 경도(상대값)."
+        },
+        "critical": {
+          "value": 0.5,
+          "unit": "h",
+          "range": [
+            -1.5,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한계 일장의 품종 차(양수 = 더 긴 일장에서도 분화 = 조생)."
+        },
+        "inductionTemp": {
+          "value": 0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화아분화 고온 한계의 품종 차."
+        },
+        "dormancy": {
+          "value": 0.5,
+          "unit": "-",
+          "range": [
+            0.1,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 깊이 배수. 휴면이 매우 얕다."
+        },
+        "chillReq": {
+          "value": 80,
+          "unit": "h",
+          "range": [
+            0,
+            600
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 타파 저온 요구량(0–7°C 시간)."
+        },
+        "pollenCold": {
+          "value": 2.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃가루 저온 한계의 품종 차(양수 = 저온에서 기형과가 잘 생김). 농진청: 매향은 저온기 기형과율이 높음."
+        },
+        "coldTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 온도의 품종 차."
+        },
+        "heatTol": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 내성."
+        },
+        "firstHarvestDays": {
+          "value": 75,
+          "unit": "일",
+          "range": [
+            50,
+            130
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값)."
+        },
+        "potentialYield": {
+          "value": 3200,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            2000,
+            9000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "촉성 표준 관리 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성. "
+          },
+          "grayMold": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "잿빛곰팡이병 저항성."
+          },
+          "anthracnose": {
+            "value": 1,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "탄저병 저항성."
+          }
+        },
+        "pricePremium": {
+          "value": 1.3,
+          "unit": "-",
+          "range": [
+            0.7,
+            2.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "설향 대비 가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 600,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      },
+      "kingsberry": {
+        "name": "킹스베리",
+        "type": "촉성(대과)",
+        "desc": "충남농업기술원 육성 대과종. 1번과가 달걀만 하다. 과실이 무르고 흰가루병에 약하며 꽃 수가 적다.",
+        "real": true,
+        "pmaxFactor": {
+          "value": 1,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 1.2,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitW": {
+          "value": 5.2,
+          "unit": "g 건물",
+          "range": [
+            1.5,
+            9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "1번과의 잠재 건물중(수정 완전·양분 충분). 1번과 55–60 g."
+        },
+        "flowers": {
+          "value": 6,
+          "unit": "개 화방⁻¹",
+          "range": [
+            5,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방당 꽃 수."
+        },
+        "dmc": {
+          "value": 0.092,
+          "unit": "g g⁻¹",
+          "range": [
+            0.07,
+            0.13
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 과실 건물률. 당도 10.1 °Bx에 해당."
+        },
+        "acid": {
+          "value": 0.55,
+          "unit": "%",
+          "range": [
+            0.4,
+            1.1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 적정 산도."
+        },
+        "firmness": {
+          "value": 2.2,
+          "unit": "N",
+          "range": [
+            1.5,
+            5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 과실 경도(상대값)."
+        },
+        "critical": {
+          "value": -0.2,
+          "unit": "h",
+          "range": [
+            -1.5,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한계 일장의 품종 차(양수 = 더 긴 일장에서도 분화 = 조생)."
+        },
+        "inductionTemp": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화아분화 고온 한계의 품종 차."
+        },
+        "dormancy": {
+          "value": 0.8,
+          "unit": "-",
+          "range": [
+            0.1,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 깊이 배수. "
+        },
+        "chillReq": {
+          "value": 150,
+          "unit": "h",
+          "range": [
+            0,
+            600
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 타파 저온 요구량(0–7°C 시간)."
+        },
+        "pollenCold": {
+          "value": 1,
+          "unit": "°C",
+          "range": [
+            -2,
+            4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃가루 저온 한계의 품종 차(양수 = 저온에서 기형과가 잘 생김). 대과라 수정 불량이 기형으로 드러나기 쉽다."
+        },
+        "coldTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 온도의 품종 차."
+        },
+        "heatTol": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 내성."
+        },
+        "firstHarvestDays": {
+          "value": 85,
+          "unit": "일",
+          "range": [
+            50,
+            130
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값)."
+        },
+        "potentialYield": {
+          "value": 4000,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            2000,
+            9000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "촉성 표준 관리 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 1,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성. "
+          },
+          "grayMold": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "잿빛곰팡이병 저항성."
+          },
+          "anthracnose": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "탄저병 저항성."
+          }
+        },
+        "pricePremium": {
+          "value": 1.8,
+          "unit": "-",
+          "range": [
+            0.7,
+            2.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "설향 대비 가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 800,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      },
+      "jukhyang": {
+        "name": "죽향",
+        "type": "촉성",
+        "desc": "담양군농업기술센터 육성. 당도와 향이 가장 뛰어난 고급 품종. 수량은 설향보다 적고 화아분화가 늦다.",
+        "real": true,
+        "pmaxFactor": {
+          "value": 0.98,
+          "unit": "-",
+          "range": [
+            0.8,
+            1.2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "광합성 능력 배수(초세)."
+        },
+        "leafArea": {
+          "value": 0.95,
+          "unit": "-",
+          "range": [
+            0.7,
+            1.4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "잎 크기 배수."
+        },
+        "fruitW": {
+          "value": 2.7,
+          "unit": "g 건물",
+          "range": [
+            1.5,
+            9
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "1번과의 잠재 건물중(수정 완전·양분 충분). 1번과 23 g 안팎."
+        },
+        "flowers": {
+          "value": 9,
+          "unit": "개 화방⁻¹",
+          "range": [
+            5,
+            20
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화방당 꽃 수."
+        },
+        "dmc": {
+          "value": 0.1155,
+          "unit": "g g⁻¹",
+          "range": [
+            0.07,
+            0.13
+          ],
+          "tag": "SRC",
+          "source": "농촌진흥청 보도(아주경제 2022-07-14): 설향 10.4, 금실 11.4, 죽향 12.8 °Bx, 매향은 저온기 기형과율이 높음",
+          "note": "기준 조건의 과실 건물률. 당도 12.8 °Bx에 해당."
+        },
+        "acid": {
+          "value": 0.6,
+          "unit": "%",
+          "range": [
+            0.4,
+            1.1
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 적정 산도."
+        },
+        "firmness": {
+          "value": 3.1,
+          "unit": "N",
+          "range": [
+            1.5,
+            5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "기준 조건의 과실 경도(상대값)."
+        },
+        "critical": {
+          "value": -0.3,
+          "unit": "h",
+          "range": [
+            -1.5,
+            1.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "한계 일장의 품종 차(양수 = 더 긴 일장에서도 분화 = 조생)."
+        },
+        "inductionTemp": {
+          "value": -0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "화아분화 고온 한계의 품종 차."
+        },
+        "dormancy": {
+          "value": 0.9,
+          "unit": "-",
+          "range": [
+            0.1,
+            2
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 깊이 배수. 설향보다 휴면이 깊어 전조 효과가 크다."
+        },
+        "chillReq": {
+          "value": 180,
+          "unit": "h",
+          "range": [
+            0,
+            600
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "휴면 타파 저온 요구량(0–7°C 시간)."
+        },
+        "pollenCold": {
+          "value": 0.5,
+          "unit": "°C",
+          "range": [
+            -2,
+            4
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "꽃가루 저온 한계의 품종 차(양수 = 저온에서 기형과가 잘 생김). "
+        },
+        "coldTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "저온 장해 온도의 품종 차."
+        },
+        "heatTol": {
+          "value": 0,
+          "unit": "°C",
+          "range": [
+            -3,
+            3
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "고온 내성."
+        },
+        "firstHarvestDays": {
+          "value": 88,
+          "unit": "일",
+          "range": [
+            50,
+            130
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "정식 후 첫 수확까지 표준 일수(참고값)."
+        },
+        "potentialYield": {
+          "value": 3600,
+          "unit": "kg (10a)⁻¹",
+          "range": [
+            2000,
+            9000
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "촉성 표준 관리 기대 수량(참고값, 계산에 쓰지 않음)."
+        },
+        "resistance": {
+          "powderyMildew": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "흰가루병 저항성. "
+          },
+          "grayMold": {
+            "value": 3,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "잿빛곰팡이병 저항성."
+          },
+          "anthracnose": {
+            "value": 2,
+            "unit": "1–5",
+            "range": [
+              1,
+              5
+            ],
+            "tag": "EST",
+            "source": "",
+            "note": "탄저병 저항성."
+          }
+        },
+        "pricePremium": {
+          "value": 1.5,
+          "unit": "-",
+          "range": [
+            0.7,
+            2.5
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "설향 대비 가격 배수(Phase 7)."
+        },
+        "seedlingPrice": {
+          "value": 700,
+          "unit": "원 주⁻¹",
+          "range": [
+            300,
+            1500
+          ],
+          "tag": "EST",
+          "source": "",
+          "note": "묘 1주 가격(Phase 7)."
+        }
+      }
     }
   }
 }

@@ -32,7 +32,7 @@ export interface CropView extends Omit<CropState, 'nodes' | 'fruits' | 'tips' | 
   /** 잎(아래→위): 면적 m², 곁순 여부 */
   leaves: { area: number; lat: 0 | 1; age: number }[];
   /** 과실: 마디, 개수(분수), 생체중 g, 개화 후 생리일수 */
-  fruitList: { node: number; n: number; fw: number; age: number }[];
+  fruitList: { node: number; n: number; fw: number; age: number; rank: number }[];
   laterals: number;
 }
 

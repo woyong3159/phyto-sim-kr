@@ -17,7 +17,7 @@ export { createStream, hashSeed, nextFloat, nextUint32 } from './rng';
 export { createWorld, listRegions, type EngineData, type World } from './world';
 export * from './greenhouse/types';
 export * from './crop/types';
-export { defaultOrder, defaultPlan, cropCanopy, beta, canopyPhoto, leafEnv, diffuseFraction, trap, type CanopyView } from './crop';
+export { defaultOrder, defaultPlan, defaultPlanSb, inductionRate, cropCanopy, beta, canopyPhoto, leafEnv, diffuseFraction, trap, type CanopyView } from './crop';
 export { curtainSaving, contractKw, buildGhParams, type GhParams, type FacilityParams } from './greenhouse';
 export { installCost, type CostLine } from './greenhouse/cost';
 export { sunDay, MONTH_DAYS, type RegionInfo, type MonthlyNormals, type Climate } from './weather';

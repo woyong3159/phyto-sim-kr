@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { beta, canopyPhoto, createInitialState, cropCanopy, defaultOrder, diffuseFraction, fingerprint, leafEnv, replay, stepHour, trap, type CanopyView, type UserAction } from '../../src/engine';
-import { runCrop, summary } from '../../tools/validate-crop';
+import { beta, canopyPhoto, createInitialState, cropCanopy, defaultOrder, defaultSettings, diffuseFraction, fingerprint, inductionRate, leafEnv, replay, stepHour, trap, type CanopyView, type UserAction } from '../../src/engine';
+import { runCrop, STRAWBERRY_SETTINGS, summary } from '../../tools/validate-crop';
 import { config, data, world, worldOf } from './helpers';
 
 const core = world.crops.core;
@@ -253,5 +253,110 @@ describe('세이브 호환', () => {
     let s = createInitialState(w);
     s = stepHour(s, w, [{ hour: 0, seq: 0, type: 'gh/setup', payload: { ...config.setup, testLai: 2 } }]);
     expect(s.gh.setup.testLai).toBe(0);
+  });
+});
+
+describe('딸기 — 수식과 시나리오(V1·V3)', () => {
+  const sp = world.crops.strawberry;
+  const sv = world.crops.varieties.strawberry.seolhyang!;
+  const q = (r: ReturnType<typeof runCrop>) => {
+    const x = r.crop.quality!;
+    return { brix: x.brix / x.kg, weight: x.weight / x.kg, firm: x.firm / x.kg, malformed: x.malformed / x.count };
+  };
+
+  it('화아분화 속도: 26°C 이상 정지, 15°C 이하는 일장 무관, 20°C 이상은 단일 필요, 저질소 촉진', () => {
+    expect(inductionRate(sp, sv, 28, 10, 1)).toBe(0);
+    expect(inductionRate(sp, sv, 12, 16, 1)).toBeCloseTo(inductionRate(sp, sv, 12, 10, 1), 10);
+    expect(inductionRate(sp, sv, 21, 16, 1)).toBe(0);
+    expect(inductionRate(sp, sv, 21, 11, 1)).toBeGreaterThan(0.04);
+    expect(inductionRate(sp, sv, 18, 15.5, 1)).toBeLessThan(inductionRate(sp, sv, 18, 12, 1));
+    expect(inductionRate(sp, sv, 18, 12, 0.6)).toBeGreaterThan(inductionRate(sp, sv, 18, 12, 1));
+    expect(inductionRate(sp, sv, 18, 12, 1.4)).toBeLessThan(inductionRate(sp, sv, 18, 12, 1));
+    // 완전 유도 조건이면 약 20일(야냉 처리 기간)
+    expect(1 / inductionRate(sp, sv, 14, 8, 1)).toBeCloseTo(20, 0);
+  });
+
+  const b = { startDate: '2026-09-01', days: 265, plantDay: 19, order: { varietyId: 'seolhyang' } };
+  const stdRun = runCrop(b);
+  const std = summary(stdRun);
+
+  it('① 표준 관리(촉성 설향): 첫 수확 11월 하순–12월, 수량·당도·과중이 타당한 범위, 탄소 수지 닫힘', () => {
+    expect(std.dead).toBe('');
+    expect(std.firstHarvestDay).toBeGreaterThan(60);
+    expect(std.firstHarvestDay).toBeLessThan(100);
+    expect(std.yield10a).toBeGreaterThan(sp.systems.forcing!.benchYield * 0.75);
+    expect(std.yield10a).toBeLessThan(9000);
+    const x = q(stdRun);
+    expect(x.brix).toBeGreaterThan(9.5);
+    expect(x.brix).toBeLessThan(12.5);
+    expect(x.weight).toBeGreaterThan(13);
+    expect(x.weight).toBeLessThan(28);
+    expect(stdRun.crop.sb!.trusses).toBeGreaterThanOrEqual(4);
+    const c = stdRun.crop.cum;
+    expect(Math.abs(c.gross - c.maint - c.used - stdRun.crop.pool) / c.gross).toBeLessThan(0.01);
+  });
+
+  it('② 전 기간 차광 → 수량 감소, 당도 저하', () => {
+    const r = runCrop({ ...b, setup: { shade: 's55' }, settings: { shadeOnW: 0 } });
+    expect(summary(r).yield10a).toBeLessThan(std.yield10a * 0.75);
+    expect(q(r).brix).toBeLessThan(q(stdRun).brix - 0.5);
+  });
+
+  it('④ 화아분화기 고온·고질소 → 출뢰(개화) 지연, 저질소·야냉 묘는 빠르다', () => {
+    const e = { startDate: '2026-08-25', days: 120, plantDay: 7, order: { varietyId: 'seolhyang', seedling: 'own' as const } };
+    const flower = (o: Parameters<typeof runCrop>[0]) => {
+      const d = runCrop(o).crop.out.sb!.firstFlowerDay;
+      return d < 0 ? 999 : d;
+    };
+    const n10 = flower(e);
+    const n14 = flower({ ...e, plan: { nLevel: 1.4 } });
+    const n06 = flower({ ...e, plan: { nLevel: 0.6 } });
+    const hot = flower({ ...e, plan: { nLevel: 1.4 }, settings: { heatNight: 25, heatPreDawn: 25, heatDay: 25, ventTemp: 28 } });
+    const chilled = flower({ ...e, order: { ...e.order, nightChill: true } });
+    expect(n06).toBeLessThan(n10 - 2);
+    expect(n14).toBeGreaterThan(n10 + 2);
+    expect(hot).toBeGreaterThan(n14 + 5);
+    expect(chilled).toBeLessThan(n06);
+  });
+
+  it('⑨ 수정벌 없음 → 기형과 급증, 상품 급감 / 뒤영벌은 저온·약광에서도 일한다', () => {
+    const none = runCrop({ ...b, plan: { bees: 'none' } });
+    const bumble = runCrop({ ...b, plan: { bees: 'bumble', beesEvery: 45 } });
+    expect(q(none).malformed).toBeGreaterThan(0.5);
+    expect(q(none).malformed).toBeGreaterThan(q(stdRun).malformed * 3);
+    expect(summary(none).top10a).toBeLessThan(std.top10a * 0.3);
+    expect(q(bumble).malformed).toBeLessThan(q(stdRun).malformed);
+  });
+
+  it('전조(11월 중순부터 14시간) → 휴면(왜화) 억제, 9월부터 켜면 화아분화가 밀린다', () => {
+    const led = { setup: { light: 'led' as const, lightPpfd: 20 }, settings: { lightMode: 'extend' as const, photoperiod: 14 } };
+    const off = runCrop({ ...b, days: 150 });
+    // 9월부터 16시간 전조를 켜 두면 가을(평균 15°C 이상)의 화아분화가 억제되어 작기 전체 꽃 수가 준다
+    const fromSep = summary(runCrop({ ...b, setup: led.setup, settings: { ...led.settings, photoperiod: 16 } }));
+    const base = { ...defaultSettings(), ...STRAWBERRY_SETTINGS };
+    const fromNov = runCrop({ ...b, days: 150, setup: led.setup, settings: { lightMode: 'off' }, actions: [{ hour: 75 * 24, seq: 0, type: 'gh/control', payload: { ...base, ...led.settings } }] });
+    expect(off.crop.sb!.dorm).toBeGreaterThan(0.3);
+    expect(fromNov.crop.sb!.dorm).toBeLessThan(off.crop.sb!.dorm * 0.5);
+    expect(fromNov.crop.out.lai).toBeGreaterThan(off.crop.out.lai);
+    expect(fromSep.count).toBeLessThan(std.count * 0.85);
+  });
+
+  it('재식밀도: 고밀도에서 주당 수량 감소·면적당 포화 / 품종: 죽향은 달고 킹스베리는 크다', () => {
+    const d6 = summary(runCrop({ ...b, order: { varietyId: 'seolhyang', density: 6 } }));
+    const d12 = summary(runCrop({ ...b, order: { varietyId: 'seolhyang', density: 12 } }));
+    // 딸기는 겨울철 sink 제한으로 계산되어 저밀도의 주당 수량 보상이 거의 없다(KNOWN_LIMITS S3). 고밀도 쪽 포화만 확인한다.
+    expect(d6.yield10a).toBeLessThan(std.yield10a);
+    expect(std.yield10a / 8.5).toBeGreaterThan(d12.yield10a / 12);
+    expect(d12.yield10a / std.yield10a).toBeLessThan(1.15);
+    const juk = q(runCrop({ ...b, order: { varietyId: 'jukhyang' } }));
+    const king = q(runCrop({ ...b, order: { varietyId: 'kingsberry' } }));
+    expect(juk.brix).toBeGreaterThan(q(stdRun).brix + 1);
+    expect(king.weight).toBeGreaterThan(q(stdRun).weight * 1.4);
+    expect(Object.keys(world.crops.varieties.strawberry).length).toBe(5);
+  });
+
+  it('실패 허용: 한겨울 무가온·무보온 철원에서는 꽃이 얼고 수량이 크게 준다', () => {
+    const cold = runCrop({ ...b, regionId: 'cheorwon', setup: { heater: 'none', curtainLayers: 0, coverLayers: 1 } });
+    expect(summary(cold).yield10a).toBeLessThan(std.yield10a * 0.6);
   });
 });

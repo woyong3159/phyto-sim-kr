@@ -12,7 +12,7 @@ import type { SimEvent } from '../types';
 import { interp, trap, XG, type CanopyView } from './canopy';
 import type { CoreParams, CropDay, CropState, CucumberParams, CucumberVariety, Curve, Fruit, LeafNode, PlantOrder, Stress, WorkPlan, WorkTask, Yield } from './types';
 
-const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
+export const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
 
 /** 발육 온도 반응(베타 함수, 0–1). */
 export function beta(t: number, tb: number, to: number, tm: number): number {
@@ -24,9 +24,9 @@ export function defaultPlan(v: CucumberVariety): WorkPlan {
   return { trainEvery: 3, lateralKeep: v.female < 0.7 ? 1 : 0, removeBelowNode: 6, maxFruit: 0, deleafEvery: 7, leavesKeep: 20, pinchNode: 0, harvestEvery: 1, harvestWeight: 0 };
 }
 
-const emptyYield = (): Yield => ({ top: 0, mid: 0, cull: 0, count: 0 });
-export const noStress = (): Stress => ({ photo: 1, expand: 1, fruit: 1, set: 1, water: 1, nutrient: 1, sinkFeedback: 1, tempSet: 1, tempFruit: 1, ssr: 1, chill: 1, heat: 1, starve: 1, training: 1 });
-const emptyDay = (dayIndex: number): CropDay => ({ dayIndex, gross: 0, maint: 0, growthResp: 0, gLeaf: 0, gStem: 0, gRoot: 0, gFruit: 0, demand: 0, supply: 0, harvest: emptyYield(), aborted: 0, labor: 0, sPhoto: 0, sExpand: 0, sFruit: 0, sSet: 0, lai: 0, nodes: 0, fruits: 0 });
+export const emptyYield = (): Yield => ({ top: 0, mid: 0, cull: 0, count: 0 });
+export const noStress = (): Stress => ({ photo: 1, expand: 1, fruit: 1, set: 1, water: 1, nutrient: 1, sinkFeedback: 1, tempSet: 1, tempFruit: 1, ssr: 1, chill: 1, heat: 1, starve: 1, training: 1, dormancy: 1, pollination: 1 });
+export const emptyDay = (dayIndex: number): CropDay => ({ dayIndex, gross: 0, maint: 0, growthResp: 0, gLeaf: 0, gStem: 0, gRoot: 0, gFruit: 0, demand: 0, supply: 0, harvest: emptyYield(), aborted: 0, labor: 0, sPhoto: 0, sExpand: 0, sFruit: 0, sSet: 0, lai: 0, nodes: 0, fruits: 0 });
 
 export interface CropEnv {
   hour: number;
@@ -39,6 +39,10 @@ export interface CropEnv {
   maint: number;
   starve: number;
   daylength: number;
+  /** 실내 상대습도 %, 보광등 가동률(0–1), 외부 일사 W m⁻² */
+  rh: number;
+  lamp: number;
+  solar: number;
   /** 온실 면적 m² (노동 시간 환산) */
   area: number;
   /** Phase 4 인터페이스: 상대 수분 가용도(0–1), 양분 스트레스 계수 */
@@ -108,7 +112,7 @@ function summarize(c: CropState, p: CucumberParams, v: CucumberVariety, ssr: num
   };
 }
 
-function shifted(c: Curve, lo: number, hi: number): Curve {
+export function shifted(c: Curve, lo: number, hi: number): Curve {
   return [c[0] + lo, c[1] + lo, c[2] + hi, c[3] + hi];
 }
 
@@ -116,7 +120,7 @@ function trainingOver(c: CropState, p: CucumberParams): number {
   return clamp((c.untrained - p.training.limit) / p.training.limit, 0, 1);
 }
 
-function feedback(c: CropState, core: CoreParams, wLeafM2: number): number {
+export function feedback(c: CropState, core: CoreParams, wLeafM2: number): number {
   if (wLeafM2 <= 0) return 1;
   const r = c.pool / wLeafM2;
   const ph = core.photo;
@@ -125,6 +129,11 @@ function feedback(c: CropState, core: CoreParams, wLeafM2: number): number {
 
 /** 온실 모델에 넘길 군락 요약(이 시간 동안 고정). */
 export function canopyOfCucumber(c: CropState, core: CoreParams, p: CucumberParams, v: CucumberVariety, water: number): CanopyView | null {
+  return buildCanopy(c, core, p, v.pmaxFactor, 1 - p.training.clump * trainingOver(c, p), water, 0);
+}
+
+/** 작물 공통: 잎 목록에서 군락 요약을 만든다. kScale = 흡광계수 배수, extraW = 관부 계수로 유지호흡을 셈할 추가 건물(포기당 g). */
+export function buildCanopy(c: CropState, core: CoreParams, p: Pick<CucumberParams, 'photo' | 'leaf' | 'resp'>, pmaxFactor: number, kScale: number, water: number, extraW: number, reserveW = 0): CanopyView | null {
   if (c.dead) return null;
   const m = c.density * c.alive;
   let area = 0;
@@ -137,8 +146,8 @@ export function canopyOfCucumber(c: CropState, core: CoreParams, p: CucumberPara
   if (lai <= 0) return null;
   let wf = 0;
   for (const f of c.fruits) wf += f.n * f.w;
-  const kdf = clamp(p.photo.kDiffuse - p.photo.kLaiSlope * lai, p.photo.kMin, 2) * (1 - p.training.clump * trainingOver(c, p));
-  const sPhoto = trap(core.water.photo, water) * feedback(c, core, wl * m);
+  const kdf = clamp(p.photo.kDiffuse - p.photo.kLaiSlope * lai, p.photo.kMin, 2) * kScale;
+  const sPhoto = trap(core.water.photo, water) * feedback(c, core, (wl + reserveW) * m);
   const pm: [number, number, number] = [0, 0, 0];
   const af: [number, number, number] = [0, 0, 0];
   // 위(젊은 잎)에서 아래로 누적 엽면적을 따라가며 가우스 깊이에 있는 잎의 엽령을 찾는다
@@ -150,7 +159,7 @@ export function canopyOfCucumber(c: CropState, core: CoreParams, p: CucumberPara
     while (g < 3 && cumul >= area * XG[g]!) {
       const fa = interp(p.photo.ageX, p.photo.ageY, n.age);
       const lma = n.area > 0 ? clamp(n.w / n.area * p.leaf.sla, p.leaf.sla / p.leaf.slaMax, p.leaf.sla / p.leaf.slaMin) : 1;
-      pm[g] = p.photo.pmax * v.pmaxFactor * fa * sPhoto * dpow(lma, p.photo.lmaExp);
+      pm[g] = p.photo.pmax * pmaxFactor * fa * sPhoto * dpow(lma, p.photo.lmaExp);
       af[g] = 0.5 + 0.5 * fa;
       g++;
     }
@@ -160,12 +169,12 @@ export function canopyOfCucumber(c: CropState, core: CoreParams, p: CucumberPara
     af[g] = af[g - 1]!;
   }
   const r = p.resp;
-  return { lai, kdf, pmax: pm, alphaF: af, tempCurve: p.photo.pmaxTemp, rm25: ((wl * r.leaf + c.wStem * r.stem + c.wRoot * r.root + wf * r.fruit) * m) / 86400, pool: c.pool, growthResp: c.growthResp, stomatalMin: p.photo.stomatalMin, waterStress: trap(core.water.photo, water) };
+  return { lai, kdf, pmax: pm, alphaF: af, tempCurve: p.photo.pmaxTemp, rm25: ((wl * r.leaf + (c.wStem + extraW) * r.stem + c.wRoot * r.root + wf * r.fruit) * m) / 86400, pool: c.pool, growthResp: c.growthResp, stomatalMin: p.photo.stomatalMin, waterStress: trap(core.water.photo, water) };
 }
 
 type Work = WorkTask;
 
-function addLabor(c: CropState, key: string, hoursPer10a: number, area: number) {
+export function addLabor(c: CropState, key: string, hoursPer10a: number, area: number) {
   const h = (hoursPer10a * area) / 1000;
   c.laborHours = { ...c.laborHours, [key]: (c.laborHours[key] ?? 0) + h };
   c.today.labor += h;
@@ -353,6 +362,8 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
     heat: 1,
     starve,
     training: 1 - over,
+    dormancy: 1,
+    pollination: 1,
   };
 
   // ── 새 마디 ──

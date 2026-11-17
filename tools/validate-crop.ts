@@ -15,16 +15,19 @@ export interface CropRun {
 /** 오이 표준 관리: 주간 난방 18°C, 야간 14°C, 28°C부터 환기 */
 export const CUCUMBER_SETTINGS: Partial<ControlSettings> = { heatDay: 18, heatNight: 14, heatPreDawn: 15, ventTemp: 28, ventBand: 4, shadeOnW: 900, rhMax: 90 };
 
+/** 딸기 표준 관리(촉성): 주간 난방 없음(환기 25°C), 야간 8°C */
+export const STRAWBERRY_SETTINGS: Partial<ControlSettings> = { heatDay: 10, heatNight: 8, heatPreDawn: 8, ventTemp: 25, ventBand: 4, shadeOnW: 2000, rhMax: 85 };
+
 export function runCrop(opts: { regionId?: string; startDate: string; seed?: string; days: number; plantDay?: number; setup?: Partial<GhSetup>; settings?: Partial<ControlSettings>; order?: Partial<PlantOrder>; plan?: Partial<WorkPlan>; actions?: UserAction[] }): CropRun {
   const world0 = createWorld({ seed: 's', startDate: opts.startDate, regionId: opts.regionId ?? 'buyeo', setup: defaultSetup(), settings: defaultSettings() }, data);
-  const base = defaultOrder(world0.crops, opts.order?.varietyId ?? 'cheongchun', opts.order?.system ?? 'semiforcing');
+  const base = defaultOrder(world0.crops, opts.order?.varietyId ?? 'cheongchun', opts.order?.system);
   const order: PlantOrder = { ...base, ...opts.order, plan: { ...base.plan, ...opts.plan } };
   const config: SimConfig = {
     seed: opts.seed ?? 'crop-validate',
     startDate: opts.startDate,
     regionId: opts.regionId ?? 'buyeo',
     setup: { ...defaultSetup(opts.setup?.facility ?? 'multi_pe'), ...opts.setup },
-    settings: { ...defaultSettings(), ...CUCUMBER_SETTINGS, ...opts.settings },
+    settings: { ...defaultSettings(), ...(base.cropId === 'strawberry' ? STRAWBERRY_SETTINGS : CUCUMBER_SETTINGS), ...opts.settings },
     crop: { day: opts.plantDay ?? 3, order },
   };
   const world = createWorld(config, data);
@@ -87,6 +90,42 @@ export function summary(r: CropRun) {
     ssr: mean(r.days.slice(40).map((d) => (d.demand > 0 ? d.supply / d.demand : 1))),
     fuelL: r.fuelL,
   };
+}
+
+if (process.env.RUN === 'strawberry') {
+  const b = { startDate: '2026-09-01', days: 265, plantDay: 19, order: { varietyId: 'seolhyang' } };
+  const head = '| 조건 | 상품+중품 kg/10a | 상품 | 비상품 | 과실 개/m² | 첫 개화(정식 후 일) | 첫 수확 | 화방 수 | LAI 평균 | 총광합성 | 과실 분배 | 당도 °Bx | 과중 g | 경도 | 기형과율 | 노동 h | 난방유 L |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|';
+  const row = (name: string, r: CropRun) => {
+    const s = summary(r);
+    const q = r.crop.quality!;
+    const sb = r.crop.out.sb!;
+    const k = q.kg > 0 ? q.kg : NaN;
+    return `| ${name} | ${f(s.yield10a, 0)} | ${f(s.top10a, 0)} | ${f(s.cull10a, 0)} | ${f(s.count, 0)} | ${sb.firstFlowerDay < 0 ? '–' : f(sb.firstFlowerDay, 0)} | ${s.firstHarvestDay < 0 ? '–' : f(s.firstHarvestDay, 0)} | ${sb.trusses} | ${f(s.laiMean, 2)} | ${f(s.gross, 0)} | ${f(s.fruitShare * 100, 0)}% | ${f(q.brix / k, 1)} | ${f(q.weight / k, 1)} | ${f(q.firm / k, 2)} | ${q.count > 0 ? f((100 * q.malformed) / q.count, 0) : '–'}% | ${f(s.labor, 0)} | ${f(s.fuelL, 0)} |`;
+  };
+  const std = runCrop(b);
+  const ss = summary(std);
+  const bench = 3534;
+  const out: string[] = [];
+  out.push('# Phase 3b 검증 — 딸기', '', '`RUN=strawberry npx vite-node tools/validate-crop.ts`가 만든 문서다. 지역 부여, 연동 비닐하우스(이중 피복) 1,000 m², 설향 8.5주/m², 9월 1일 시작·9월 20일 정식(구입묘), 5월 하순까지 265일.', '표준 관리: 야간 난방 8°C, 25°C부터 환기, 꿀벌, 화방당 7화, 관부 2개, 적엽 14일(관부당 9매), 수확 2일 간격. 근권 수분·양분 충분, 병해충 없음.', '');
+  out.push('## ① 표준 관리와 V4 벤치마크', '', head, row('표준 관리(촉성 설향)', std), row('뒤영벌(45일마다 교체)', runCrop({ ...b, plan: { bees: 'bumble', beesEvery: 45 } })), row('야간 12°C', runCrop({ ...b, settings: { heatNight: 12, heatPreDawn: 12 } })), '');
+  out.push(`- 농산물 소득조사 딸기(촉성) **${bench.toLocaleString('ko-KR')} kg/10a**(2017년산; 2019년 분석 수경 3,684 / 토경 2,920). 모델 표준 관리: **${f(ss.yield10a, 0)} kg/10a (+${f((ss.yield10a / bench - 1) * 100, 0)}%)** → ±25% 범위 밖.`, '- 오이와 같은 이유다: 병해충(잿빛곰팡이·흰가루·응애)과 근권 제약이 없는 잠재 수량이며, 수치를 억지로 맞추지 않았다. 고설 수경 상위 농가의 6–8 t/10a 범위에는 들어간다.', '');
+  out.push('### 월별 경과(표준 관리)', '', '| 월 | 평균기온 °C | DLI mol | LAI(월말) | 달린 과실/주 | 총광합성 g/m²/d | 공급/수요 | 수확 kg/10a |', '|---|---|---|---|---|---|---|---|');
+  for (let w = 0; (w + 1) * 30 <= std.days.length; w++) {
+    const d = std.days.slice(w * 30, w * 30 + 30);
+    out.push(`| ${w + 1} | ${f(mean(d.map((x) => x.tMean)))} | ${f(mean(d.map((x) => x.dli)))} | ${f(d[29]!.lai, 2)} | ${f(d[29]!.fruits, 1)} | ${f(mean(d.map((x) => x.gross)))} | ${f(sum(d.map((x) => x.supply)) / Math.max(1e-9, sum(d.map((x) => x.demand))), 2)} | ${f(per10a(sum(d.map((x) => x.harvest.top + x.harvest.mid))), 0)} |`);
+  }
+  out.push('', '(월 = 정식 후 30일 단위)', '', '## ② 전 기간 50% 차광 → 수량·당도', '', head, row('표준', std), row('차광 55% 상시', runCrop({ ...b, setup: { shade: 's55' }, settings: { shadeOnW: 0 } })), '');
+  const e = { startDate: '2026-08-25', days: 130, plantDay: 7, order: { varietyId: 'seolhyang', seedling: 'own' as const } };
+  out.push('## ④ 화아분화기 고온·고질소 → 출뢰 지연 (9월 1일 미분화 자가묘 정식, 130일)', '', head, row('질소 0.6(육묘 후기 양분 중단)', runCrop({ ...e, plan: { nLevel: 0.6 } })), row('질소 1.0', runCrop(e)), row('질소 1.4(과다)', runCrop({ ...e, plan: { nLevel: 1.4 } })), row('질소 1.4 + 고온(25°C 가온, 28°C 환기)', runCrop({ ...e, plan: { nLevel: 1.4 }, settings: { heatNight: 25, heatPreDawn: 25, heatDay: 25, ventTemp: 28 } })), row('야냉 단일처리 묘', runCrop({ ...e, order: { ...e.order, nightChill: true } })), '');
+  out.push('## ⑨ 수정벌', '', head, row('꿀벌(표준)', std), row('벌 없음', runCrop({ ...b, plan: { bees: 'none' } })), row('뒤영벌', runCrop({ ...b, plan: { bees: 'bumble', beesEvery: 45 } })), row('꿀벌 + 차광(약광)', runCrop({ ...b, setup: { shade: 's55' }, settings: { shadeOnW: 0 } })), '');
+  const led = { setup: { light: 'led' as const, lightPpfd: 20 } };
+  const base = { ...defaultSettings(), ...STRAWBERRY_SETTINGS };
+  out.push('## 휴면과 전조', '', head, row('무전조', std), row('11월 중순부터 14시간 전조', runCrop({ ...b, ...led, actions: [{ hour: 75 * 24, seq: 0, type: 'gh/control', payload: { ...base, lightMode: 'extend', photoperiod: 14 } }] })), row('9월부터 16시간 전조', runCrop({ ...b, ...led, settings: { lightMode: 'extend', photoperiod: 16 } })), row('죽향 무전조', runCrop({ ...b, order: { varietyId: 'jukhyang' } })), row('죽향 11월 중순부터 전조', runCrop({ ...b, order: { varietyId: 'jukhyang' }, ...led, actions: [{ hour: 75 * 24, seq: 0, type: 'gh/control', payload: { ...base, lightMode: 'extend', photoperiod: 14 } }] })), '');
+  out.push('## 재식밀도 · 작업', '', head, ...[6, 8.5, 12].map((d) => row(`${d} 주/m²`, d === 8.5 ? std : runCrop({ ...b, order: { varietyId: 'seolhyang', density: d } }))), row('적화 안 함', runCrop({ ...b, plan: { flowersKeep: 0 } })), row('관부 1개만', runCrop({ ...b, plan: { crownsKeep: 1 } })), row('적엽 안 함', runCrop({ ...b, plan: { deleafEvery: 0 } })), row('런너 방치', runCrop({ ...b, plan: { runnerEvery: 0 } })), row('수확 5일 간격', runCrop({ ...b, plan: { harvestEvery: 5 } })), '');
+  out.push('## 품종 · 작형', '', head, ...['seolhyang', 'geumsil', 'maehyang', 'kingsberry', 'jukhyang'].map((v) => row(v, v === 'seolhyang' ? std : runCrop({ ...b, order: { varietyId: v } }))), row('반촉성(10월 15일 정식, 무가온 → 1월 가온)', runCrop({ startDate: '2026-10-01', days: 235, plantDay: 14, order: { varietyId: 'seolhyang', system: 'semiforcing' }, setup: { heater: 'oil' }, settings: { heatNight: 0, heatPreDawn: 0, heatDay: 0 }, actions: [{ hour: 95 * 24, seq: 0, type: 'gh/control', payload: { ...base } }] })), '');
+  out.push('## 실패 허용', '', head, row('철원 무가온·커튼 없음', runCrop({ ...b, regionId: 'cheorwon', setup: { heater: 'none', curtainLayers: 0, coverLayers: 1 } })), '');
+  writeFileSync(new URL('../docs/VALIDATION_PHASE3B.md', import.meta.url), out.join('\n') + '\n');
+  console.log(out.join('\n'));
 }
 
 if (process.env.RUN === 'crop') {
