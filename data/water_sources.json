@@ -1,9 +1,226 @@
 {
-  "_meta": {
-    "file": "water_sources",
-    "title": "원수",
-    "plannedPhase": 4,
-    "schemaVersion": 1
+ "_meta": {
+  "file": "water_sources",
+  "title": "원수(지하수·상수·빗물) 성분과 지역 경향",
+  "plannedPhase": 4,
+  "schemaVersion": 1
+ },
+ "params": {
+  "profiles": {
+   "gw_avg": {
+    "name": "지하수(내륙 평균)",
+    "note": "두 조사의 평균적 성분. 황산은 S로 보고된 값을 SO4-S로 보았다.",
+    "tag": "SRC",
+    "source": "최기영 등(1995) 양액재배 36개 농가 원수 조사, 생물환경조절학회지(koreascience JAKO199511922404537): pH 평균 6.75, EC 0.35 mS/cm, Ca 26.1, Mg 8.1, HCO3 63.1, Fe 0.14 ppm; 시설원예 지하수 수질 평가(koreascience JAKO202007636555043): 양호한 지하수 평균 pH 6.61, EC 0.27, NO3-N 7.64, K 6.26, Ca 18.57, Mg 4.38, Na 20.85, Cl 18.10, HCO3 55.06, Fe 0.09 mg/L",
+    "mgL": {
+     "Ca": 24,
+     "Mg": 6.5,
+     "Na": 20,
+     "K": 5,
+     "Cl": 18,
+     "S": 8,
+     "NO3": 30,
+     "HCO3": 60,
+     "Fe": 0.12,
+     "Mn": 0.02,
+     "Zn": 0.04,
+     "B": 0.04,
+     "Cu": 0.01
+    },
+    "pH": 6.8,
+    "ec": 0.33
+   },
+   "gw_bicarb": {
+    "name": "지하수(중탄산 과다 평야)",
+    "note": "지역 경향은 문헌(중탄산 피해 지역), 수치는 피해 시험의 240 mg/L와 파프리카 단지 최댓값(161)을 참고한 추정.",
+    "tag": "EST",
+    "source": "설향 육묘 중탄산 시험(koreascience JAKO201633056056945): 중탄산 피해는 고양, 논산·부여, 익산, 산청 등에서 많이 발생; 바람직한 HCO3 60–80 mg/L(JAKO201415641085274); 파프리카 수출단지 지하수(koreascience JAKO201030853097081): 평균 pH 7.2, EC 0.31, HCO3 97.8, Ca 35.7, Mg 7.35, Na 17.9 mg/L, 지역·농가별 차이 큼",
+    "mgL": {
+     "Ca": 55,
+     "Mg": 12,
+     "Na": 32,
+     "K": 4,
+     "Cl": 28,
+     "S": 10,
+     "NO3": 20,
+     "HCO3": 230,
+     "Fe": 0.25,
+     "Mn": 0.05,
+     "Zn": 0.03,
+     "B": 0.06,
+     "Cu": 0.01
+    },
+    "pH": 7.6,
+    "ec": 0.55
+   },
+   "gw_mountain": {
+    "name": "지하수(산간 화강암 지대)",
+    "note": "강원 지역 시료가 대체로 낮은 EC를 보인다는 경향에서 추정.",
+    "tag": "EST",
+    "source": "파프리카 수출단지 지하수(koreascience JAKO201030853097081): 평균 pH 7.2, EC 0.31, HCO3 97.8, Ca 35.7, Mg 7.35, Na 17.9 mg/L, 지역·농가별 차이 큼",
+    "mgL": {
+     "Ca": 10,
+     "Mg": 2.5,
+     "Na": 7,
+     "K": 1.5,
+     "Cl": 6,
+     "S": 4,
+     "NO3": 8,
+     "HCO3": 38,
+     "Fe": 0.05,
+     "Mn": 0.01,
+     "Zn": 0.02,
+     "B": 0.01,
+     "Cu": 0.005
+    },
+    "pH": 6.7,
+    "ec": 0.12
+   },
+   "gw_coastal": {
+    "name": "지하수(해안·간척지)",
+    "note": "나트륨·염소가 높다. 수치는 추정.",
+    "tag": "EST",
+    "source": "시설원예 지하수 수질 평가(JAKO202007636555043): 간척지 지하수는 염분이 높아 정수가 필요",
+    "mgL": {
+     "Ca": 40,
+     "Mg": 20,
+     "Na": 95,
+     "K": 6,
+     "Cl": 150,
+     "S": 25,
+     "NO3": 15,
+     "HCO3": 150,
+     "Fe": 0.2,
+     "Mn": 0.05,
+     "Zn": 0.03,
+     "B": 0.15,
+     "Cu": 0.01
+    },
+    "pH": 7.4,
+    "ec": 0.95
+   },
+   "gw_jeju": {
+    "name": "지하수(제주 화산암)",
+    "note": "제주 지하수는 경도가 낮다는 일반 경향에 따른 추정.",
+    "tag": "EST",
+    "source": "",
+    "mgL": {
+     "Ca": 8,
+     "Mg": 6,
+     "Na": 14,
+     "K": 3,
+     "Cl": 15,
+     "S": 4,
+     "NO3": 12,
+     "HCO3": 55,
+     "Fe": 0.03,
+     "Mn": 0.005,
+     "Zn": 0.01,
+     "B": 0.02,
+     "Cu": 0.005
+    },
+    "pH": 7.5,
+    "ec": 0.16
+   },
+   "tap": {
+    "name": "상수도",
+    "note": "국내 정수장 수돗물의 통상 성분 범위에 따른 추정.",
+    "tag": "EST",
+    "source": "",
+    "mgL": {
+     "Ca": 17,
+     "Mg": 4,
+     "Na": 11,
+     "K": 2.5,
+     "Cl": 14,
+     "S": 7,
+     "NO3": 8,
+     "HCO3": 42,
+     "Fe": 0.02,
+     "Mn": 0.005,
+     "Zn": 0.02,
+     "B": 0.02,
+     "Cu": 0.01
+    },
+    "pH": 7.2,
+    "ec": 0.2
+   },
+   "rain": {
+    "name": "빗물",
+    "note": "대기 중 CO2와 평형인 빗물(pH 5.6) + 미량의 질산·황산·해염.",
+    "tag": "EST",
+    "source": "",
+    "mgL": {
+     "Ca": 0.4,
+     "Mg": 0.1,
+     "Na": 0.6,
+     "K": 0.2,
+     "Cl": 1,
+     "S": 0.6,
+     "NO3": 1.5,
+     "HCO3": 0.3
+    },
+    "pH": 5.6,
+    "ec": 0.02
+   }
   },
-  "params": {}
+  "regions": {
+   "_note": "지점별 지하수 성분 경향(EST). 문헌이 꼽은 중탄산 피해 지역(고양·논산·부여·익산·산청)과 해안·간척지, 산간, 제주를 지점에 대응시켰다.",
+   "buyeo": "gw_bicarb",
+   "jeonju": "gw_bicarb",
+   "incheon": "gw_bicarb",
+   "jinju": "gw_bicarb",
+   "cheonan": "gw_bicarb",
+   "mokpo": "gw_coastal",
+   "seosan": "gw_coastal",
+   "yeosu": "gw_coastal",
+   "pohang": "gw_coastal",
+   "cheorwon": "gw_mountain",
+   "daegwallyeong": "gw_mountain",
+   "taebaek": "gw_mountain",
+   "chuncheon": "gw_mountain",
+   "wonju": "gw_mountain",
+   "gangneung": "gw_mountain",
+   "sokcho": "gw_mountain",
+   "andong": "gw_mountain",
+   "chungju": "gw_mountain",
+   "jeju": "gw_jeju",
+   "seogwipo": "gw_jeju"
+  },
+  "cost": {
+   "tap": {
+    "value": 800,
+    "unit": "원 m⁻³",
+    "range": [
+     300,
+     3000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "상수도 요금(일반용 누진 하위 구간 수준)."
+   },
+   "groundwaterPump": {
+    "value": 0.5,
+    "unit": "kWh m⁻³",
+    "range": [
+     0.1,
+     2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "지하수 양수 전력."
+   },
+   "rainCollect": {
+    "value": 0.85,
+    "unit": "-",
+    "range": [
+     0.5,
+     0.95
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "지붕 빗물 집수 효율."
+   }
+  }
+ }
 }

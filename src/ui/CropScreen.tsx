@@ -114,6 +114,7 @@ export function OrderEditor({ value, onChange }: { value: PlantOrder; onChange: 
         <>
           <Select label="묘(seedling)" value={value.seedling ?? 'buy'} options={[['buy', '구입묘(전문 육묘장, 후기 질소 조절)'], ['own', '자가 육묘(런너 번식)']] as const} onChange={(seedling) => onChange({ ...value, seedling })} testId="sb-seedling" />
           <Toggle label="야냉 단일처리 묘" checked={!!value.nightChill} onChange={(nightChill) => onChange({ ...value, nightChill })} hint="화아분화를 끝낸 묘. 8월 말에도 심을 수 있다" />
+          {value.seedling === 'own' && <Num label="육묘기 질소 수준" value={value.plan.nLevel ?? 1} step={0.1} min={0.5} max={1.5} unit="배" hint="1 = 표준 · 육묘 후기 질소를 끊으면(낮게) 화아분화 촉진" onChange={(x) => onChange({ ...value, plan: { ...value.plan, nLevel: x } })} testId="plan-n" />}
           <p className="muted small">야냉 처리를 안 한 묘는 정식일 직전 40일의 그 지역 평년 기온·일장으로 화아분화 진행도를 계산합니다. 중부 지방은 9월 15–20일쯤 분화가 끝납니다. 자가 육묘는 탄저병 잠복 위험이 높습니다(병해충 Phase에서 반영).</p>
         </>
       )}
@@ -281,7 +282,7 @@ function PlantIcon({ crop }: { crop: CropView }) {
 
 const STRESS_LABEL: [keyof Stress, string][] = [
   ['photo', '광합성'], ['expand', '엽 확장'], ['fruit', '과실 비대'], ['set', '착과'],
-  ['water', '수분'], ['nutrient', '양분'], ['sinkFeedback', '당 축적(sink 부족)'], ['tempSet', '착과 온도'], ['tempFruit', '비대 온도'], ['ssr', '동화산물 수급'], ['chill', '저온'], ['heat', '고온'], ['starve', '기아(호흡 부족)'], ['training', '유인 상태'], ['dormancy', '휴면(왜화)'], ['pollination', '수분 조건(오늘)'], ['rootTemp', '근권 온도(뿌리 활력)'], ['light', '강광 장해'],
+  ['water', '수분'], ['nutrient', '양분'], ['sinkFeedback', '당 축적(sink 부족)'], ['tempSet', '착과 온도'], ['tempFruit', '비대 온도'], ['ssr', '동화산물 수급'], ['chill', '저온'], ['heat', '고온'], ['starve', '기아(호흡 부족)'], ['training', '유인 상태'], ['dormancy', '휴면(왜화)'], ['pollination', '수분 조건(오늘)'], ['rootTemp', '근권 온도(뿌리 활력)'], ['light', '강광 장해'], ['salt', '근권 염류(EC, Maas–Hoffman)'],
 ];
 
 const DEATH: Record<string, string> = { rot: '고온 근권으로 뿌리·근경이 상함', frost: '동해(얼어 죽음)', chill: '저온 장해', heat: '고온 장해', collapse: '잎이 모두 소실됨' };
@@ -477,9 +478,8 @@ function Work({ crop }: { crop: CropView }) {
             <Num label="런너 제거 간격" value={draft.runnerEvery ?? 0} min={0} max={60} unit="일" onChange={(x) => set('runnerEvery', x)} />
             <h3>수확(harvest)</h3>
             <Num label="수확 간격" value={draft.harvestEvery} min={0} max={10} unit="일" onChange={(x) => set('harvestEvery', x)} testId="plan-harvest" />
-            <h3>체내 질소 수준(임시 입력)</h3>
-            <Num label="질소 수준" value={draft.nLevel ?? 1} step={0.1} min={0.5} max={1.5} unit="배" hint="1 = 표준 · 낮을수록 화아분화 촉진" onChange={(x) => set('nLevel', x)} testId="plan-n" />
-            <p className="muted small">양액·근권 모델(Phase 4)이 들어가면 급액 처방에서 계산됩니다. 지금은 화아분화 속도에만 영향을 줍니다.</p>
+            <h3>체내 질소</h3>
+            <p className="muted small">정식 뒤의 체내 질소는 근권·양액 탭의 급액 처방과 관수가 정합니다(신엽 질소 ÷ 적정). 질소가 낮을수록 다음 화방의 화아분화가 빨라집니다 — 화방 분화기에 EC를 낮추는 관행과 같은 원리.</p>
           </>
         ) : (
           <>

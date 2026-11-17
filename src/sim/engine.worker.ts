@@ -6,9 +6,9 @@
  *   (백그라운드에서 돌아온 직후 밀린 시간을 한꺼번에 계산하지 않기 위해).
  * - 사건이 생기면(자동 일시정지가 켜진 종류) 그 시각에서 멈춘다.
  */
-import { contractKw, createInitialState, createWorld, fingerprint, stepHour, type ControlSettings, type CropState, type EventType, type GhSetup, type SimEvent, type SimState, type UserAction, type WorkPlan, type World } from '../engine';
+import { contractKw, createInitialState, createWorld, fingerprint, stepHour, type ControlSettings, type CropState, type EventType, type GhSetup, type IrrSettings, type Lab, type NutSettings, type RzSetup, type RzState, type SimEvent, type SimState, type StockTank, type UserAction, type WorkPlan, type World } from '../engine';
 import { ENGINE_DATA } from '../data';
-import type { CropView, DayRow, FromWorker, HourRow, ToWorker, WxView } from './protocol';
+import type { CropView, DayRow, FromWorker, HourRow, RzView, ToWorker, WxView } from './protocol';
 
 const SNAPSHOT_INTERVAL_HOURS = 7 * 24;
 const LOOP_MS = 25;
@@ -47,6 +47,27 @@ function cropView(c: CropState | null, plan: WorkPlan | null): CropView | null {
   };
 }
 
+const tankView = ({ ions: _i, chelFe: _c, ...t }: StockTank) => t;
+
+function rzView(r: RzState, pend: { setup?: RzSetup; irr?: IrrSettings; nut?: NutSettings; labs?: Lab[] }): RzView {
+  return {
+    setup: pend.setup ?? r.setup,
+    irr: pend.irr ?? r.irr,
+    nut: pend.nut ?? r.nut,
+    out: r.out,
+    today: r.today,
+    yesterday: r.yesterday,
+    total: r.total,
+    stock: { A: tankView(r.stock.A), B: tankView(r.stock.B), acid: tankView(r.stock.acid) },
+    labs: pend.labs?.length ? [...r.labs, ...pend.labs] : r.labs,
+    W: r.W,
+    drainTank: r.drainTank,
+    rain: r.rain,
+    doseScale: r.doseScale,
+    plant: r.plant ? { tipburn: r.plant.tipburn, caRatio: r.plant.caRatio } : null,
+  };
+}
+
 function view(): WxView {
   const s = state!;
   const sun = world!.clim.sun[s.weather.cur.di]!;
@@ -54,8 +75,15 @@ function view(): WxView {
   let setup = s.gh.setup;
   let settings = s.gh.settings;
   let plan: WorkPlan | null = null;
+  const pend: { setup?: RzSetup; irr?: IrrSettings; nut?: NutSettings; labs?: Lab[] } = {};
   for (const a of actions) {
     if (a.hour !== s.hour) continue;
+    if (a.type === 'rz/setup') pend.setup = a.payload as RzSetup;
+    if (a.type === 'rz/irrigation') pend.irr = a.payload as IrrSettings;
+    if (a.type === 'rz/nutrition') pend.nut = a.payload as NutSettings;
+    if (a.type === 'rz/config') Object.assign(pend, a.payload as object);
+    // 방금 의뢰한 분석(다음 스텝에서 시료를 뜬다)
+    if (a.type === 'rz/lab') (pend.labs ??= []).push({ kind: (a.payload as { kind: Lab['kind'] }).kind, ordered: s.hour, ready: s.hour + world!.rz.lab.delay });
     if (a.type === 'crop/plan') plan = a.payload as WorkPlan;
     if (a.type === 'gh/setup') setup = a.payload as GhSetup;
     if (a.type === 'gh/control') settings = a.payload as ControlSettings;
@@ -69,6 +97,7 @@ function view(): WxView {
     daylength: sun.daylength,
     gh: { out: g.out, today: g.today, total: g.total, setup, settings, failures: g.failures, breached: g.breached, destroyed: g.destroyed, dust: g.dust, roofSnow: g.roofSnow, contractKw: contractKw(world!, { ...g, setup }) },
     crop: cropView(s.crop, plan),
+    rz: rzView(s.rz, pend),
   };
 }
 
@@ -83,7 +112,7 @@ function stepOnce(live: boolean): boolean {
     const d = state.gh.today;
     const ct = state.crop?.today;
     const cropDay = ct && ct.dayIndex === state.weather.prev.dayIndex ? { ...ct, sPhoto: ct.sPhoto / 24, sExpand: ct.sExpand / 24, sFruit: ct.sFruit / 24, sSet: ct.sSet / 24 } : null;
-    dayBuffer.push({ dayIndex: state.weather.prev.dayIndex, wx: state.weather.prev, gh: { ...d, tMean: d.tMean / 24, rhMean: d.rhMean / 24 }, crop: cropDay });
+    dayBuffer.push({ dayIndex: state.weather.prev.dayIndex, wx: state.weather.prev, gh: { ...d, tMean: d.tMean / 24, rhMean: d.rhMean / 24 }, crop: cropDay, rz: state.rz.today.dayIndex === state.weather.prev.dayIndex ? state.rz.today : null });
   }
   if (live && state.hour % SNAPSHOT_INTERVAL_HOURS === 0) post({ type: 'snapshot', state, fingerprint: fingerprint(state) });
   if (live && state.events.length) {

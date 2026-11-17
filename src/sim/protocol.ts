@@ -1,4 +1,4 @@
-import type { ControlSettings, CropDay, CropState, DayWx, DeviceId, EventType, GhDay, GhHour, GhSetup, HourWx, SimConfig, SimEvent, SimState, UserAction } from '../engine';
+import type { ControlSettings, CropDay, CropState, DayWx, DeviceId, EventType, GhDay, GhHour, GhSetup, HourWx, IrrSettings, Lab, NutSettings, PlantPools, RzDay, RzOut, RzSetup, RzTotal, SimConfig, SimEvent, SimState, StockTank, UserAction } from '../engine';
 
 /** 배속: 실제 1초당 게임 시간(h). 0 = 일시정지. */
 export const SPEEDS = [
@@ -36,6 +36,24 @@ export interface CropView extends Omit<CropState, 'nodes' | 'fruits' | 'tips' | 
   laterals: number;
 }
 
+/** 화면에 보여줄 근권 현황(방금 넣은 설정 변경 포함). */
+export interface RzView {
+  setup: RzSetup;
+  irr: IrrSettings;
+  nut: NutSettings;
+  out: RzOut;
+  today: RzDay;
+  yesterday: RzDay | null;
+  total: RzTotal;
+  stock: { A: Omit<StockTank, 'ions' | 'chelFe'>; B: Omit<StockTank, 'ions' | 'chelFe'>; acid: Omit<StockTank, 'ions' | 'chelFe'> };
+  labs: Lab[];
+  W: number;
+  drainTank: number;
+  rain: number;
+  doseScale: number;
+  plant: Pick<PlantPools, 'tipburn' | 'caRatio'> | null;
+}
+
 /** 화면에 보여줄 현재 외기·온실 요약. */
 export interface WxView {
   now: HourWx;
@@ -45,6 +63,7 @@ export interface WxView {
   daylength: number;
   gh: GhView;
   crop: CropView | null;
+  rz: RzView;
 }
 
 /** 시간 단위 원장 한 줄(내부 vs 외부 그래프용). */
@@ -69,6 +88,7 @@ export interface DayRow {
   wx: DayWx;
   gh: GhDay | null;
   crop?: CropDay | null;
+  rz?: RzDay | null;
 }
 
 export type ToWorker =

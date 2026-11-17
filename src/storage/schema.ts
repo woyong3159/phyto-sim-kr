@@ -5,7 +5,7 @@
  */
 import { defaultSettings, defaultSetup, type EventType, type SimConfig, type SimState, type UserAction } from '../engine';
 
-export const SAVE_SCHEMA_VERSION = 4;
+export const SAVE_SCHEMA_VERSION = 5;
 /** v1(Phase 0) 세이브에는 지역이 없었다. 옮겨올 때 넣는 기본 지역. */
 export const DEFAULT_REGION_ID = 'buyeo';
 export const EXPORT_FORMAT = 'phyto-sim-kr-save';
@@ -73,6 +73,13 @@ export const MIGRATIONS: Record<number, Migration> = {
     if (config.crop === undefined) config.crop = null;
     if (config.setup) config.setup = { ...(config.setup as Record<string, unknown>), testLai: 0 };
     return { ...old, config };
+  },
+  // v4 → v5 (Phase 4): 근권 구성(config.rz) 추가. 옛 작기는 정식 작물의 기본 근권(배지·처방·관수)으로 다시 계산된다.
+  4: (old) => {
+    const config = { ...(old.config as Record<string, unknown>) };
+    delete config.rz;
+    const mode = old.observationMode === 'realistic' ? 'realistic' : 'god';
+    return { ...old, config, observationMode: mode };
   },
 };
 

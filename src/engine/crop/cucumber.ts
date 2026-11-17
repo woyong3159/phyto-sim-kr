@@ -7,6 +7,7 @@
  *  - 착과: 개화 전후의 어린 과실은 공급/수요 비(source/sink)와 온도에 따라 퇴화한다 → 착과 주기(flush)가 저절로 생긴다.
  *  - 근권 수분·양분은 Phase 4 인터페이스: 지금은 가용도 1(충분), S_nut = 1.
  */
+import type { RzSupply } from '../rootzone/types';
 import { dexp, dpow } from '../dmath';
 import type { SimEvent } from '../types';
 import { interp, trap, XG, type CanopyView } from './canopy';
@@ -25,7 +26,7 @@ export function defaultPlan(v: CucumberVariety): WorkPlan {
 }
 
 export const emptyYield = (): Yield => ({ top: 0, mid: 0, cull: 0, count: 0 });
-export const noStress = (): Stress => ({ photo: 1, expand: 1, fruit: 1, set: 1, water: 1, nutrient: 1, sinkFeedback: 1, tempSet: 1, tempFruit: 1, ssr: 1, chill: 1, heat: 1, starve: 1, training: 1, dormancy: 1, pollination: 1, rootTemp: 1, light: 1 });
+export const noStress = (): Stress => ({ photo: 1, expand: 1, fruit: 1, set: 1, water: 1, nutrient: 1, salt: 1, sinkFeedback: 1, tempSet: 1, tempFruit: 1, ssr: 1, chill: 1, heat: 1, starve: 1, training: 1, dormancy: 1, pollination: 1, rootTemp: 1, light: 1 });
 export const emptyDay = (dayIndex: number): CropDay => ({ dayIndex, gross: 0, maint: 0, growthResp: 0, gLeaf: 0, gStem: 0, gRoot: 0, gFruit: 0, demand: 0, supply: 0, harvest: emptyYield(), aborted: 0, labor: 0, sPhoto: 0, sExpand: 0, sFruit: 0, sSet: 0, lai: 0, nodes: 0, fruits: 0 });
 
 export interface CropEnv {
@@ -47,10 +48,15 @@ export interface CropEnv {
   solar: number;
   /** 온실 면적 m² (노동 시간 환산) */
   area: number;
-  /** Phase 4 인터페이스: 상대 수분 가용도(0–1), 양분 스트레스 계수 */
+  /** 근권 수분 가용도(0–1) */
   water: number;
-  nutrient: number;
+  /** 근권 공급 계수(Phase 4: 양분·염해·근권 온도) */
+  rz: RzSupply;
 }
+
+/** 근권이 없을 때(정식 직전 등) 쓰는 중립 공급 */
+export const NEUTRAL_SUPPLY: RzSupply = { water: 1, nutrient: 1, photo: [1, 1, 1], expand: 1, fruit: 1, set: 1, salt: 1, brix: 1, plantN: 1, tRoot: 20, rootAct: 1, tipburn: 0 };
+export type CanopySupply = Pick<RzSupply, 'water' | 'photo'>;
 
 export function plantCucumber(order: PlantOrder, p: CucumberParams, v: CucumberVariety, env: CropEnv): CropState {
   const sd = p.seedling;
@@ -133,12 +139,13 @@ export function feedback(c: CropState, core: CoreParams, wLeafM2: number): numbe
 }
 
 /** 온실 모델에 넘길 군락 요약(이 시간 동안 고정). */
-export function canopyOfCucumber(c: CropState, core: CoreParams, p: CucumberParams, v: CucumberVariety, water: number): CanopyView | null {
-  return buildCanopy(c, core, p, v.pmaxFactor, 1 - p.training.clump * trainingOver(c, p), water, 0);
+export function canopyOfCucumber(c: CropState, core: CoreParams, p: CucumberParams, v: CucumberVariety, sup: CanopySupply): CanopyView | null {
+  return buildCanopy(c, core, p, v.pmaxFactor, 1 - p.training.clump * trainingOver(c, p), sup, 0);
 }
 
 /** 작물 공통: 잎 목록에서 군락 요약을 만든다. kScale = 흡광계수 배수, extraW = 관부 계수로 유지호흡을 셈할 추가 건물(포기당 g). */
-export function buildCanopy(c: CropState, core: CoreParams, p: Pick<CucumberParams, 'photo' | 'leaf' | 'resp'>, pmaxFactor: number, kScale: number, water: number, extraW: number, reserveW = 0): CanopyView | null {
+export function buildCanopy(c: CropState, core: CoreParams, p: Pick<CucumberParams, 'photo' | 'leaf' | 'resp'>, pmaxFactor: number, kScale: number, sup: CanopySupply, extraW: number, reserveW = 0): CanopyView | null {
+  const water = sup.water;
   if (c.dead) return null;
   const m = c.density * c.alive;
   let area = 0;
@@ -164,7 +171,8 @@ export function buildCanopy(c: CropState, core: CoreParams, p: Pick<CucumberPara
     while (g < 3 && cumul >= area * XG[g]!) {
       const fa = interp(p.photo.ageX, p.photo.ageY, n.age);
       const lma = n.area > 0 ? clamp(n.w / n.area * p.leaf.sla, p.leaf.sla / p.leaf.slaMax, p.leaf.sla / p.leaf.slaMin) : 1;
-      pm[g] = p.photo.pmax * pmaxFactor * fa * sPhoto * dpow(lma, p.photo.lmaExp);
+      // 근권 양분: 군락 깊이별(위 신엽·가운데·아래 노엽) 광합성 계수 — 이동성 원소 결핍은 아래 잎부터
+      pm[g] = p.photo.pmax * pmaxFactor * fa * sPhoto * dpow(lma, p.photo.lmaExp) * sup.photo[g]!;
       af[g] = 0.5 + 0.5 * fa;
       g++;
     }
@@ -353,12 +361,13 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
   const over = trainingOver(c, p);
   const starve = env.maint + env.starve > 0 ? 1 - env.starve / (env.maint + env.starve) : 1;
   const stress: Stress = {
-    photo: sWaterPhoto * env.nutrient * fb,
-    expand: sWaterExpand * env.nutrient,
-    fruit: sWaterFruit * env.nutrient * tempFruit,
-    set: tempSet * sSsr * env.nutrient,
+    photo: sWaterPhoto * env.rz.nutrient * fb,
+    expand: sWaterExpand * env.rz.expand,
+    fruit: sWaterFruit * env.rz.fruit * tempFruit,
+    set: tempSet * sSsr * env.rz.set,
     water: sWaterExpand,
-    nutrient: env.nutrient,
+    nutrient: env.rz.nutrient,
+    salt: env.rz.salt,
     sinkFeedback: fb,
     tempSet,
     tempFruit,

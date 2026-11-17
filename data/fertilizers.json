@@ -1,9 +1,1361 @@
 {
-  "_meta": {
-    "file": "fertilizers",
-    "title": "비료·양액 원료",
-    "plannedPhase": 4,
-    "schemaVersion": 1
+ "_meta": {
+  "file": "fertilizers",
+  "title": "비료·양액 원료와 목표 배양액",
+  "plannedPhase": 4,
+  "schemaVersion": 1
+ },
+ "params": {
+  "fertilizers": {
+   "ca_nitrate": {
+    "name": "질산칼슘(4수염)",
+    "formula": "Ca(NO₃)₂·4H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 236.15,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "Ca": 1,
+     "NO3": 2
+    },
+    "solubility": {
+     "value": 1290,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 1400,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "A",
+    "note": "칼슘의 주 공급원. 황산염·인산염과 같은 원액 탱크에 넣으면 침전한다."
+   },
+   "k_nitrate": {
+    "name": "질산칼륨",
+    "formula": "KNO₃",
+    "kind": "salt",
+    "mw": {
+     "value": 101.1,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "K": 1,
+     "NO3": 1
+    },
+    "solubility": {
+     "value": 316,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 2600,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "AB",
+    "note": ""
+   },
+   "nh4_nitrate": {
+    "name": "질산암모늄",
+    "formula": "NH₄NO₃",
+    "kind": "salt",
+    "mw": {
+     "value": 80.04,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "NH4": 1,
+     "NO3": 1
+    },
+    "solubility": {
+     "value": 1920,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 1600,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "A",
+    "note": "국내에서는 판매·보관 규제가 있는 원료다(게임에서는 구입 가능으로 둔다)."
+   },
+   "mkp": {
+    "name": "인산일칼륨(MKP)",
+    "formula": "KH₂PO₄",
+    "kind": "salt",
+    "mw": {
+     "value": 136.09,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "K": 1,
+     "P": 1
+    },
+    "solubility": {
+     "value": 226,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3600,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": ""
+   },
+   "map": {
+    "name": "인산일암모늄(MAP)",
+    "formula": "NH₄H₂PO₄",
+    "kind": "salt",
+    "mw": {
+     "value": 115.03,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "NH4": 1,
+     "P": 1
+    },
+    "solubility": {
+     "value": 370,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 2900,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": ""
+   },
+   "k_sulfate": {
+    "name": "황산칼륨",
+    "formula": "K₂SO₄",
+    "kind": "salt",
+    "mw": {
+     "value": 174.26,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "K": 2,
+     "S": 1
+    },
+    "solubility": {
+     "value": 111,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 2100,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": "용해도가 낮아 원액을 진하게 만들 수 없다."
+   },
+   "kcl": {
+    "name": "염화칼륨",
+    "formula": "KCl",
+    "kind": "salt",
+    "mw": {
+     "value": 74.55,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "K": 1,
+     "Cl": 1
+    },
+    "solubility": {
+     "value": 340,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 1200,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": "염소가 쌓이므로 순환식에서는 피한다."
+   },
+   "mg_sulfate": {
+    "name": "황산마그네슘(7수)",
+    "formula": "MgSO₄·7H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 246.47,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "Mg": 1,
+     "S": 1
+    },
+    "solubility": {
+     "value": 710,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 1000,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": ""
+   },
+   "mg_nitrate": {
+    "name": "질산마그네슘(6수)",
+    "formula": "Mg(NO₃)₂·6H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 256.41,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "Mg": 1,
+     "NO3": 2
+    },
+    "solubility": {
+     "value": 1250,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 1900,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "A",
+    "note": ""
+   },
+   "fe_edta": {
+    "name": "킬레이트철 Fe-EDTA 13%",
+    "formula": "NaFeEDTA·3H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 429.6,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "de Kreij, Voogt & Baas (1999) Nutrient solutions and water quality for soilless cultures, Brochure 196, PBG Naaldwijk (edepot.wur.nl/456342) — 비료 성분·분자량 표",
+     "note": "Fe 13% 제품에서 Fe 1 mol당 질량(55.85 ÷ 0.13)."
+    },
+    "ions": {
+     "Fe": 1,
+     "Na": 1
+    },
+    "solubility": {
+     "value": 90,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 16000,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "chelate": "EDTA",
+    "tank": "A",
+    "note": "pH 6.5를 넘으면 킬레이트가 풀려 철이 침전한다."
+   },
+   "fe_dtpa": {
+    "name": "킬레이트철 Fe-DTPA 11%",
+    "formula": "Fe-DTPA",
+    "kind": "salt",
+    "mw": {
+     "value": 507.7,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "de Kreij, Voogt & Baas (1999) Nutrient solutions and water quality for soilless cultures, Brochure 196, PBG Naaldwijk (edepot.wur.nl/456342) — 비료 성분·분자량 표",
+     "note": "Fe 11% 제품에서 Fe 1 mol당 질량."
+    },
+    "ions": {
+     "Fe": 1
+    },
+    "solubility": {
+     "value": 100,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 21000,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "chelate": "DTPA",
+    "tank": "A",
+    "note": "pH 7.5까지 안정."
+   },
+   "fe_eddha": {
+    "name": "킬레이트철 Fe-EDDHA 6%",
+    "formula": "Fe-EDDHA",
+    "kind": "salt",
+    "mw": {
+     "value": 930.8,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "Fe 6% 제품에서 Fe 1 mol당 질량."
+    },
+    "ions": {
+     "Fe": 1
+    },
+    "solubility": {
+     "value": 60,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 32000,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "chelate": "EDDHA",
+    "tank": "A",
+    "note": "알칼리성(pH 9)에서도 안정. 값이 비싸다."
+   },
+   "mn_sulfate": {
+    "name": "황산망간(1수)",
+    "formula": "MnSO₄·H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 169.02,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "Mn": 1,
+     "S": 1
+    },
+    "solubility": {
+     "value": 760,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3200,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": ""
+   },
+   "zn_sulfate": {
+    "name": "황산아연(7수)",
+    "formula": "ZnSO₄·7H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 287.56,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "Zn": 1,
+     "S": 1
+    },
+    "solubility": {
+     "value": 960,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3000,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": ""
+   },
+   "boric_acid": {
+    "name": "붕산",
+    "formula": "H₃BO₃",
+    "kind": "salt",
+    "mw": {
+     "value": 61.83,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "B": 1
+    },
+    "solubility": {
+     "value": 50,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3200,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": "약산이라 전하 수지에는 거의 영향이 없다."
+   },
+   "cu_sulfate": {
+    "name": "황산구리(5수)",
+    "formula": "CuSO₄·5H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 249.69,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "Cu": 1,
+     "S": 1
+    },
+    "solubility": {
+     "value": 320,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 5500,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": ""
+   },
+   "na_molybdate": {
+    "name": "몰리브덴산나트륨",
+    "formula": "Na₂MoO₄·2H₂O",
+    "kind": "salt",
+    "mw": {
+     "value": 241.95,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "Mo": 1,
+     "Na": 2
+    },
+    "solubility": {
+     "value": 840,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 45000,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "B",
+    "note": ""
+   },
+   "hno3": {
+    "name": "질산(60%)",
+    "formula": "HNO₃",
+    "kind": "acid",
+    "mw": {
+     "value": 63.01,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "NO3": 1
+    },
+    "solubility": {
+     "value": 9999,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "액체(무한 혼화)."
+    },
+    "price": {
+     "value": 1300,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "liquid": {
+     "purity": {
+      "value": 0.6,
+      "unit": "g g⁻¹",
+      "range": [
+       0.1,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "시판 농도(w/w)."
+     },
+     "density": {
+      "value": 1.37,
+      "unit": "kg L⁻¹",
+      "range": [
+       0.8,
+       2
+      ],
+      "tag": "SRC",
+      "source": "CRC Handbook(학습 지식) — 해당 농도 수용액의 밀도",
+      "note": "밀도."
+     }
+    },
+    "tank": "acid",
+    "note": "중탄산을 중화하고 질소도 공급한다."
+   },
+   "h3po4": {
+    "name": "인산(85%)",
+    "formula": "H₃PO₄",
+    "kind": "acid",
+    "mw": {
+     "value": 98,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "P": 1
+    },
+    "solubility": {
+     "value": 9999,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "액체(무한 혼화)."
+    },
+    "price": {
+     "value": 2600,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "liquid": {
+     "purity": {
+      "value": 0.85,
+      "unit": "g g⁻¹",
+      "range": [
+       0.1,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "시판 농도(w/w)."
+     },
+     "density": {
+      "value": 1.69,
+      "unit": "kg L⁻¹",
+      "range": [
+       0.8,
+       2
+      ],
+      "tag": "SRC",
+      "source": "CRC Handbook(학습 지식) — 해당 농도 수용액의 밀도",
+      "note": "밀도."
+     }
+    },
+    "tank": "acid",
+    "note": "인산을 너무 많이 쓰면 인 과잉이 된다."
+   },
+   "h2so4": {
+    "name": "황산(98%)",
+    "formula": "H₂SO₄",
+    "kind": "acid",
+    "mw": {
+     "value": 98.08,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "S": 1
+    },
+    "solubility": {
+     "value": 9999,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "액체(무한 혼화)."
+    },
+    "price": {
+     "value": 900,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "liquid": {
+     "purity": {
+      "value": 0.98,
+      "unit": "g g⁻¹",
+      "range": [
+       0.1,
+       1
+      ],
+      "tag": "EST",
+      "source": "",
+      "note": "시판 농도(w/w)."
+     },
+     "density": {
+      "value": 1.84,
+      "unit": "kg L⁻¹",
+      "range": [
+       0.8,
+       2
+      ],
+      "tag": "SRC",
+      "source": "CRC Handbook(학습 지식) — 해당 농도 수용액의 밀도",
+      "note": "밀도."
+     }
+    },
+    "tank": "acid",
+    "note": "수소 이온 2개. 황이 쌓인다."
+   },
+   "koh": {
+    "name": "수산화칼륨",
+    "formula": "KOH",
+    "kind": "base",
+    "mw": {
+     "value": 56.11,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "K": 1
+    },
+    "solubility": {
+     "value": 1120,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3200,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "acid",
+    "note": "빗물처럼 산성인 원수의 pH를 올릴 때 쓴다."
+   },
+   "khco3": {
+    "name": "중탄산칼륨",
+    "formula": "KHCO₃",
+    "kind": "base",
+    "mw": {
+     "value": 100.12,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "SRC",
+     "source": "화학식과 원자량(IUPAC)에서 계산한 성분 함량",
+     "note": "제품 1 mol(주성분 기준)의 질량."
+    },
+    "ions": {
+     "K": 1,
+     "HCO3": 1
+    },
+    "solubility": {
+     "value": 224,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3100,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "tank": "acid",
+    "note": "완충력(중탄산)을 더한다."
+   },
+   "comp_181818": {
+    "name": "수용성 복합비료 18-18-18+미량(가상)",
+    "formula": "혼합",
+    "kind": "blend",
+    "mw": {
+     "value": 1000,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "혼합물이라 1 kg을 1 \"mol\"로 다룬다(성분은 blend에서 계산)."
+    },
+    "ions": {},
+    "solubility": {
+     "value": 300,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 4200,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "blend": {
+     "mkp": 0.1,
+     "map": 0.21,
+     "k_nitrate": 0.313,
+     "nh4_nitrate": 0.319,
+     "mg_sulfate": 0.04,
+     "fe_edta": 0.008,
+     "mn_sulfate": 0.004,
+     "zn_sulfate": 0.002,
+     "boric_acid": 0.003,
+     "cu_sulfate": 0.0006,
+     "na_molybdate": 0.0004
+    },
+    "tank": "B",
+    "note": "요소 없이 질산·암모늄·인산염으로 만든 범용 복합비료를 본뜸. 칼슘이 없어 질산칼슘과 함께 쓴다."
+   },
+   "comp_13630": {
+    "name": "고칼리 복합비료 13-6-30+3MgO(가상)",
+    "formula": "혼합",
+    "kind": "blend",
+    "mw": {
+     "value": 1000,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "혼합물이라 1 kg을 1 \"mol\"로 다룬다."
+    },
+    "ions": {},
+    "solubility": {
+     "value": 250,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3900,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "blend": {
+     "mkp": 0.115,
+     "k_nitrate": 0.56,
+     "nh4_nitrate": 0.15,
+     "mg_sulfate": 0.17,
+     "fe_edta": 0.004,
+     "mn_sulfate": 0.001
+    },
+    "tank": "B",
+    "note": "과실 비대기용 고칼리 비료를 본뜸."
+   },
+   "comp_201020": {
+    "name": "생육 초기 복합비료 20-10-20(가상)",
+    "formula": "혼합",
+    "kind": "blend",
+    "mw": {
+     "value": 1000,
+     "unit": "g mol⁻¹ (주성분 1 mol당 제품 질량)",
+     "range": [
+      10,
+      2000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "혼합물이라 1 kg을 1 \"mol\"로 다룬다."
+    },
+    "ions": {},
+    "solubility": {
+     "value": 300,
+     "unit": "g L⁻¹ (20°C)",
+     "range": [
+      1,
+      10000
+     ],
+     "tag": "EST",
+     "source": "용해도: CRC Handbook of Chemistry and Physics 물 100 g당 용해도(20°C)를 물 1 L 기준으로 환산(학습 지식, 원문 미확인)",
+     "note": "원액 탱크에서 이 농도를 넘으면 녹지 않고 가라앉는다."
+    },
+    "price": {
+     "value": 3800,
+     "unit": "원 kg⁻¹",
+     "range": [
+      100,
+      100000
+     ],
+     "tag": "EST",
+     "source": "국내 비료상 소매가(20–25 kg 포장)의 통상 수준에 따른 추정. Phase 7에서 KAMIS·농협 가격으로 교체 예정",
+     "note": "제품 kg당 가격."
+    },
+    "blend": {
+     "map": 0.164,
+     "k_nitrate": 0.429,
+     "nh4_nitrate": 0.346,
+     "mg_sulfate": 0.05,
+     "fe_edta": 0.006,
+     "mn_sulfate": 0.003,
+     "boric_acid": 0.002
+    },
+    "tank": "B",
+    "note": "생육 초기 질소 위주 비료를 본뜸."
+   }
   },
-  "params": {}
+  "recipes": {
+   "pbg_cucumber": {
+    "name": "네덜란드 오이(순환식 공급액)",
+    "tag": "SRC",
+    "source": "Sonneveld & Voogt 계열 순환식 오이 공급 평균(Netherlands J. Agric. Sci., library.wur.nl/ojs/16546): NO3 10–13, H2PO4 1.0–1.25, SO4 1.0–1.5, NH4 1.0–1.25, K 6.0–6.5, Ca 2.5–3.0, Mg 1–1.25 mmol/L; Fe 15, Mn 10, Zn 4–5, B 20–25, Cu 0.75, Mo 0.5 μmol/L",
+    "note": "범위의 중간값.",
+    "mmol": {
+     "NO3": 11.5,
+     "NH4": 1.1,
+     "P": 1.1,
+     "K": 6.25,
+     "Ca": 2.75,
+     "Mg": 1.1,
+     "S": 1.25,
+     "Fe": 15,
+     "Mn": 10,
+     "Zn": 4.5,
+     "B": 22.5,
+     "Cu": 0.75,
+     "Mo": 0.5
+    }
+   },
+   "pbg_cucumber_open": {
+    "name": "네덜란드 오이(배출식 표준)",
+    "tag": "EST",
+    "source": "Sonneveld & Straver (1994) 암면 오이 표준액(학습 지식, 원문 미확인)",
+    "note": "배출식은 배지 안 농축을 감안해 순환식보다 진하다.",
+    "mmol": {
+     "NO3": 16,
+     "NH4": 1.25,
+     "P": 1.25,
+     "K": 8,
+     "Ca": 4,
+     "Mg": 1.375,
+     "S": 1.375,
+     "Fe": 15,
+     "Mn": 10,
+     "Zn": 5,
+     "B": 25,
+     "Cu": 0.75,
+     "Mo": 0.5
+    }
+   },
+   "pbg_strawberry": {
+    "name": "네덜란드 딸기(피트 배지)",
+    "tag": "SRC",
+    "source": "PBG Naaldwijk 딸기 피트 배지 기본 배양액(edepot.wur.nl/237303) — Zn은 표가 깨져 5 μmol/L로 추정",
+    "note": "",
+    "mmol": {
+     "NO3": 11.5,
+     "NH4": 1,
+     "P": 1,
+     "K": 5.5,
+     "Ca": 3.25,
+     "Mg": 1.25,
+     "S": 1.5,
+     "Fe": 20,
+     "Mn": 10,
+     "Zn": 5,
+     "B": 25,
+     "Cu": 0.75,
+     "Mo": 0.5
+    }
+   },
+   "yamazaki_strawberry": {
+    "name": "야마자키 딸기",
+    "tag": "EST",
+    "source": "야마자키 배양액(山崎 1976): 딸기 N 5·P 1.5·K 3·Ca 2·Mg 1 me/L, 오이 NO3-N 13·NH4-N 1·P 3·K 6·Ca 7·Mg 4 me/L(학습 지식, 원문 미확인). 국내 딸기 연구가 기준액으로 사용(전하준 등 2013). 미량원소는 원시처방(園試処方) 값",
+    "note": "me/L를 mmol/L로 환산(P는 3가로 셈).",
+    "mmol": {
+     "NO3": 5,
+     "NH4": 0.5,
+     "P": 0.5,
+     "K": 3,
+     "Ca": 1,
+     "Mg": 0.5,
+     "S": 0.5,
+     "Fe": 54,
+     "Mn": 9.1,
+     "Zn": 0.76,
+     "B": 46,
+     "Cu": 0.31,
+     "Mo": 0.1
+    }
+   },
+   "yamazaki_cucumber": {
+    "name": "야마자키 오이",
+    "tag": "EST",
+    "source": "야마자키 배양액(山崎 1976): 딸기 N 5·P 1.5·K 3·Ca 2·Mg 1 me/L, 오이 NO3-N 13·NH4-N 1·P 3·K 6·Ca 7·Mg 4 me/L(학습 지식, 원문 미확인). 국내 딸기 연구가 기준액으로 사용(전하준 등 2013). 미량원소는 원시처방(園試処方) 값",
+    "note": "me/L를 mmol/L로 환산(P는 3가로 셈).",
+    "mmol": {
+     "NO3": 13,
+     "NH4": 1,
+     "P": 1,
+     "K": 6,
+     "Ca": 3.5,
+     "Mg": 2,
+     "S": 2,
+     "Fe": 54,
+     "Mn": 9.1,
+     "Zn": 0.76,
+     "B": 46,
+     "Cu": 0.31,
+     "Mo": 0.1
+    }
+   },
+   "enshi": {
+    "name": "원시처방(園試処方) 표준",
+    "tag": "EST",
+    "source": "일본 원예시험장 표준 배양액(학습 지식, 원문 미확인)",
+    "note": "범용 고농도 배양액.",
+    "mmol": {
+     "NO3": 16,
+     "NH4": 1.33,
+     "P": 1.33,
+     "K": 8,
+     "Ca": 4,
+     "Mg": 2,
+     "S": 2,
+     "Fe": 54,
+     "Mn": 9.1,
+     "Zn": 0.76,
+     "B": 46,
+     "Cu": 0.31,
+     "Mo": 0.1
+    }
+   },
+   "wasabi_half": {
+    "name": "와사비용 1/2 원시처방",
+    "tag": "EST",
+    "source": "",
+    "note": "와사비 수경 전용 표준액을 찾지 못해 원시처방의 절반(EC 1.1 안팎)으로 둔다. 냉량·저광 작물이라 저농도가 관행이라는 일반론에 근거.",
+    "mmol": {
+     "NO3": 8,
+     "NH4": 0.67,
+     "P": 0.67,
+     "K": 4,
+     "Ca": 2,
+     "Mg": 1,
+     "S": 1,
+     "Fe": 27,
+     "Mn": 4.6,
+     "Zn": 0.4,
+     "B": 23,
+     "Cu": 0.16,
+     "Mo": 0.05
+    }
+   }
+  },
+  "recipeInfo": {
+   "value": 0,
+   "unit": "-",
+   "range": [
+    0,
+    0
+   ],
+   "tag": "EST",
+   "source": "",
+   "note": "recipes 표의 단위: 다량원소 mmol/L, 미량원소(Fe, Mn, Zn, B, Cu, Mo) μmol/L."
+  }
+ }
 }

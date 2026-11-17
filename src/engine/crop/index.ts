@@ -6,7 +6,8 @@
 import type { EngineModule, SimEvent, SimState } from '../types';
 import type { World } from '../world';
 import type { CanopyView } from './canopy';
-import { canopyOfCucumber, defaultPlan, plantCucumber, stepCucumber, type CropEnv } from './cucumber';
+import { canopyOfCucumber, defaultPlan, NEUTRAL_SUPPLY, plantCucumber, stepCucumber, type CropEnv } from './cucumber';
+import type { RzSupply } from '../rootzone/types';
 import { canopyOfStrawberry, defaultPlanSb, plantStrawberry, stepStrawberry, type Nursery } from './strawberry';
 import { canopyOfWasabi, defaultPlanWs, plantWasabi, stepWasabi } from './wasabi';
 import type { CropData, CropId, CropState, PlantOrder, WorkPlan, WorkTask } from './types';
@@ -17,16 +18,16 @@ export { beta, defaultPlan } from './cucumber';
 export { defaultPlanSb, inductionRate } from './strawberry';
 export { defaultPlanWs } from './wasabi';
 
-/** Phase 4 인터페이스: 근권이 계산하기 전까지 수분 가용도와 양분 스트레스는 1(충분)이다. */
-export function rootzoneSupply(_state: SimState): { water: number; nutrient: number } {
-  return { water: 1, nutrient: 1 };
+/** 근권 모델(Phase 4)이 이번 시간에 계산한 공급 계수. */
+export function rootzoneSupply(state: SimState): RzSupply {
+  return state.rz?.out?.supply ?? NEUTRAL_SUPPLY;
 }
 
 export function cropCanopy(state: SimState, world: World): CanopyView | null {
   const c = state.crop;
   if (!c) return null;
   const d = world.crops;
-  const water = rootzoneSupply(state).water;
+  const water = rootzoneSupply(state);
   if (c.cropId === 'strawberry') {
     const v = d.varieties.strawberry[c.varietyId];
     return v ? canopyOfStrawberry(c, d.core, d.strawberry, v, water) : null;
@@ -53,7 +54,7 @@ export function defaultOrder(d: CropData, varietyId = 'cheongchun', system?: str
 function envOf(state: SimState, world: World): CropEnv {
   const o = state.gh.out;
   const rz = rootzoneSupply(state);
-  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, rh: o.rhIn, tSol: o.tSolution, lamp: o.light, solar: state.weather.now.solarW, area: state.gh.setup.area, water: rz.water, nutrient: rz.nutrient };
+  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, rh: o.rhIn, tSol: o.tSolution, lamp: o.light, solar: state.weather.now.solarW, area: state.gh.setup.area, water: rz.water, rz };
 }
 
 function plant(state: SimState, world: World, order: PlantOrder): CropState | null {

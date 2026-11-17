@@ -9,7 +9,7 @@
 import { dexp, dpow } from '../dmath';
 import type { SimEvent } from '../types';
 import { trap, type CanopyView } from './canopy';
-import { addLabor, beta, buildCanopy, clamp, emptyDay, emptyYield, feedback, noStress, type CropEnv } from './cucumber';
+import { addLabor, beta, buildCanopy, clamp, emptyDay, emptyYield, feedback, noStress, type CanopySupply, type CropEnv } from './cucumber';
 import type { CoreParams, CropState, LeafNode, PlantOrder, Stress, WasabiParams, WasabiVariety, WorkPlan, WorkTask, WsState } from './types';
 
 export function defaultPlanWs(): WorkPlan {
@@ -38,7 +38,7 @@ export function plantWasabi(order: PlantOrder, p: WasabiParams, v: WasabiVariety
     nodes.push({ age: (sd.leaves - i) / p.leaf.rate / 2, area, w: sd.leafW / sd.leaves, cap: area > cap ? area : cap, peak: area, lat: 0 });
   }
   const day = Math.floor(env.hour / 24);
-  const ws: WsState = { vern: 0, boltLeft: 0, stalkW: 0, bolts: 0, offshoots: 0, offshootW: 0, peakToday: 0, peakAvg: 200, rootT: env.tSol, heatLoad: 0, lastOffshoot: day, lastStalk: day, leafYield: 0, stalkYield: 0, harvested: false, pungency: 0 };
+  const ws: WsState = { vern: 0, boltLeft: 0, stalkW: 0, bolts: 0, offshoots: 0, offshootW: 0, peakToday: 0, peakAvg: 200, rootT: env.rz.tRoot, heatLoad: 0, lastOffshoot: day, lastStalk: day, leafYield: 0, stalkYield: 0, harvested: false, pungency: 0 };
   const crop: CropState = {
     cropId: 'wasabi', varietyId: order.varietyId, system: order.system, density: clamp(order.density, 2, 16), plan: order.plan, plantedHour: env.hour,
     alive: 1, dead: false, deathCause: '', pd: 0, pool: 0, wStem: sd.stemW, wRoot: sd.rootW, growthResp: 0,
@@ -76,11 +76,11 @@ function rootFactor(c: CropState, p: WasabiParams): number {
   return trap(p.root.temp, c.ws!.rootT);
 }
 
-export function canopyOfWasabi(c: CropState, core: CoreParams, p: WasabiParams, v: WasabiVariety, water: number): CanopyView | null {
+export function canopyOfWasabi(c: CropState, core: CoreParams, p: WasabiParams, v: WasabiVariety, sup: CanopySupply): CanopyView | null {
   if (!c.ws || c.ws.harvested) return null;
   // 강광 장해와 뿌리 활력 저하는 잎의 광합성 능력을 낮춘다
   const f = trap(p.light.inhibit, c.ws.peakAvg) * (1 - p.root.photoShare * (1 - rootFactor(c, p)));
-  return buildCanopy(c, core, p, v.pmaxFactor * f, 1, water, c.ws.stalkW + c.ws.offshootW, c.wStem + c.wRoot);
+  return buildCanopy(c, core, p, v.pmaxFactor * f, 1, sup, c.ws.stalkW + c.ws.offshootW, c.wStem + c.wRoot);
 }
 
 function doWork(c: CropState, w: WorkTask, p: WasabiParams, v: WasabiVariety, env: CropEnv, events: SimEvent[]) {
@@ -170,7 +170,8 @@ export function stepWasabi(c0: CropState, core: CoreParams, p: WasabiParams, v: 
   c.t24 += (env.tIn - c.t24) / 24;
   c.dliToday += (env.ppfd * 3600) / 1e6;
   if (env.ppfd > ws.peakToday) ws.peakToday = env.ppfd;
-  const rootNow = c.system === 'substrate' ? env.tSol + p.root.substrateAir * (c.t24 - env.tSol) : env.tSol;
+  // 근권 온도는 근권 모델(수경: 양액 온도, 배지: 양액·기온 가중)이 계산한다
+  const rootNow = env.rz.tRoot;
   ws.rootT += (rootNow - ws.rootT) / 24;
 
   // ── 작업 ──
@@ -207,10 +208,10 @@ export function stepWasabi(c0: CropState, core: CoreParams, p: WasabiParams, v: 
   const fLight = trap(p.light.inhibit, ws.peakAvg);
   const starve = env.maint + env.starve > 0 ? 1 - env.starve / (env.maint + env.starve) : 1;
   const stress: Stress = {
-    photo: trap(core.water.photo, env.water) * env.nutrient * fb * fLight * (1 - p.root.photoShare * (1 - fRoot)),
-    expand: sWaterExpand * env.nutrient * fRoot,
-    fruit: trap(core.water.fruit, env.water) * env.nutrient * fRoot,
-    set: 1, water: sWaterExpand, nutrient: env.nutrient, sinkFeedback: fb, tempSet: 1, tempFruit: fT, ssr: 1, chill: 1, heat: 1, starve, training: 1, dormancy: 1, pollination: 1,
+    photo: trap(core.water.photo, env.water) * env.rz.nutrient * fb * fLight * (1 - p.root.photoShare * (1 - fRoot)),
+    expand: sWaterExpand * env.rz.expand * fRoot,
+    fruit: trap(core.water.fruit, env.water) * env.rz.fruit * fRoot,
+    set: 1, water: sWaterExpand, nutrient: env.rz.nutrient, salt: env.rz.salt, sinkFeedback: fb, tempSet: 1, tempFruit: fT, ssr: 1, chill: 1, heat: 1, starve, training: 1, dormancy: 1, pollination: 1,
     rootTemp: fRoot, light: fLight,
   };
 

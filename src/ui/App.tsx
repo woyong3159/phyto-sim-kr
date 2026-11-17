@@ -9,6 +9,7 @@ import { MoreScreen } from './MoreScreen';
 import { Placeholder } from './Placeholder';
 import { TimeBar } from './TimeBar';
 import { CropScreen } from './CropScreen';
+import { RootzoneScreen } from './RootzoneScreen';
 
 export function App() {
   const [tab, setTab] = useState<TabId>('dashboard');
@@ -37,7 +38,7 @@ export function App() {
           )}
           {tab === 'dashboard' && (view.status === 'nosave' ? <TitleScreen /> : view.status === 'loading' ? <p className="muted">불러오는 중…</p> : <Dashboard view={view} />)}
           {tab === 'env' && <EnvScreen view={view} />}
-          {tab === 'rootzone' && <Placeholder title="근권·양액" phase="이후 Phase" items={['배지 함수율, 근권 EC/pH, 이온별 농도', '급액 처방(mmol/L)·관수 전략·배액률', '원수 성분과 양액 보정']} />}
+          {tab === 'rootzone' && <RootzoneScreen view={view} />}
           {tab === 'crop' && <CropScreen view={view} />}
           {tab === 'ipm' && <Placeholder title="IPM" phase="이후 Phase" items={['스카우팅(노동 시간·탐지 확률)과 병해충 밀도', '천적 방사·농약 살포·저항성 관리', '외부 유입 위험과 방역(biosecurity) 수준']} />}
           {tab === 'more' && <MoreScreen view={view} pwa={pwa} />}

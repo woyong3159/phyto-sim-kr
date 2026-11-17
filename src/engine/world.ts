@@ -7,6 +7,9 @@ import { dexp, dlog } from './dmath';
 import type { SimConfig } from './types';
 import { buildGhParams, strip, type GhParams } from './greenhouse/params';
 import type { CropData } from './crop/types';
+import type { IonVec } from './rootzone/chem';
+import type { RzParams } from './rootzone/types';
+import { buildRzParams, defaultRzConfig, rawWaters, type RzConfig } from './rootzone/setup';
 import { buildClimate, type Climate, type ClimateClass, type JangmaZone, type RegionInfo } from './weather/climate';
 
 interface P {
@@ -41,6 +44,9 @@ export interface EngineData {
   prices: unknown;
   crops: unknown;
   varieties: unknown;
+  rootzone: unknown;
+  fertilizers: unknown;
+  water_sources: unknown;
 }
 
 export interface GenParams {
@@ -96,6 +102,11 @@ export interface World {
   ev: EventParams;
   gh: GhParams;
   crops: CropData;
+  rz: RzParams;
+  /** 그 지역 원수 이온 조성(mmol/L) */
+  raw: Record<'groundwater' | 'tap' | 'rain', IonVec>;
+  /** 작기 시작 때의 근권 구성(설정에 없으면 작물 기본값) */
+  rzConfig: RzConfig;
 }
 
 const num = (o: Record<string, unknown>, k: string): number => {
@@ -174,10 +185,16 @@ export function createWorld(config: SimConfig, data: EngineData): World {
 
   const annualMean = nm.TAVG.values.reduce((a, v, m) => a + v * [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m]!, 0) / 365;
 
+  const rz = buildRzParams(data.rootzone, data.fertilizers, data.water_sources, data.crops);
+  const rzConfig = config.rz ?? defaultRzConfig(rz, config.crop?.order.cropId ?? 'cucumber', region.id);
+
   return {
     config,
     region,
     clim,
+    rz,
+    raw: rawWaters(rz, region.id),
+    rzConfig,
     gh: buildGhParams(data.facilities, data.equipment, data.prices, annualMean),
     crops: buildCrops(data.crops, data.varieties),
     gen: {

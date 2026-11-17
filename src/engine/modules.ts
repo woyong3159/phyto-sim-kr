@@ -8,9 +8,10 @@ import { timeModule } from './time';
 import { weatherModule } from './weather';
 import { controlModule, greenhouseModule } from './greenhouse';
 import { cropModule } from './crop';
+import { rootzoneModule } from './rootzone';
 
 export const eventsModule = stubModule('events', '뉴스·재해·시장 충격(기상 특보는 weather가 낸다)', 7);
-export const rootzoneModule = stubModule('rootzone', '배지·양액·관수·이온 흡수', 4);
+export { rootzoneModule };
 export { cropModule };
 export const physiologyModule = stubModule('physiology', '생리장해·생장조절제(PGR)', 5);
 export const protectionModule = stubModule('protection', '병해·해충·바이러스·천적·농약·저항성·방역', 6);

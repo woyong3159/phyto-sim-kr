@@ -1,6 +1,6 @@
 // Phase 3a 검증(V3·V4) 실행기: RUN=crop npx vite-node tools/validate-crop.ts → docs/VALIDATION_PHASE3A.md
 import { writeFileSync } from 'node:fs';
-import { createInitialState, createWorld, defaultOrder, defaultSettings, defaultSetup, stepHour, type ControlSettings, type CropDay, type CropState, type GhSetup, type PlantOrder, type SimConfig, type SimState, type UserAction, type WorkPlan } from '../src/engine';
+import { createInitialState, createWorld, defaultOrder, defaultRzConfig, defaultSettings, defaultSetup, stepHour, type ControlSettings, type CropDay, type CropState, type GhSetup, type IrrSettings, type NutSettings, type PlantOrder, type RzOut, type RzSetup, type SimConfig, type SimState, type UserAction, type WorkPlan } from '../src/engine';
 import { data } from './validate-greenhouse';
 
 export interface CropRun {
@@ -10,6 +10,14 @@ export interface CropRun {
   events: string[];
   /** 주간 평균 CO2, 총 연료 */
   fuelL: number;
+  /** 근권 일 기록(매일 14시 값) */
+  rzDays: { day: number; out: RzOut; tipburn: number; vpd: number; caRatio: number }[];
+}
+
+export interface RzPatch {
+  setup?: Partial<RzSetup>;
+  irr?: Partial<IrrSettings>;
+  nut?: Partial<NutSettings>;
 }
 
 /** 오이 표준 관리: 주간 난방 18°C, 야간 14°C, 28°C부터 환기 */
@@ -22,7 +30,7 @@ export const STRAWBERRY_SETTINGS: Partial<ControlSettings> = { heatDay: 10, heat
 export const WASABI_SETTINGS: Partial<ControlSettings> = { heatDay: 8, heatNight: 8, heatPreDawn: 8, ventTemp: 18, ventBand: 4, shadeOnW: 250, rhMax: 95, fogTemp: 22, fogRhMax: 90, coolTemp: 22, solutionMin: 12, solutionMax: 17 };
 export const WASABI_SETUP: Partial<GhSetup> = { shade: 's55', cooling: 'padfan', fog: true, solutionChiller: true, solutionHeater: true };
 
-export function runCrop(opts: { regionId?: string; startDate: string; seed?: string; days: number; plantDay?: number; setup?: Partial<GhSetup>; settings?: Partial<ControlSettings>; order?: Partial<PlantOrder>; plan?: Partial<WorkPlan>; actions?: UserAction[] }): CropRun {
+export function runCrop(opts: { regionId?: string; startDate: string; seed?: string; days: number; plantDay?: number; setup?: Partial<GhSetup>; settings?: Partial<ControlSettings>; order?: Partial<PlantOrder>; plan?: Partial<WorkPlan>; actions?: UserAction[]; rz?: RzPatch }): CropRun {
   const world0 = createWorld({ seed: 's', startDate: opts.startDate, regionId: opts.regionId ?? 'buyeo', setup: defaultSetup(), settings: defaultSettings() }, data);
   const base = defaultOrder(world0.crops, opts.order?.varietyId ?? 'cheongchun', opts.order?.system);
   const order: PlantOrder = { ...base, ...opts.order, plan: { ...base.plan, ...opts.plan } };
@@ -34,9 +42,14 @@ export function runCrop(opts: { regionId?: string; startDate: string; seed?: str
     settings: { ...defaultSettings(), ...(base.cropId === 'wasabi' ? WASABI_SETTINGS : base.cropId === 'strawberry' ? STRAWBERRY_SETTINGS : CUCUMBER_SETTINGS), ...opts.settings },
     crop: { day: opts.plantDay ?? 3, order },
   };
+  if (opts.rz) {
+    const d = defaultRzConfig(world0.rz, order.cropId, config.regionId);
+    config.rz = { setup: { ...d.setup, ...opts.rz.setup }, irr: { ...d.irr, ...opts.rz.irr }, nut: { ...d.nut, ...opts.rz.nut } };
+  }
   const world = createWorld(config, data);
   let s = createInitialState(world);
   const days: CropRun['days'] = [];
+  const rzDays: CropRun['rzDays'] = [];
   const events: string[] = [];
   const repairs: UserAction[] = [];
   const acts = opts.actions ?? [];
@@ -53,6 +66,7 @@ export function runCrop(opts: { regionId?: string; startDate: string; seed?: str
       events.push(`${e.type}:${e.code}@${Math.floor(e.hour / 24)}`);
       if (e.type === 'equipment') repairs.push({ hour: s.hour, seq: 0, type: 'gh/repair', payload: { device: e.code } });
     }
+    if (s.hour % 24 === 14 && s.crop) rzDays.push({ day: Math.floor(s.hour / 24), out: s.rz.out, tipburn: s.rz.plant?.tipburn ?? 0, vpd: s.gh.out.vpd, caRatio: s.rz.plant?.caRatio ?? 1 });
     if (s.hour % 24 === 0 && s.crop) {
       const t = s.crop.today;
       const g = s.gh.today;
@@ -61,7 +75,7 @@ export function runCrop(opts: { regionId?: string; startDate: string; seed?: str
       co2N = 0;
     }
   }
-  return { days, final: s, crop: s.crop!, events, fuelL: s.gh.total.fuelL };
+  return { days, final: s, crop: s.crop!, events, fuelL: s.gh.total.fuelL, rzDays };
 }
 
 const sum = (a: number[]) => a.reduce((x, y) => x + y, 0);

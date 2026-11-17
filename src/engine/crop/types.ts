@@ -276,6 +276,8 @@ export interface Stress {
   /** 요인별 */
   water: number;
   nutrient: number;
+  /** 근권 염류(Maas–Hoffman, G6) */
+  salt: number;
   sinkFeedback: number;
   tempSet: number;
   tempFruit: number;
@@ -435,6 +437,8 @@ export interface SbState {
   firstFlowerHour: number;
   /** 탄저병 잠복 위험 지수(Phase 6 인터페이스) */
   anthracnoseRisk: number;
+  /** 근권 양분 품질 계수(과실 K·근권 EC → 과실 건물률·당도) 7일 이동평균 */
+  nutQ?: number;
 }
 
 export interface WsState {

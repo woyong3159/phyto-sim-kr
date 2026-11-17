@@ -4,10 +4,10 @@ import { join } from 'node:path';
 import { validateDataFile, validateParam, type DataFile } from '../../src/engine/params';
 
 const dataDir = join(__dirname, '../../data');
-const EXPECTED = ['biocontrol', 'biosecurity', 'channels', 'climate', 'crops', 'diseases', 'equipment', 'events', 'facilities', 'fertilizers', 'land', 'pests', 'pesticides', 'pgr', 'policy_finance', 'prices', 'regions', 'varieties', 'viruses', 'water_sources'];
+const EXPECTED = ['biocontrol', 'biosecurity', 'channels', 'climate', 'crops', 'diseases', 'equipment', 'events', 'facilities', 'fertilizers', 'land', 'pests', 'pesticides', 'pgr', 'policy_finance', 'prices', 'regions', 'rootzone', 'varieties', 'viruses', 'water_sources'];
 
 describe('/data — 파라미터 외부화(N5)와 태그 프로토콜(8항)', () => {
-  it('헌법 5항의 20개 데이터 파일이 모두 있다', () => {
+  it('헌법 5항의 20개 데이터 파일 + 근권(rootzone)이 모두 있다', () => {
     const files = readdirSync(dataDir).filter((f) => f.endsWith('.json')).map((f) => f.replace('.json', '')).sort();
     expect(files).toEqual([...EXPECTED].sort());
   });

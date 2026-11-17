@@ -244,6 +244,12 @@ test('모든 탭이 열리고 넘치지 않는다 + 다크 모드', async ({ pag
     await page.locator(`[data-tab="${id}"]`).tap();
     await expect(page.locator(`[data-screen="${id}"]`)).toBeVisible();
     await noOverflow(page);
+    if (id === 'rootzone') {
+      for (const sub of ['irr', 'nut', 'measure', 'graph', 'now']) {
+        await page.locator(`[data-sub="${sub}"]`).tap();
+        await noOverflow(page);
+      }
+    }
     if (id === 'env') {
       for (const sub of ['control', 'setup', 'outdoor', 'now']) {
         await page.locator(`[data-sub="${sub}"]`).tap();
@@ -435,4 +441,70 @@ test('와사비: 선택 → 근경·근권 온도·매운맛 정보 → 잎 수�
   await noOverflow(page);
   await page.getByTestId('crop-yield').scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('42-wasabi-harvested.png') });
+});
+
+test('근권·양액 탭: 현황(엽분석·이온) → 관수 변경 확인 → 탱크 침전 경고 → 현실 모드 분석 의뢰 → 그래프', async ({ page }, info) => {
+  await startGame(page, { region: 'buyeo', date: '2026-03-01', seed: 'e2e-rz' });
+  await advanceWeeks(page, 4);
+  await page.locator('[data-tab="rootzone"]').tap();
+  await expect(page.getByTestId('rz-now')).toBeVisible();
+  await expect(page.getByTestId('rz-tissue')).toBeVisible();
+  await expect(page.getByTestId('rz-ions')).toContainText('NO₃');
+  await expect(page.getByTestId('rz-tanks')).toContainText('A 탱크');
+  await noOverflow(page);
+  for (const r of await page.locator('.subtabs button').evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ w: b.width, h: b.height })))) {
+    expect(r.w).toBeGreaterThanOrEqual(44);
+    expect(r.h).toBeGreaterThanOrEqual(44);
+  }
+  await page.screenshot({ path: info.outputPath('30-rz-now.png'), fullPage: true });
+
+  // 관수: 1회 관수량 변경 → 확인 단계
+  await page.locator('[data-sub="irr"]').tap();
+  const dose = page.getByTestId('rz-dose');
+  await dose.fill('200');
+  await dose.blur();
+  await page.getByTestId('apply-irr').tap();
+  await page.getByTestId('confirm-irr').tap();
+  await expect(page.getByTestId('apply-irr')).toHaveCount(0);
+  await expect(dose).toHaveValue('200');
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('31-rz-irrigation.png'), fullPage: true });
+
+  // 양액: 계산기 + A탱크에 황산마그네슘을 넣으면 침전 경고(학습 모드)
+  await page.locator('[data-sub="nut"]').tap();
+  await expect(page.getByTestId('rz-calc')).toContainText('dS/m');
+  const tankA = page.locator('[data-tank="A"]');
+  await tankA.locator('select').selectOption('mg_sulfate');
+  await tankA.getByRole('button', { name: '추가' }).tap();
+  await expect(page.getByTestId('warn-A')).toContainText('석고');
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('32-rz-nutrition.png'), fullPage: true });
+  // 적용하지 않고 되돌린다
+  await page.getByTestId('apply-nut').tap();
+  await page.getByRole('button', { name: '되돌리기' }).tap();
+  await expect(page.getByTestId('warn-A')).toHaveCount(0);
+
+  // 측정: 현실 모드 → 이온·엽분석은 숨김 → 식물체 분석 의뢰 → 3일 뒤 결과
+  await page.locator('[data-sub="measure"]').tap();
+  await page.locator('[data-obs="realistic"]').tap();
+  await expect(page.locator('.page-head .badge')).toContainText('현실 모드');
+  await page.locator('[data-lab="tissue"]').tap();
+  await expect(page.locator('details.lab')).toContainText('남음');
+  for (let i = 0; i < 4; i++) {
+    await page.locator('[data-turn="24"]').tap();
+    await expect(page.locator('[data-turn="24"]')).toBeEnabled();
+    if (await page.getByTestId('pause-banner').isVisible()) await page.getByTestId('pause-banner').getByRole('button').tap();
+  }
+  await expect(page.locator('details.lab').first()).toContainText('결과 도착');
+  await page.locator('details.lab summary').first().tap();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('33-rz-measure.png'), fullPage: true });
+  await page.locator('[data-sub="now"]').tap();
+  await expect(page.getByTestId('rz-ions')).toHaveCount(0);
+  await expect(page.getByTestId('rz-tissue')).toHaveCount(0);
+
+  await page.locator('[data-sub="graph"]').tap();
+  await expect(page.getByTestId('chart-rz-ec')).toBeVisible();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('34-rz-graph.png'), fullPage: true });
 });

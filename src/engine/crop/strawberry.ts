@@ -11,7 +11,7 @@
 import { dexp, dlog, dpow } from '../dmath';
 import type { SimEvent } from '../types';
 import { trap, type CanopyView } from './canopy';
-import { addLabor, beta, buildCanopy, clamp, emptyDay, emptyYield, feedback, noStress, shifted, type CropEnv } from './cucumber';
+import { addLabor, beta, buildCanopy, clamp, emptyDay, emptyYield, feedback, noStress, shifted, type CanopySupply, type CropEnv } from './cucumber';
 import type { CoreParams, CropState, Curve, Fruit, LeafNode, PlantOrder, SbState, Stress, StrawberryParams, StrawberryVariety, WorkPlan, WorkTask } from './types';
 
 export function defaultPlanSb(): WorkPlan {
@@ -91,12 +91,13 @@ export function plantStrawberry(order: PlantOrder, p: StrawberryParams, v: Straw
   return crop;
 }
 
-function dmcOf(p: StrawberryParams, v: StrawberryVariety, f: Fruit, dli: number): number {
+/** 과실 건물률. q: 근권 양분 품질 계수(과실 K·근권 EC, Phase 4)의 이동평균 */
+function dmcOf(p: StrawberryParams, v: StrawberryVariety, f: Fruit, dli: number, q = 1): number {
   const fr = p.fruit;
   const sr = f.dur > 0 ? 1 - f.def / f.dur : fr.ssrRef;
   const tMean = f.dur > 0 ? (f.tSum ?? 0) / f.dur : fr.dmcTempRef;
   const light = (fr.dmcLight * dlog((dli > 0.5 ? dli : 0.5) / p.leaf.slaDliRef)) / 0.6931;
-  return clamp(v.dmc * (1 + fr.dmcSsr * (sr - fr.ssrRef)) * (1 - fr.dmcTemp * (tMean - fr.dmcTempRef)) * (1 + light), fr.dmcMin, fr.dmcMax);
+  return clamp(v.dmc * q * (1 + fr.dmcSsr * (sr - fr.ssrRef)) * (1 - fr.dmcTemp * (tMean - fr.dmcTempRef)) * (1 + light), fr.dmcMin, fr.dmcMax);
 }
 
 function summarize(c: CropState, p: StrawberryParams, v: StrawberryVariety, ssr: number, sla: number, stress: Stress): CropState['out'] {
@@ -119,7 +120,7 @@ function summarize(c: CropState, p: StrawberryParams, v: StrawberryVariety, ssr:
     wf += f.n * f.w;
     if (f.age >= 0) {
       fruits += f.n;
-      const fw = f.w / dmcOf(p, v, f, c.dliAvg);
+      const fw = f.w / dmcOf(p, v, f, c.dliAvg, c.sb?.nutQ ?? 1);
       if (fw > big) big = fw;
     } else {
       flowers += f.n;
@@ -132,8 +133,8 @@ function summarize(c: CropState, p: StrawberryParams, v: StrawberryVariety, ssr:
   };
 }
 
-export function canopyOfStrawberry(c: CropState, core: CoreParams, p: StrawberryParams, v: StrawberryVariety, water: number): CanopyView | null {
-  return buildCanopy(c, core, p, v.pmaxFactor, 1, water, c.sb ? c.sb.runnerW : 0, c.wStem + c.wRoot);
+export function canopyOfStrawberry(c: CropState, core: CoreParams, p: StrawberryParams, v: StrawberryVariety, sup: CanopySupply): CanopyView | null {
+  return buildCanopy(c, core, p, v.pmaxFactor, 1, sup, c.sb ? c.sb.runnerW : 0, c.wStem + c.wRoot);
 }
 
 function doWork(c: CropState, w: WorkTask, p: StrawberryParams, v: StrawberryVariety, env: CropEnv, events: SimEvent[]) {
@@ -190,7 +191,7 @@ function doWork(c: CropState, w: WorkTask, p: StrawberryParams, v: StrawberryVar
         keep.push(f);
         continue;
       }
-      const dmc = dmcOf(p, v, f, c.dliAvg);
+      const dmc = dmcOf(p, v, f, c.dliAvg, c.sb?.nutQ ?? 1);
       const fw = f.w / dmc;
       const kg = (f.n * fw * m) / 1000;
       const fert = 1 - dexp(-(f.poll ?? 0));
@@ -241,7 +242,9 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
   const c: CropState = { ...c0, nodes: c0.nodes.map((n) => ({ ...n })), fruits: c0.fruits.map((f) => ({ ...f })), total: { ...c0.total }, cum: { ...c0.cum }, today: { ...c0.today, harvest: { ...c0.today.harvest } }, sb: { ...c0.sb }, quality: { ...c0.quality! } };
   const sb = c.sb!;
   const day = Math.floor(env.hour / 24);
-  const nLevel = c.plan.nLevel ?? 1;
+  // 체내 질소 수준: 정식 뒤에는 근권 양분 모델의 신엽 질소(적정 대비)를 쓴다
+  const nLevel = clamp(env.rz.plantN, 0.3, 1.6);
+  sb.nutQ = (sb.nutQ ?? 1) + (env.rz.brix - (sb.nutQ ?? 1)) / (24 * 7);
 
   // ── 하루 넘김: 이동평균, 화아분화, 휴면, 런너, 봉군 세력 ──
   if (env.hod === 0 && c.today.dayIndex !== day) {
@@ -326,11 +329,11 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
   const starve = env.maint + env.starve > 0 ? 1 - env.starve / (env.maint + env.starve) : 1;
   const dormF = 1 - p.dormancy.dwarf * sb.dorm;
   const stress: Stress = {
-    photo: trap(core.water.photo, env.water) * env.nutrient * fb,
-    expand: sWaterExpand * env.nutrient * dormF,
-    fruit: trap(core.water.fruit, env.water) * env.nutrient * tempFruit,
-    set: sSsr * env.nutrient,
-    water: sWaterExpand, nutrient: env.nutrient, sinkFeedback: fb, tempSet: 1, tempFruit, ssr: sSsr, chill: 1, heat: 1, starve, training: 1,
+    photo: trap(core.water.photo, env.water) * env.rz.nutrient * fb,
+    expand: sWaterExpand * env.rz.expand * dormF,
+    fruit: trap(core.water.fruit, env.water) * env.rz.fruit * tempFruit,
+    set: sSsr * env.rz.set,
+    water: sWaterExpand, nutrient: env.rz.nutrient, salt: env.rz.salt, sinkFeedback: fb, tempSet: 1, tempFruit, ssr: sSsr, chill: 1, heat: 1, starve, training: 1,
     dormancy: dormF, rootTemp: 1, light: 1,
     pollination: sb.beeHours > 0 ? clamp(sb.beeAct / sb.beeHours, 0, 1) : 0,
   };
@@ -353,7 +356,7 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
     const n = c.nodes[i]!;
     if (n.age < 2 * p.leaf.expandDays && n.area < n.cap) {
       const s = 1 / (1 + dexp(-rExp * (n.age - p.leaf.expandDays / 2)));
-      let dA = n.cap * rExp * s * (1 - s) * dpd * sWaterExpand * env.nutrient;
+      let dA = n.cap * rExp * s * (1 - s) * dpd * sWaterExpand * env.rz.expand;
       if (n.area + dA > n.cap) dA = n.cap - n.area;
       leafDA[i] = dA;
       leafDemand[i] = dA / sla;

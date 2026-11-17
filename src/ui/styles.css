@@ -1054,3 +1054,67 @@ button {
 .stress-bad strong {
   color: var(--hot);
 }
+
+/* ── 근권·양액(Phase 4) ── */
+.metric[data-warn='1'] {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.judge {
+  display: inline-block;
+  margin-left: 2px;
+  padding: 0 5px;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.judge-ok {
+  color: var(--leaf);
+}
+
+.judge-warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.judge-bad {
+  background: var(--hot);
+  color: #fff;
+}
+
+.tank {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.tank h3 {
+  margin: 0;
+}
+
+.fert-row,
+.fert-add {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.fert-row > .num,
+.fert-add > .field {
+  flex: 1;
+  min-width: 0;
+}
+
+.warn-list li {
+  color: var(--warn);
+  font-size: 13px;
+}
+
+.inout td .judge {
+  font-variant-numeric: normal;
+}

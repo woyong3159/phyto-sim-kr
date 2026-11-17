@@ -33,7 +33,8 @@ export const EVENT_LABEL: Record<EventType, { name: string; fromPhase: number }>
   equipment: { name: '장비 고장', fromPhase: 2 },
   disease: { name: '병해충 발견', fromPhase: 6 },
   news: { name: '뉴스', fromPhase: 7 },
-  stock: { name: '재고 부족', fromPhase: 4 },
+  stock: { name: '원액 탱크 소진', fromPhase: 4 },
+  rootzone: { name: '근권(막힘·뿌리 장해·건조·분석 결과)', fromPhase: 4 },
   crop: { name: '작물 고사·첫 수확', fromPhase: 3 },
 };
 

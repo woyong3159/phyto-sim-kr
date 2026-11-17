@@ -1,0 +1,1652 @@
+{
+ "_meta": {
+  "file": "rootzone",
+  "title": "근권 시스템·양액 화학·흡수 동역학·측정",
+  "plannedPhase": 4,
+  "schemaVersion": 1
+ },
+ "params": {
+  "systems": {
+   "rockwool": {
+    "kind": "substrate",
+    "name": "암면(rockwool)",
+    "volume": {
+     "value": 9,
+     "unit": "L m⁻²(바닥)",
+     "range": [
+      2,
+      60
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 1 m²당 배지 부피. 슬래브 100×20×7.5 cm를 2.2주/m² 재식에 맞춰 놓은 경우."
+    },
+    "height": {
+     "value": 7.5,
+     "unit": "cm",
+     "range": [
+      3,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "배지 높이(용기용수량 계산에 씀: 배지 가운데 높이의 매트릭 퍼텐셜)."
+    },
+    "thetaS": {
+     "value": 0.95,
+     "unit": "m³ m⁻³",
+     "range": [
+      0.5,
+      0.98
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "포화 수분(공극률)."
+    },
+    "thetaR": {
+     "value": 0.02,
+     "unit": "m³ m⁻³",
+     "range": [
+      0,
+      0.3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "잔류 수분."
+    },
+    "alpha": {
+     "value": 0.15,
+     "unit": "cm⁻¹",
+     "range": [
+      0.005,
+      0.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "van Genuchten α."
+    },
+    "n": {
+     "value": 3,
+     "unit": "-",
+     "range": [
+      1.1,
+      5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "van Genuchten n."
+    },
+    "bypass": {
+     "value": 0.05,
+     "unit": "-",
+     "range": [
+      0,
+      0.6
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관수한 양액 가운데 배지 용액과 섞이지 않고 바로 배액으로 빠지는 비율(선택류). 배액 EC가 급액과 배지 사이에 오는 이유."
+    },
+    "drainTau": {
+     "value": 0.3,
+     "unit": "h",
+     "range": [
+      0.05,
+      2
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "용기용수량을 넘는 물이 빠지는 시간 상수."
+    },
+    "nitrify": {
+     "value": 0.0005,
+     "unit": "h⁻¹",
+     "range": [
+      0,
+      0.05
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "배지 안 암모늄의 질산화 속도(20°C, Q10 2). 질산화는 암모늄 1 mol당 수소 이온 2 mol을 내어 근권을 산성화한다. 무기 배지라 미생물이 적어 느리다(하루 약 1%, 추정)."
+    },
+    "installCost": {
+     "value": 45000,
+     "unit": "원 m⁻²",
+     "range": [
+      0,
+      200000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "고설 베드·배지·점적 설치비(대략)."
+    },
+    "note": "보수력 곡선이 평평하다가 급하게 꺾여 물 관리가 예민하다."
+   },
+   "coir": {
+    "kind": "substrate",
+    "name": "코이어(coir)",
+    "volume": {
+     "value": 15,
+     "unit": "L m⁻²(바닥)",
+     "range": [
+      2,
+      60
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 1 m²당 배지 부피. 딸기 고설 베드(폭 25 cm, 깊이 15 cm 안팎)."
+    },
+    "height": {
+     "value": 12,
+     "unit": "cm",
+     "range": [
+      3,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "배지 높이(용기용수량 계산에 씀: 배지 가운데 높이의 매트릭 퍼텐셜)."
+    },
+    "thetaS": {
+     "value": 0.9,
+     "unit": "m³ m⁻³",
+     "range": [
+      0.5,
+      0.98
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "포화 수분(공극률)."
+    },
+    "thetaR": {
+     "value": 0.1,
+     "unit": "m³ m⁻³",
+     "range": [
+      0,
+      0.3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "잔류 수분."
+    },
+    "alpha": {
+     "value": 0.12,
+     "unit": "cm⁻¹",
+     "range": [
+      0.005,
+      0.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "van Genuchten α."
+    },
+    "n": {
+     "value": 2,
+     "unit": "-",
+     "range": [
+      1.1,
+      5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "van Genuchten n."
+    },
+    "bypass": {
+     "value": 0.08,
+     "unit": "-",
+     "range": [
+      0,
+      0.6
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관수한 양액 가운데 배지 용액과 섞이지 않고 바로 배액으로 빠지는 비율(선택류). 배액 EC가 급액과 배지 사이에 오는 이유."
+    },
+    "drainTau": {
+     "value": 0.3,
+     "unit": "h",
+     "range": [
+      0.05,
+      2
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "용기용수량을 넘는 물이 빠지는 시간 상수."
+    },
+    "nitrify": {
+     "value": 0.0015,
+     "unit": "h⁻¹",
+     "range": [
+      0,
+      0.05
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "배지 안 암모늄의 질산화 속도(20°C, Q10 2). 질산화는 암모늄 1 mol당 수소 이온 2 mol을 내어 근권을 산성화한다. 유기 배지라 질산화 미생물이 있다(하루 약 3.5%, 추정)."
+    },
+    "installCost": {
+     "value": 55000,
+     "unit": "원 m⁻²",
+     "range": [
+      0,
+      200000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "고설 베드·배지·점적 설치비(대략)."
+    },
+    "note": "보수력이 좋고 완충력이 있다."
+   },
+   "peatPerlite": {
+    "kind": "substrate",
+    "name": "피트+펄라이트",
+    "volume": {
+     "value": 18,
+     "unit": "L m⁻²(바닥)",
+     "range": [
+      2,
+      60
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "바닥 1 m²당 배지 부피. 혼합 상토 베드."
+    },
+    "height": {
+     "value": 15,
+     "unit": "cm",
+     "range": [
+      3,
+      30
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "배지 높이(용기용수량 계산에 씀: 배지 가운데 높이의 매트릭 퍼텐셜)."
+    },
+    "thetaS": {
+     "value": 0.85,
+     "unit": "m³ m⁻³",
+     "range": [
+      0.5,
+      0.98
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "포화 수분(공극률)."
+    },
+    "thetaR": {
+     "value": 0.1,
+     "unit": "m³ m⁻³",
+     "range": [
+      0,
+      0.3
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "잔류 수분."
+    },
+    "alpha": {
+     "value": 0.08,
+     "unit": "cm⁻¹",
+     "range": [
+      0.005,
+      0.5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "van Genuchten α."
+    },
+    "n": {
+     "value": 1.8,
+     "unit": "-",
+     "range": [
+      1.1,
+      5
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "van Genuchten n."
+    },
+    "bypass": {
+     "value": 0.1,
+     "unit": "-",
+     "range": [
+      0,
+      0.6
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "관수한 양액 가운데 배지 용액과 섞이지 않고 바로 배액으로 빠지는 비율(선택류). 배액 EC가 급액과 배지 사이에 오는 이유."
+    },
+    "drainTau": {
+     "value": 0.3,
+     "unit": "h",
+     "range": [
+      0.05,
+      2
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "용기용수량을 넘는 물이 빠지는 시간 상수."
+    },
+    "nitrify": {
+     "value": 0.002,
+     "unit": "h⁻¹",
+     "range": [
+      0,
+      0.05
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "배지 안 암모늄의 질산화 속도(20°C, Q10 2). 질산화는 암모늄 1 mol당 수소 이온 2 mol을 내어 근권을 산성화한다. 유기 배지라 질산화 미생물이 많다(하루 약 5%, 추정)."
+    },
+    "installCost": {
+     "value": 50000,
+     "unit": "원 m⁻²",
+     "range": [
+      0,
+      200000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "고설 베드·배지·점적 설치비(대략)."
+    },
+    "note": "물을 많이 머금어 과습되기 쉽다."
+   },
+   "nft": {
+    "kind": "hydro",
+    "name": "박막수경(NFT)",
+    "volume": {
+     "value": 8,
+     "unit": "L m⁻²",
+     "range": [
+      2,
+      40
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "거터 속 양액 + 순환 탱크 몫."
+    },
+    "kla": {
+     "value": 4,
+     "unit": "h⁻¹",
+     "range": [
+      0.5,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "재포기 계수: 얇은 막으로 흘러 산소가 잘 녹는다."
+    },
+    "nitrify": {
+     "value": 0.002,
+     "unit": "h⁻¹",
+     "range": [
+      0,
+      0.05
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "거터·탱크 벽 생물막의 질산화(추정)."
+    },
+    "klaAerated": {
+     "value": 4,
+     "unit": "h⁻¹",
+     "range": [
+      0.5,
+      10
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "에어펌프 효과 없음(이미 높음)."
+    },
+    "installCost": {
+     "value": 60000,
+     "unit": "원 m⁻²",
+     "range": [
+      0,
+      200000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비."
+    },
+    "note": "양액량이 적어 온도·농도가 빨리 변하고, 펌프가 멈추면 뿌리가 바로 마른다."
+   },
+   "dft": {
+    "kind": "hydro",
+    "name": "담액수경(DFT)",
+    "volume": {
+     "value": 100,
+     "unit": "L m⁻²",
+     "range": [
+      30,
+      200
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "깊이 10 cm 담액."
+    },
+    "kla": {
+     "value": 0.25,
+     "unit": "h⁻¹",
+     "range": [
+      0.05,
+      2
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "포기하지 않을 때 수면 재포기 계수."
+    },
+    "nitrify": {
+     "value": 0.002,
+     "unit": "h⁻¹",
+     "range": [
+      0,
+      0.05
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "탱크 벽 생물막의 질산화(추정)."
+    },
+    "klaAerated": {
+     "value": 1.8,
+     "unit": "h⁻¹",
+     "range": [
+      0.3,
+      6
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "에어펌프 포기 시 재포기 계수."
+    },
+    "installCost": {
+     "value": 70000,
+     "unit": "원 m⁻²",
+     "range": [
+      0,
+      200000
+     ],
+     "tag": "EST",
+     "source": "",
+     "note": "설치비."
+    },
+    "note": "양액량이 많아 온도·농도가 안정적이지만 용존산소가 부족해지기 쉽다."
+   }
+  },
+  "substrate": {
+   "psiCurve": {
+    "values": [
+     -50,
+     -8,
+     0,
+     1
+    ],
+    "unit": "kPa(배지 매트릭 퍼텐셜)",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 배지 수분 가용도. 고형배지는 −10 kPa 부근부터 물 공급이 줄어든다는 일반론에 근거(−8 kPa 이상 1, −50 kPa에서 0). 포화(0 kPa)의 산소 부족은 기상률로 따로 계산한다."
+   },
+   "afp": {
+    "values": [
+     0.02,
+     0.1,
+     9,
+     10
+    ],
+    "unit": "m³ m⁻³(기상률)",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 배지 기상률(air-filled porosity)에 따른 뿌리 산소 가용도. 10% 이상이면 충분, 2% 이하면 산소 결핍."
+   },
+   "afpTempRef": {
+    "value": 20,
+    "unit": "°C",
+    "range": [
+     10,
+     30
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "산소 요구 기준 온도: 근권 온도가 1°C 오를 때마다 필요한 기상률이 3% 늘어난다(호흡 증가·용존산소 감소)."
+   },
+   "afpTemp": {
+    "value": 0.03,
+    "unit": "°C⁻¹",
+    "range": [
+     0,
+     0.08
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "위 온도 보정 계수."
+   },
+   "tempWeight": {
+    "value": 0.6,
+    "unit": "-",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "배지 온도 = 양액 탱크 온도와 실내 기온의 가중 평균(이 값이 양액 비중). 바닥 1 m²당 열용량은 시설 데이터의 양액·배지 열용량을 공유한다."
+   }
+  },
+  "hydro": {
+   "doTarget": {
+    "values": [
+     0.5,
+     4,
+     99,
+     100
+    ],
+    "unit": "mg L⁻¹",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 용존산소에 따른 뿌리 활력. 4 mg/L 이하에서 줄고 0.5 mg/L에서 0(일반 수경 지침)."
+   },
+   "rootO2": {
+    "value": 1.5,
+    "unit": "mg O₂ g⁻¹ h⁻¹",
+    "range": [
+     0.3,
+     5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "뿌리 건물 1 g의 산소 소비(20°C). 수경 뿌리 호흡 10–20 µmol O₂/g 생체중/h(건물 환산 약 3–6 mg)의 하한 쪽 추정(학습 지식)."
+   },
+   "rootO2Q10": {
+    "value": 2,
+    "unit": "-",
+    "range": [
+     1.5,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "뿌리 호흡 Q10."
+   },
+   "pumpFail": {
+    "value": 2,
+    "unit": "h",
+    "range": [
+     0.5,
+     12
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "NFT 펌프가 멈추면 이 시간 뒤 뿌리가 마르기 시작한다(Phase 6 장비 고장과 연결 예정)."
+   }
+  },
+  "doSat": {
+   "values": [
+    14.62,
+    -0.3898,
+    0.006969,
+    -0.00005897
+   ],
+   "unit": "mg L⁻¹ (계수: a0 + a1·T + a2·T² + a3·T³)",
+   "range": [
+    -100,
+    100
+   ],
+   "tag": "SRC",
+   "source": "APHA Standard Methods / Benson & Krause(1984) 담수 포화 용존산소 근사식(학습 지식)",
+   "note": "담수 포화 용존산소(1기압). 20°C 9.1, 30°C 7.6 mg/L."
+  },
+  "chemistry": {
+   "lambda": {
+    "NO3": 71.4,
+    "NH4": 73.5,
+    "P": 36,
+    "K": 73.5,
+    "Ca": 119,
+    "Mg": 106,
+    "S": 160,
+    "Na": 50.1,
+    "Cl": 76.3,
+    "HCO3": 44.5,
+    "Fe": 0,
+    "Mn": 107,
+    "Zn": 106,
+    "B": 0,
+    "Cu": 107,
+    "Mo": 149,
+    "H": 349.8,
+    "OH": 198.6,
+    "CO3": 138.6,
+    "HPO4": 114
+   },
+   "lambdaInfo": {
+    "value": 0,
+    "unit": "S cm² mol⁻¹",
+    "range": [
+     0,
+     400
+    ],
+    "tag": "SRC",
+    "source": "CRC Handbook — 무한 희석 몰전도도(25°C)(학습 지식, 원문 미확인)",
+    "note": "위 lambda 표: 이온 1 mol당 무한 희석 몰전도도. 킬레이트철·붕산은 전하가 없는 것으로 본다."
+   },
+   "ecShrink": {
+    "value": 1.1,
+    "unit": "(mol L⁻¹)^-0.5",
+    "range": [
+     0,
+     3
+    ],
+    "tag": "CAL",
+    "source": "WUR(edepot.wur.nl/386055) 예시: 양이온 합 13 me/L 배양액의 EC 1.5 mS/cm",
+    "note": "EC = Σcλ × (1 − 계수 × √이온세기). 무한 희석 합 1.75 mS/cm인 예시 배양액이 1.5가 되도록 맞춘 값(원래 Kohlrausch 계수는 이온마다 다름)."
+   },
+   "pKa": {
+    "carb1": 6.35,
+    "carb2": 10.33,
+    "phos1": 2.15,
+    "phos2": 7.2,
+    "phos3": 12.35,
+    "nh4": 9.25,
+    "water": 14,
+    "kH": 0.034
+   },
+   "pKaInfo": {
+    "value": 0,
+    "unit": "-",
+    "range": [
+     0,
+     0
+    ],
+    "tag": "SRC",
+    "source": "표준 해리상수(25°C): 탄산 6.35·10.33, 인산 2.15·7.20·12.35, 암모늄 9.25, 물 14.0, CO2 헨리상수 0.034 mol L⁻¹ atm⁻¹",
+    "note": "위 pKa 표(온도 보정 없음)."
+   },
+   "pco2Rootzone": {
+    "value": 10000,
+    "unit": "ppm",
+    "range": [
+     400,
+     30000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "배지 공극의 CO2 분압(뿌리 호흡으로 대기보다 훨씬 높다, 0.5–2% 범위의 중간 추정). 배지 용액은 이 분압과 평형이라고 본다."
+   },
+   "pco2Tank": {
+    "value": 600,
+    "unit": "ppm",
+    "range": [
+     400,
+     5000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "수경 양액·순환 탱크의 CO2 분압(수면에서 대기와 교환)."
+   },
+   "kspGypsum": {
+    "value": 0.0012,
+    "unit": "mol² L⁻²",
+    "range": [
+     0.0001,
+     0.01
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "원액 탱크의 석고(CaSO4) 유효 용해도곱. 순수 물의 2.4 g/L(14 mM)보다 진한 질산염 용액에서 더 녹는 것을 감안한 추정."
+   },
+   "kspCaP": {
+    "value": 0.0001,
+    "unit": "mol² L⁻²",
+    "range": [
+     0.000001,
+     0.01
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "원액 탱크의 인산칼슘(CaHPO4) 유효 용해도곱(추정)."
+   },
+   "caPRate": {
+    "value": 0.02,
+    "unit": "h⁻¹ pH⁻¹",
+    "range": [
+     0,
+     0.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "근권 pH가 한계를 1 넘을 때 시간당 침전하는 인산칼슘 비율(Ca·P 가운데 적은 쪽 기준)."
+   },
+   "caPFeed": {
+    "value": 6.6,
+    "unit": "-",
+    "range": [
+     6,
+     7.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "희석 양액·배지 용액의 pH가 이보다 높으면 인산칼슘이 서서히 침전한다(점적 막힘·인 가급도 저하)."
+   }
+  },
+  "chelate": {
+   "EDTA": {
+    "values": [
+     -100000,
+     -99999,
+     6.3,
+     7.3
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "SRC",
+    "source": "Eurofins Agro (2016) Manual nutrient solutions: Fe-DTPA 안정 pH 3.5–7.5; Fe-EDTA·Fe-EDDHA 범위는 학습 지식(EDTA 약 6.5까지, EDDHA 9 이상)",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. Fe-EDTA 안정도."
+   },
+   "DTPA": {
+    "values": [
+     -100000,
+     -99999,
+     7.3,
+     8
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "SRC",
+    "source": "Eurofins Agro (2016) Manual nutrient solutions: Fe-DTPA 안정 pH 3.5–7.5; Fe-EDTA·Fe-EDDHA 범위는 학습 지식(EDTA 약 6.5까지, EDDHA 9 이상)",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. Fe-DTPA 안정도(제조사 표: 3.5–7.5)."
+   },
+   "EDDHA": {
+    "values": [
+     -100000,
+     -99999,
+     9.5,
+     11
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "SRC",
+    "source": "Eurofins Agro (2016) Manual nutrient solutions: Fe-DTPA 안정 pH 3.5–7.5; Fe-EDTA·Fe-EDDHA 범위는 학습 지식(EDTA 약 6.5까지, EDDHA 9 이상)",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. Fe-EDDHA 안정도."
+   },
+   "free": {
+    "values": [
+     -100000,
+     -99999,
+     5,
+     6
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 킬레이트 없는 철(원수의 철)은 pH 5 위에서 산화·침전한다."
+   },
+   "decay": {
+    "value": 0.03,
+    "unit": "h⁻¹",
+    "range": [
+     0.001,
+     0.2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "안정 범위를 벗어난 킬레이트철이 침전하는 속도(1 − 안정도에 곱한다)."
+   },
+   "freeRate": {
+    "value": 0.15,
+    "unit": "h⁻¹",
+    "range": [
+     0.01,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "킬레이트되지 않은 철이 수산화철로 가라앉는 속도(1 − 가용도에 곱한다). 원수 철이 pH 6 이상에서 수 시간 안에 산화·침전한다는 일반론에서 추정."
+   }
+  },
+  "uptake": {
+   "_note": "imax: mmol (g 뿌리 건물)⁻¹ h⁻¹, km: mmol L⁻¹, sigma: 질량류 결합계수(0–1), mobility: 하위엽에서 신생 조직으로의 재전류 이동성(0–1), xylem: 증산류(물관)를 따라 분배되는 몫(나머지는 생장 요구량대로 체관·능동 분배), stem: 줄기·잎자루·뿌리의 정상 농도 ÷ 성엽 정상 농도(칼륨·염소는 줄기·잎자루에 많이 쌓인다), young: 어린 잎의 정상 농도 ÷ 표준 엽분석 시료(성엽) 정상 농도(칼슘·붕소·망간은 어린 잎에서 낮다). 값은 작물 요구량과 전형적 흡수 농도(흡수량/흡수 수분)에 맞춘 추정(EST)이다. Ca·Mg·Na·B는 질량류 의존이 크고, N·P·K는 능동 흡수가 주라는 일반론에 근거.",
+   "NO3": {
+    "imax": 0.12,
+    "km": 0.15,
+    "sigma": 0.3,
+    "mobility": 1,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.6
+   },
+   "NH4": {
+    "imax": 0.02,
+    "km": 0.03,
+    "sigma": 0.02,
+    "mobility": 1,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.6
+   },
+   "P": {
+    "imax": 0.012,
+    "km": 0.02,
+    "sigma": 0.02,
+    "mobility": 0.9,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.6
+   },
+   "K": {
+    "imax": 0.08,
+    "km": 0.1,
+    "sigma": 0.2,
+    "mobility": 1,
+    "xylem": 0,
+    "young": 1,
+    "stem": 1.6
+   },
+   "Ca": {
+    "imax": 0.004,
+    "km": 0.5,
+    "sigma": 0.4,
+    "mobility": 0,
+    "xylem": 1,
+    "young": 0.3,
+    "stem": 0.4
+   },
+   "Mg": {
+    "imax": 0.006,
+    "km": 0.3,
+    "sigma": 0.35,
+    "mobility": 0.7,
+    "xylem": 0.3,
+    "young": 1,
+    "stem": 0.6
+   },
+   "S": {
+    "imax": 0.008,
+    "km": 0.1,
+    "sigma": 0.15,
+    "mobility": 0.3,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.5
+   },
+   "Na": {
+    "imax": 0.0005,
+    "km": 2,
+    "sigma": 0.06,
+    "mobility": 0.2,
+    "xylem": 0.8,
+    "young": 1,
+    "stem": 1
+   },
+   "Cl": {
+    "imax": 0.0003,
+    "km": 1,
+    "sigma": 0.08,
+    "mobility": 0.6,
+    "xylem": 0.5,
+    "young": 1,
+    "stem": 1.5
+   },
+   "Fe": {
+    "imax": 0.00012,
+    "km": 0.005,
+    "sigma": 0.02,
+    "mobility": 0,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.5
+   },
+   "Mn": {
+    "imax": 0.00006,
+    "km": 0.004,
+    "sigma": 0.1,
+    "mobility": 0.05,
+    "xylem": 0.6,
+    "young": 0.6,
+    "stem": 0.3
+   },
+   "Zn": {
+    "imax": 0.00003,
+    "km": 0.002,
+    "sigma": 0.1,
+    "mobility": 0.3,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.6
+   },
+   "B": {
+    "imax": 0.00002,
+    "km": 0.02,
+    "sigma": 0.4,
+    "mobility": 0,
+    "xylem": 0.9,
+    "young": 0.35,
+    "stem": 0.5
+   },
+   "Cu": {
+    "imax": 0.000006,
+    "km": 0.0005,
+    "sigma": 0.05,
+    "mobility": 0.2,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.6
+   },
+   "Mo": {
+    "imax": 0.000002,
+    "km": 0.0002,
+    "sigma": 0.2,
+    "mobility": 0.5,
+    "xylem": 0,
+    "young": 1,
+    "stem": 0.5
+   }
+  },
+  "uptakeInfo": {
+   "value": 0,
+   "unit": "-",
+   "range": [
+    0,
+    0
+   ],
+   "tag": "EST",
+   "source": "",
+   "note": "위 uptake 표의 출처·근거 표시용(모든 값 EST)."
+  },
+  "antagonism": {
+   "_note": "대상 이온: {길항 이온: Ki(mmol/L)}. 칼륨↑ → Ca·Mg 흡수↓, 암모늄↑ → Ca·K·Mg 흡수↓, 나트륨 → K·Ca, 염소 → NO3. Ki는 추정(EST).",
+   "Ca": {
+    "K": 4,
+    "NH4": 1.5,
+    "Na": 10,
+    "Mg": 6
+   },
+   "Mg": {
+    "K": 3,
+    "NH4": 1.5,
+    "Ca": 6
+   },
+   "K": {
+    "NH4": 2,
+    "Na": 8
+   },
+   "NO3": {
+    "Cl": 5
+   }
+  },
+  "pHAvail": {
+   "Fe": {
+    "values": [
+     3,
+     4.5,
+     6.2,
+     7.6
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 철: 고pH에서 3가 철 환원 능력(Strategy I 작물)과 용해도가 떨어진다."
+   },
+   "Mn": {
+    "values": [
+     2,
+     3,
+     6.3,
+     7.8
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 망간: 고pH에서 산화되어 가급도↓."
+   },
+   "Zn": {
+    "values": [
+     3,
+     4,
+     6.5,
+     8
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 아연."
+   },
+   "Cu": {
+    "values": [
+     3,
+     4,
+     6.5,
+     8
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 구리."
+   },
+   "P": {
+    "values": [
+     3,
+     4.5,
+     6.8,
+     8.5
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 인: 고pH에서 인산칼슘으로 묶인다."
+   },
+   "B": {
+    "values": [
+     3,
+     4.5,
+     7,
+     9
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 붕소."
+   },
+   "Ca": {
+    "values": [
+     3,
+     5,
+     99,
+     100
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 칼슘: 저pH에서 H⁺ 경쟁으로 흡수↓."
+   },
+   "Mg": {
+    "values": [
+     3,
+     5,
+     99,
+     100
+    ],
+    "unit": "pH",
+    "range": [
+     -100000,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "사다리꼴 반응곡선 [0이 되는 하한, 1이 되는 시작, 1이 끝나는 점, 0이 되는 상한]. 마그네슘: 저pH에서 흡수↓."
+   }
+  },
+  "mnLowPH": {
+   "value": 3,
+   "unit": "-",
+   "range": [
+    1,
+    10
+   ],
+   "tag": "EST",
+   "source": "",
+   "note": "pH 5.5에서 pH 4.5로 내려갈 때 망간 가급도가 이 배수까지 커진다(망간 과잉·독성)."
+  },
+  "root": {
+   "chargeImbalance": {
+    "value": 0.15,
+    "unit": "-",
+    "range": [
+     0,
+     0.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "음이온 흡수가 양이온보다 많을 수 있는 상한(양이온 당량 대비). 질산 영양에서 뿌리가 OH⁻·HCO₃⁻를 내어 근권이 알칼리화하는 폭을 정한다. 추정."
+   },
+   "cationSlack": {
+    "value": 0.03,
+    "unit": "-",
+    "range": [
+     0,
+     0.3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "양이온 흡수가 음이온보다 많을 수 있는 여유(음이온 당량 대비). 여기에 흡수한 암모늄만큼(암모늄 동화가 내는 H⁺)을 더한 것이 상한. 추정."
+   },
+   "activeRootShoot": {
+    "value": 0.5,
+    "unit": "g g⁻¹",
+    "range": [
+     0.1,
+     2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "능동 흡수에 참여하는 뿌리 건물의 상한 = 잎 건물 × 이 값. 묵은 뿌리·저장 뿌리가 많아도 흡수 능력은 지상부가 공급하는 동화산물만큼만 유지된다는 가정(추정)."
+   },
+   "regulation": {
+    "value": 1.5,
+    "unit": "-",
+    "range": [
+     1.05,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "잎 평균 농도가 적정의 이 배수에 이르면 능동 흡수가 0까지 줄어든다(하향 조절, 사치 흡수 상한)."
+   },
+   "upRegulation": {
+    "value": 1,
+    "unit": "-",
+    "range": [
+     0,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "결핍일 때 능동 흡수 증가(1 = 결핍이 심하면 최대 2배)."
+   },
+   "waterWeight": {
+    "value": 0.3,
+    "unit": "-",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "뿌리 활력 저하가 물 흡수(수분 가용도)에 미치는 비중."
+   },
+   "healthLoss": {
+    "value": 0.02,
+    "unit": "h⁻¹",
+    "range": [
+     0,
+     0.2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "산소 가용도가 0일 때 시간당 뿌리 손상(뿌리 건강도 감소)."
+   },
+   "healthGain": {
+    "value": 0.004,
+    "unit": "h⁻¹",
+    "range": [
+     0,
+     0.05
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "산소·온도가 좋을 때 뿌리 건강도 회복 속도."
+   }
+  },
+  "plant": {
+   "youngAge": {
+    "value": 0.6,
+    "unit": "-",
+    "range": [
+     0.2,
+     1.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "잎이 \"신엽(상위엽)\" 구획에 속하는 엽령(잎 확장 생리일수의 배수). 이후 성엽(하위엽)으로 넘어간다."
+   },
+   "remob": {
+    "value": 0.01,
+    "unit": "h⁻¹",
+    "range": [
+     0.001,
+     0.05
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "이동성 원소가 하위엽에서 신생 조직으로 재전류되는 최대 속도(하위엽 최저 농도 초과분에 대한 비율)."
+   },
+   "senescRemob": {
+    "value": 0.4,
+    "unit": "-",
+    "range": [
+     0,
+     0.8
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "낙엽·적엽으로 잃는 잎에서 미리 회수되는 이동성 원소 비율."
+   },
+   "strFactor": {
+    "value": 0.5,
+    "unit": "-",
+    "range": [
+     0.2,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "줄기·뿌리의 적정 농도 = 신엽 적정 농도 × 이 값."
+   },
+   "youngTransp": {
+    "value": 0.6,
+    "unit": "kPa",
+    "range": [
+     0.1,
+     2
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "신엽·과실의 상대 증산 = VPD ÷ (VPD + 이 값). 습하면 어린 조직으로 가는 칼슘이 줄어든다(팁번)."
+   },
+   "fruitTransp": {
+    "value": 0.04,
+    "unit": "-",
+    "range": [
+     0,
+     0.3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "과실의 상대 증산(잎 대비)."
+   },
+   "defFloor": {
+    "value": 0.2,
+    "unit": "-",
+    "range": [
+     0,
+     0.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "엽분석의 \"심한 결핍\" 농도에서 광합성·엽 확장 등 과정이 유지되는 비율(완전히 멈추지 않는다). 질소 결핍 잎도 광합성을 일부 한다는 일반론에서 추정."
+   },
+   "rootPressure": {
+    "value": 0.3,
+    "unit": "-",
+    "range": [
+     0,
+     0.8
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "물관으로 운반되는 원소(칼슘·붕소 등) 가운데 밤의 근압 흐름으로 자라는 조직에 바로 가는 몫. 나머지는 증산 비율을 따른다."
+   },
+   "rootPressureEC": {
+    "value": 8,
+    "unit": "dS m⁻¹",
+    "range": [
+     3,
+     20
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "근권 EC가 이 값이면 근압이 0. 염류가 높으면 근압이 약해져 어린 잎·과실의 칼슘이 줄어든다(팁번·배꼽썩음과 고EC의 관계, 일반론에서 추정)."
+   },
+   "tipburnDays": {
+    "value": 2,
+    "unit": "d",
+    "range": [
+     0.5,
+     7
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "팁번 위험 지수의 이동평균 기간."
+   }
+  },
+  "irrigation": {
+   "maxEventsPerHour": {
+    "value": 6,
+    "unit": "회 h⁻¹",
+    "range": [
+     1,
+     20
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "한 시간에 허용하는 최대 관수 횟수(밸브·펌프 한계)."
+   },
+   "autoDrainStep": {
+    "value": 0.15,
+    "unit": "-",
+    "range": [
+     0,
+     0.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "배액률 자동 보정 이득: 어제 배액률이 목표에서 10%p 벗어날 때마다 1회 관수량을 이 비율만큼 바꾼다(최대 1.5배 폭)."
+   }
+  },
+  "tanks": {
+   "stockVolume": {
+    "value": 500,
+    "unit": "L",
+    "range": [
+     50,
+     5000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "원액 탱크(A·B) 기본 용량."
+   },
+   "acidVolume": {
+    "value": 200,
+    "unit": "L",
+    "range": [
+     20,
+     2000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "산 탱크 기본 용량."
+   },
+   "drainVolume": {
+    "value": 20,
+    "unit": "L m⁻²",
+    "range": [
+     2,
+     100
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "순환식 배액 회수 탱크 용량(바닥 면적당)."
+   },
+   "rainVolume": {
+    "value": 30,
+    "unit": "L m⁻²",
+    "range": [
+     0,
+     300
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "빗물 저장 탱크 기본 용량(바닥 면적당)."
+   },
+   "mixLabor": {
+    "value": 0.5,
+    "unit": "h 회⁻¹",
+    "range": [
+     0.1,
+     3
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "원액 탱크 한 개를 새로 타는 작업 시간."
+   },
+   "renewLabor": {
+    "value": 2,
+    "unit": "h (1000 m²)⁻¹",
+    "range": [
+     0.5,
+     10
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "수경 양액 전량 교체 작업 시간."
+   }
+  },
+  "clog": {
+   "stockSuspended": {
+    "value": 0.3,
+    "unit": "-",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "원액 탱크 침전물 가운데 주입 때 함께 빨려 들어가는 비율."
+   },
+   "perMol": {
+    "value": 2,
+    "unit": "mol⁻¹ m²",
+    "range": [
+     0,
+     10
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "바닥 1 m²당 점적 라인으로 들어간 침전물 1 mol이 막힘 지수를 올리는 양."
+   },
+   "rawFe": {
+    "value": 0.004,
+    "unit": "(mg L⁻¹)⁻¹ m³⁻¹ m²",
+    "range": [
+     0,
+     0.05
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "원수의 비킬레이트 철 1 mg/L로 1 m³(바닥 1 m²당)를 흘렸을 때 막힘 지수 증가."
+   },
+   "caP": {
+    "value": 0.03,
+    "unit": "(mmol L⁻¹)⁻² m³⁻¹ m²",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "급액 pH가 인산칼슘 침전 한계를 넘었을 때 Ca × P 1 (mmol/L)²당 막힘 지수 증가."
+   },
+   "flowLoss": {
+    "value": 0.6,
+    "unit": "-",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "막힘 지수 1일 때 점적 유량 감소 비율."
+   },
+   "flushKeep": {
+    "value": 0.15,
+    "unit": "-",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "산 세척 뒤 남는 막힘 지수 비율."
+   },
+   "flushLabor": {
+    "value": 4,
+    "unit": "h (10a)⁻¹",
+    "range": [
+     1,
+     20
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "점적 라인 산 세척 노동."
+   }
+  },
+  "equipment": {
+   "injectorProp": {
+    "value": 3000,
+    "unit": "원 m⁻²",
+    "range": [
+     0,
+     50000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "비례 주입기(도사트론류) 설치비."
+   },
+   "injectorMix": {
+    "value": 12000,
+    "unit": "원 m⁻²",
+    "range": [
+     0,
+     100000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "양액 혼합기(EC·pH 자동) 설치비."
+   },
+   "uv": {
+    "value": 8000,
+    "unit": "원 m⁻²",
+    "range": [
+     0,
+     50000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "자외선 살균기 설치비(순환식)."
+   },
+   "uvPower": {
+    "value": 0.05,
+    "unit": "kWh m⁻³",
+    "range": [
+     0,
+     1
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "자외선 살균 전력."
+   },
+   "heatDisinfect": {
+    "value": 10000,
+    "unit": "원 m⁻²",
+    "range": [
+     0,
+     50000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "열 살균기 설치비."
+   },
+   "heatPower": {
+    "value": 6,
+    "unit": "kWh m⁻³",
+    "range": [
+     1,
+     20
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "열 살균(95°C 30초, 열 회수 포함) 에너지."
+   },
+   "aeration": {
+    "value": 0.4,
+    "unit": "W m⁻²",
+    "range": [
+     0,
+     5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "DFT 에어펌프 전력."
+   },
+   "meter": {
+    "value": 350000,
+    "unit": "원",
+    "range": [
+     50000,
+     2000000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "휴대용 EC·pH 미터 구입비."
+   }
+  },
+  "lab": {
+   "delay": {
+    "value": 72,
+    "unit": "h",
+    "range": [
+     24,
+     240
+    ],
+    "tag": "SRC",
+    "source": "헌법 9항: 실험실 분석 결과 3일 지연",
+    "note": "분석 의뢰부터 결과까지."
+   },
+   "solution": {
+    "value": 20000,
+    "unit": "원 건⁻¹",
+    "range": [
+     0,
+     200000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "양액·배액 분석(농업기술센터·민간 분석기관의 통상 수수료 수준)."
+   },
+   "tissue": {
+    "value": 30000,
+    "unit": "원 건⁻¹",
+    "range": [
+     0,
+     200000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "식물체(잎) 분석."
+   },
+   "water": {
+    "value": 20000,
+    "unit": "원 건⁻¹",
+    "range": [
+     0,
+     200000
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "원수 분석."
+   }
+  }
+ }
+}

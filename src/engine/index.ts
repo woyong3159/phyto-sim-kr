@@ -7,6 +7,7 @@ import { STEP_ORDER } from './modules';
 import { ENGINE_STATE_VERSION, type SimState, type UserAction } from './types';
 import { initWeather } from './weather';
 import { initGreenhouse } from './greenhouse';
+import { initRootzone } from './rootzone/model';
 import type { World } from './world';
 
 export * from './types';
@@ -17,6 +18,11 @@ export { createStream, hashSeed, nextFloat, nextUint32 } from './rng';
 export { createWorld, listRegions, type EngineData, type World } from './world';
 export * from './greenhouse/types';
 export * from './crop/types';
+export * from './rootzone/types';
+export * from './rootzone/chem';
+export { buildRzParams, defaultRzConfig, designRecipe, rawWaters, rawAlkalinity, groundwaterProfile, recipeVec, fillTank, feedOf, solveMix, thetaCC, thetaAt, psiOf, ecTargetAt, isHydro, recipeKey, DEFAULT_FERTS, type RzConfig, type Feed } from './rootzone/setup';
+export { capacityOf, storage, emptyRzDay } from './rootzone/model';
+export { toDisplay, fromDisplay, optUp, PLANT_IONS, ELEM } from './rootzone/plant';
 export { defaultOrder, defaultPlan, defaultPlanSb, defaultPlanWs, inductionRate, cropCanopy, beta, canopyPhoto, leafEnv, diffuseFraction, trap, type CanopyView } from './crop';
 export { curtainSaving, contractKw, buildGhParams, type GhParams, type FacilityParams } from './greenhouse';
 export { installCost, type CostLine } from './greenhouse/cost';
@@ -25,15 +31,18 @@ export { sunDay, MONTH_DAYS, type RegionInfo, type MonthlyNormals, type Climate 
 export function createInitialState(world: World): SimState {
   const rng = createAllStreams(world.config.seed);
   const init = initWeather(world, rng.weather, rng.events);
-  return {
+  const s: SimState = {
     stateVersion: ENGINE_STATE_VERSION,
     hour: 0,
     rng: { ...rng, weather: init.weatherRng, events: init.eventsRng },
     weather: init.weather,
     gh: initGreenhouse(world, init.weather.now.temp, init.weather.now.rh),
     crop: null,
+    rz: null as unknown as SimState['rz'],
     events: init.events,
   };
+  s.rz = initRootzone(world, s.gh.out.tSolution);
+  return s;
 }
 
 /** 조치 목록을 (hour, seq) 순으로 정렬한 사본을 만든다. */

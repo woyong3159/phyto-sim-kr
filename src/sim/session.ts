@@ -5,9 +5,10 @@
  *   저장에는 워커 왕복이 필요 없다: 메인 스레드가 아는 "마지막 게임 시각 + 조치 로그"만 쓰면 된다.
  */
 import EngineWorker from './engine.worker?worker&inline';
-import { ENGINE_STATE_VERSION, EVENT_TYPES, defaultSettings, defaultSetup, type ControlSettings, type DayWx, type DeviceId, type EventType, type GhSetup, type PlantOrder, type SimConfig, type SimEvent, type WorkPlan, type WorkTask } from '../engine';
+import { RZ_PARAMS } from '../data';
+import { ENGINE_STATE_VERSION, EVENT_TYPES, defaultRzConfig, defaultSettings, defaultSetup, type ControlSettings, type DayWx, type DeviceId, type EventType, type GhSetup, type IrrSettings, type Lab, type NutSettings, type PlantOrder, type RzConfig, type RzSetup, type SimConfig, type SimEvent, type WorkPlan, type WorkTask } from '../engine';
 import { getDailyRows, getHourlyRows, pruneHourly, putHourlyRows, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putDailyRows, putSave, putSnapshot, type Db } from '../storage/db';
-import { SAVE_SCHEMA_VERSION, type SaveRecord } from '../storage/schema';
+import { SAVE_SCHEMA_VERSION, type ObservationMode, type SaveRecord } from '../storage/schema';
 import { decodeBundle, encodeBundle, exportFileName, shareOrDownload } from '../storage/exportImport';
 import type { DayRow, FromWorker, HourRow, ToWorker, WxView } from './protocol';
 
@@ -263,6 +264,11 @@ export class Session {
   }
   plantCrop(order: PlantOrder) {
     this.addAction('crop/plant', order);
+    // 근권을 한 번도 손대지 않았고 처음 계획과 다른 작물을 심으면, 그 작물의 기본 근권(배지·처방·관수)으로 맞춘다.
+    const save = this.view.save;
+    if (save && !save.actions.some((a) => a.type.startsWith('rz/')) && !save.config.rz && (save.config.crop?.order.cropId ?? 'cucumber') !== order.cropId) {
+      this.addAction('rz/config', defaultRzConfig(RZ_PARAMS, order.cropId, save.config.regionId));
+    }
   }
   setPlan(plan: WorkPlan) {
     this.addAction('crop/plan', plan);
@@ -273,11 +279,42 @@ export class Session {
   removeCrop() {
     this.addAction('crop/remove', null);
   }
+  // ── 근권(Phase 4) ──
+  setRzSetup(setup: RzSetup) {
+    this.addAction('rz/setup', setup);
+  }
+  setIrrigation(irr: IrrSettings) {
+    this.addAction('rz/irrigation', irr);
+  }
+  setNutrition(nut: NutSettings) {
+    this.addAction('rz/nutrition', nut);
+  }
+  applyRzConfig(cfg: RzConfig) {
+    this.addAction('rz/config', cfg);
+  }
+  refillTank(tank: 'A' | 'B' | 'acid' | 'all') {
+    this.addAction('rz/refill', { tank });
+  }
+  rzWork(type: 'rz/flush' | 'rz/renew' | 'rz/dumpDrain') {
+    this.addAction(type, null);
+  }
+  orderLab(kind: Lab['kind']) {
+    this.addAction('rz/lab', { kind });
+  }
+  /** 관측 모드: 학습(모두 보임) / 현실(측정해야 보임). 화면 표시만 바꾸고 결과에는 영향이 없다(리포트에 기록). */
+  setObservationMode(mode: ObservationMode) {
+    const save = this.view.save;
+    if (!save) return;
+    this.set({ save: { ...save, observationMode: mode } });
+    this.dirty = true;
+    void this.saveNow();
+  }
 
   async saveNow(): Promise<void> {
     const save = this.view.save;
     if (!this.db || !save || this.view.status !== 'ready') return;
     const updated: SaveRecord = { ...save, hour: this.view.hour, updatedAt: Date.now() };
+    // 관측 모드는 화면 쪽 상태라 저장 직전의 값을 그대로 쓴다
     this.dirty = false;
     await putSave(this.db, updated);
     if (this.view.save?.id === updated.id) this.set({ save: { ...this.view.save, hour: updated.hour, updatedAt: updated.updatedAt }, lastSavedAt: updated.updatedAt });
