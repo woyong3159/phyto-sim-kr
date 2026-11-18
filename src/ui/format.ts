@@ -1,3 +1,4 @@
+import { PHYS_PARAMS } from '../data';
 import { calendarAt, type DeviceId, type EventType, type SimConfig, type SimEvent } from '../engine';
 
 export const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -36,6 +37,8 @@ export const EVENT_LABEL: Record<EventType, { name: string; fromPhase: number }>
   stock: { name: '원액 탱크 소진', fromPhase: 4 },
   rootzone: { name: '근권(막힘·뿌리 장해·건조·분석 결과)', fromPhase: 4 },
   crop: { name: '작물 고사·첫 수확', fromPhase: 3 },
+  physiology: { name: '생리장해·생장조절제(PLS 위험 포함)', fromPhase: 5 },
+  labor: { name: '노동(작업 밀림)', fromPhase: 5 },
 };
 
 export const DEVICE_LABEL: Record<DeviceId, string> = {
@@ -81,6 +84,20 @@ export function eventText(e: SimEvent): string {
       if (e.code === 'removed') return `작물 철거 — 누적 수확 ${(v * 1000).toFixed(0)} kg/10a`;
       const cause: Record<string, string> = { 'dead:frost': '동해', 'dead:chill': '저온 장해', 'dead:heat': '고온 장해', 'dead:collapse': '잎 소실', 'dead:rot': '고온 근권(뿌리 상함)' };
       return `작물 고사 — ${cause[e.code] ?? e.code} (실내 ${v.toFixed(1)}°C)`;
+    }
+    case 'physiology': {
+      const [kind, key] = e.code.split(':') as [string, string];
+      const P = PHYS_PARAMS;
+      if (kind === 'dis') {
+        const d = P.dis.strawberry[key] ?? P.dis.cucumber[key] ?? P.dis.wasabi[key];
+        return `생리장해 발생 — ${d?.name ?? key} (발생률 ${(v * 100).toFixed(0)}%)`;
+      }
+      const name = P.pgr.products[key]?.name ?? key;
+      if (kind === 'pls' && key === 'residue') return `PLS 위험 — 미등록 약제 잔류 ${v.toFixed(3)} mg/kg인 채로 수확`;
+      if (kind === 'pls') return `미등록 생장조절제 사용 — ${name} ${v} ppm (PLS 위반 위험)`;
+      if (kind === 'label') return `라벨 농도 초과 — ${name} ${v} ppm`;
+      if (kind === 'tox') return `약해 발생 — ${name} (강도 ${(v * 100).toFixed(0)}%)`;
+      return EVENT_LABEL[e.type].name;
     }
     default:
       return EVENT_LABEL[e.type].name;

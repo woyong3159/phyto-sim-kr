@@ -8,9 +8,11 @@
  *  - 근권 수분·양분은 Phase 4 인터페이스: 지금은 가용도 1(충분), S_nut = 1.
  */
 import type { RzSupply } from '../rootzone/types';
+import type { PhysFx } from '../physiology/types';
 import { dexp, dpow } from '../dmath';
 import type { SimEvent } from '../types';
 import { interp, trap, XG, type CanopyView } from './canopy';
+import { addLoss, applyDefects, applyLeafLoss, exposeFruits, hoursOf, runScheduled, type Sched } from './phys';
 import type { CoreParams, CropDay, CropState, CucumberParams, CucumberVariety, Curve, Fruit, LeafNode, PlantOrder, Stress, WorkPlan, WorkTask, Yield } from './types';
 
 export const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
@@ -52,6 +54,12 @@ export interface CropEnv {
   water: number;
   /** 근권 공급 계수(Phase 4: 양분·염해·근권 온도) */
   rz: RzSupply;
+  /** 생장조절제·생리장해 효과(Phase 5) */
+  fx: PhysFx;
+  /** 오늘 남은 노동 시간(h, 온실 전체). Infinity = 제한 없음 */
+  laborLeft: number;
+  /** 자동 일용 고용 가능 시간(h)과 1인 시간 */
+  laborAuto?: { hours: number; per: number };
 }
 
 /** 근권이 없을 때(정식 직전 등) 쓰는 중립 공급 */
@@ -88,12 +96,13 @@ function dmcOf(p: CucumberParams, dli: number): number {
   return d < 0.025 ? 0.025 : d;
 }
 
-function femaleRate(c: CropState, p: CucumberParams, v: CucumberVariety): number {
+function femaleRate(c: CropState, p: CucumberParams, v: CucumberVariety, fxFemale = 0): number {
   const f = v.female - p.fruit.femaleNight * (c.nightAvg - p.fruit.femaleNightRef) - p.fruit.femaleDay * (c.dayLenAvg - p.fruit.femaleDayRef);
-  return clamp(f, p.fruit.femaleMin, 1);
+  // 생장조절제(에테폰 +, 지베렐린 −)는 환경으로 정해진 암꽃 비율에 더해진다
+  return clamp(clamp(f, p.fruit.femaleMin, 1) + fxFemale, 0, 1);
 }
 
-function summarize(c: CropState, p: CucumberParams, v: CucumberVariety, ssr: number, sla: number, stress: Stress): CropState['out'] {
+function summarize(c: CropState, p: CucumberParams, v: CucumberVariety, ssr: number, sla: number, stress: Stress, fxFemale = 0): CropState['out'] {
   const m = c.density * c.alive;
   let area = 0;
   let wl = 0;
@@ -116,7 +125,7 @@ function summarize(c: CropState, p: CucumberParams, v: CucumberVariety, ssr: num
   }
   return {
     lai: area * m, leaves, nodes: c.mainNodes, fruits, flowers, wLeaf: wl * m, wStem: c.wStem * m, wRoot: c.wRoot * m, wFruit: wf * m, pool: c.pool, ssr,
-    etiolation: c.lastInternode / p.stem.internode, stemLength: c.stemLength, sla, femaleRate: femaleRate(c, p, v), biggestFruit: big / dmcOf(p, c.dliAvg), stress,
+    etiolation: c.lastInternode / p.stem.internode, stemLength: c.stemLength, sla, femaleRate: femaleRate(c, p, v, fxFemale), biggestFruit: big / dmcOf(p, c.dliAvg), stress,
   };
 }
 
@@ -193,7 +202,20 @@ export function addLabor(c: CropState, key: string, hoursPer10a: number, area: n
   c.today.labor += h;
 }
 
-function doWork(c: CropState, w: Work, p: CucumberParams, v: CucumberVariety, env: CropEnv, events: SimEvent[]) {
+/** 지금 수확 기준에 든 과실 무게(kg m⁻²) — 노동 시간 예상용 */
+export function readyKgCu(c: CropState, p: CucumberParams, v: CucumberVariety): number {
+  const target = c.plan.harvestWeight > 0 ? c.plan.harvestWeight : v.harvestWeight;
+  const dmc = dmcOf(p, c.dliAvg);
+  const m = c.density * c.alive;
+  let kg = 0;
+  for (const f of c.fruits) {
+    const fw = f.w / dmc;
+    if (f.age >= 0 && (fw >= target || f.age > p.fruit.staleAge)) kg += (f.n * fw * m) / 1000;
+  }
+  return kg;
+}
+
+function doWork(c: CropState, w: Work, p: CucumberParams, v: CucumberVariety, env: CropEnv, events: SimEvent[], frac = 1) {
   const day = Math.floor(env.hour / 24);
   const m = c.density * c.alive;
   if (w === 'train') {
@@ -258,20 +280,27 @@ function doWork(c: CropState, w: Work, p: CucumberParams, v: CucumberVariety, en
         keep.push(f);
         continue;
       }
-      const kg = (f.n * fw * m) / 1000;
+      // 노동이 모자라면 익은 과실 가운데 frac만큼만 따고 나머지는 달아 둔다(내일 더 커지거나 늙는다)
+      const nh = f.n * frac;
+      if (frac < 1) keep.push({ ...f, n: f.n - nh });
+      const kg = (nh * fw * m) / 1000;
       const def = f.dur > 0 ? f.def / f.dur : 0;
       const curved = clamp((v.curveSens * (def - p.fruit.curveStart)) / (p.fruit.curveFull - p.fruit.curveStart), 0, 1);
-      got.count += f.n * m;
-      if (stale && fw < target) got.cull += kg;
-      else if (fw > target * p.fruit.oversize * p.fruit.oversizeCull) got.cull += kg;
+      got.count += nh * m;
+      let part = { top: 0, mid: 0, cull: 0 };
+      if (stale && fw < target) part.cull = kg;
+      else if (fw > target * p.fruit.oversize * p.fruit.oversizeCull) part.cull = kg;
       else if (fw > target * p.fruit.oversize) {
-        got.mid += kg * (1 - curved);
-        got.cull += kg * curved;
+        part = { top: 0, mid: kg * (1 - curved), cull: kg * curved };
+        addLoss(c, 'cu_curved', kg * curved);
       } else {
-        got.top += kg * (1 - curved);
-        got.mid += kg * curved * (1 - curved);
-        got.cull += kg * curved * curved;
+        part = { top: kg * (1 - curved), mid: kg * curved * (1 - curved), cull: kg * curved * curved };
+        addLoss(c, 'cu_curved', kg * curved);
       }
+      part = applyDefects(part, f, env.fx, c);
+      got.top += part.top;
+      got.mid += part.mid;
+      got.cull += part.cull;
     }
     c.fruits = keep;
     const kgAll = got.top + got.mid + got.cull;
@@ -327,10 +356,14 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
   // ── 작업(계획 + 직접 지시) ──
   for (const w of works) doWork(c, w, p, v, env, events);
   if (env.hod === p.labor.workHour) {
+    // 예정 작업: 수확 → 유인 → 적엽 순서로, 오늘 남은 노동 시간 안에서만 한다(Phase 5)
     const pl = c.plan;
-    if (pl.trainEvery > 0 && day - c.lastTrain >= pl.trainEvery) doWork(c, 'train', p, v, env, events);
-    if (pl.deleafEvery > 0 && day - c.lastDeleaf >= pl.deleafEvery) doWork(c, 'deleaf', p, v, env, events);
-    if (pl.harvestEvery > 0 && day - c.lastHarvest >= pl.harvestEvery) doWork(c, 'harvest', p, v, env, events);
+    const L = p.labor;
+    const list: Sched[] = [];
+    if (pl.harvestEvery > 0 && day - c.lastHarvest >= pl.harvestEvery) list.push({ task: 'harvest', est: hoursOf(L.harvestBase + L.harvestPerTon * readyKgCu(c, p, v), env.area), partialBase: hoursOf(L.harvestBase, env.area), run: (fr) => doWork(c, 'harvest', p, v, env, events, fr) });
+    if (pl.trainEvery > 0 && day - c.lastTrain >= pl.trainEvery) list.push({ task: 'train', est: hoursOf(L.train + (pl.removeBelowNode > 0 || pl.maxFruit > 0 ? L.thin : 0), env.area), run: () => doWork(c, 'train', p, v, env, events) });
+    if (pl.deleafEvery > 0 && day - c.lastDeleaf >= pl.deleafEvery) list.push({ task: 'deleaf', est: hoursOf(L.deleaf, env.area), run: () => doWork(c, 'deleaf', p, v, env, events) });
+    runScheduled(c, env.laborLeft, list, env.laborAuto);
   }
 
   const m = c.density * c.alive;
@@ -385,16 +418,18 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
   // ── 새 마디 ──
   const sla = clamp(p.leaf.sla * dpow(p.leaf.slaDliRef / (c.dliAvg > 1 ? c.dliAvg : 1), p.leaf.slaLightExp) * (1 + p.leaf.slaTemp * (c.tAvg - p.leaf.slaTempRef)), p.leaf.slaMin, p.leaf.slaMax);
   if (!c.pinched) {
-    c.nodeFrac += p.leaf.rate * dpd * (c.pd < p.seedling.shock ? p.seedling.shockFactor : 1);
+    const nodeBase = p.leaf.rate * dpd * (c.pd < p.seedling.shock ? p.seedling.shockFactor : 1);
+    c.nodeFrac += nodeBase * env.fx.node * (1 - env.fx.arrest);
+    addLoss(c, 'cu_arrest', nodeBase * env.fx.node * env.fx.arrest);
     while (c.nodeFrac >= 1) {
       c.nodeFrac -= 1;
       c.mainNodes++;
       c.untrained++;
-      const len = p.stem.internode * clamp((1 + p.stem.internodeNight * (c.nightAvg - p.stem.internodeNightRef)) * dpow(p.leaf.slaDliRef / (c.dliAvg > 1 ? c.dliAvg : 1), p.stem.internodeLightExp), p.stem.internodeMin, p.stem.internodeMax);
+      const len = p.stem.internode * clamp((1 + p.stem.internodeNight * (c.nightAvg - p.stem.internodeNightRef)) * dpow(p.leaf.slaDliRef / (c.dliAvg > 1 ? c.dliAvg : 1), p.stem.internodeLightExp), p.stem.internodeMin, p.stem.internodeMax) * env.fx.internode;
       c.lastInternode += (len - c.lastInternode) / 3;
       c.stemLength += len;
       c.nodes.push({ age: 0, area: 0, w: 0, cap: p.leaf.maxArea * v.leafArea, peak: 0, lat: 0 });
-      c.fruits.push({ node: c.mainNodes, n: femaleRate(c, p, v), age: -p.fruit.anthesisAge, w: 0, def: 0, dur: 0 });
+      c.fruits.push({ node: c.mainNodes, n: femaleRate(c, p, v, env.fx.female), age: -p.fruit.anthesisAge, w: 0, def: 0, dur: 0 });
       c.tips.push({ node: c.mainNodes, age: 0, made: 0 });
     }
   }
@@ -427,15 +462,17 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
     const n = c.nodes[i]!;
     if (n.age < 2 * p.leaf.expandDays && n.area < n.cap) {
       const s = 1 / (1 + dexp(-rExp * (n.age - p.leaf.expandDays / 2)));
-      let dA = n.cap * rExp * s * (1 - s) * dpd * stress.expand;
-      if (n.area + dA > n.cap) dA = n.cap - n.area;
+      const capX = n.cap * (env.fx.expand > 1 ? env.fx.expand : 1);
+      let dA = n.cap * rExp * s * (1 - s) * dpd * stress.expand * env.fx.expand;
+      if (n.area + dA > capX) dA = capX - n.area;
+      if (dA < 0) dA = 0;
       leafDA[i] = dA;
       leafDemand[i] = dA / sla;
       dLeaf += leafDemand[i]!;
     }
   }
   const dStem = dLeaf * p.stem.ratio;
-  const dRoot = (dLeaf + dStem) * p.stem.rootRatio;
+  const dRoot = (dLeaf + dStem) * p.stem.rootRatio * env.fx.root;
   const fruitDemand: number[] = new Array(c.fruits.length).fill(0);
   let dFruit = 0;
   const wMax = p.fruit.wMax * v.fruitWMax;
@@ -444,7 +481,7 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
     if (f.age >= 0 && f.n > 0) {
       const e = dexp(-p.fruit.rate * (f.age - p.fruit.mid));
       const rate = p.fruit.rate * wMax * dexp(-e) * e;
-      fruitDemand[i] = f.n * rate * dpd * stress.fruit;
+      fruitDemand[i] = f.n * rate * dpd * stress.fruit * (f.age < p.fruit.abortWindow * 3 ? env.fx.fruitGrow : 1);
       dFruit += fruitDemand[i]!;
     }
   }
@@ -498,7 +535,9 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
   t.supply += used;
 
   // ── 발육: 엽령·과실 나이, 착과와 퇴화 ──
-  const abortRate = p.fruit.abortMax * (1 - stress.set) * dpd;
+  // 생장조절제: CPPU는 퇴화를 줄이고(set > 0), 에테폰 약해는 낙화를 늘린다(set < 0)
+  const setFx = 1 - env.fx.set;
+  const abortRate = (p.fruit.abortMax * (1 - stress.set) + (setFx > 1 ? (setFx - 1) * p.fruit.abortMax : 0)) * (setFx < 1 ? setFx : 1) * dpd;
   let aborted = 0;
   for (const f of c.fruits) {
     f.age += dpd;
@@ -513,6 +552,8 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
     c.abortedTotal += aborted * m;
     t.aborted += aborted * m;
   }
+  exposeFruits(c, env.fx, dpd);
+  applyLeafLoss(c, env.fx, p.leaf.expandDays, m);
 
   // ── 잎 노화와 장해 ──
   const dmg = p.damage;
@@ -575,7 +616,7 @@ export function stepCucumber(c0: CropState, core: CoreParams, p: CucumberParams,
   t.sExpand += stress.expand;
   t.sFruit += stress.fruit;
   t.sSet += stress.set;
-  c.out = summarize(c, p, v, ratio, sla, stress);
+  c.out = summarize(c, p, v, ratio, sla, stress, env.fx.female);
   t.lai = c.out.lai;
   t.nodes = c.mainNodes;
   t.fruits = c.out.fruits;

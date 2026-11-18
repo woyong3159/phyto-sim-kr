@@ -6,7 +6,7 @@
  */
 import EngineWorker from './engine.worker?worker&inline';
 import { RZ_PARAMS } from '../data';
-import { ENGINE_STATE_VERSION, EVENT_TYPES, defaultRzConfig, defaultSettings, defaultSetup, type ControlSettings, type DayWx, type DeviceId, type EventType, type GhSetup, type IrrSettings, type Lab, type NutSettings, type PlantOrder, type RzConfig, type RzSetup, type SimConfig, type SimEvent, type WorkPlan, type WorkTask } from '../engine';
+import { ENGINE_STATE_VERSION, EVENT_TYPES, defaultRzConfig, defaultSettings, defaultSetup, type ControlSettings, type DayWx, type DeviceId, type EventType, type GhSetup, type IrrSettings, type Lab, type LaborSettings, type PgrMethod, type NutSettings, type PlantOrder, type RzConfig, type RzSetup, type SimConfig, type SimEvent, type WorkPlan, type WorkTask } from '../engine';
 import { getDailyRows, getHourlyRows, pruneHourly, putHourlyRows, getSave, kvGet, kvSet, latestSnapshot, listSaves, listSnapshots, openDatabase, putDailyRows, putSave, putSnapshot, type Db } from '../storage/db';
 import { SAVE_SCHEMA_VERSION, type ObservationMode, type SaveRecord } from '../storage/schema';
 import { decodeBundle, encodeBundle, exportFileName, shareOrDownload } from '../storage/exportImport';
@@ -300,6 +300,18 @@ export class Session {
   }
   orderLab(kind: Lab['kind']) {
     this.addAction('rz/lab', { kind });
+  }
+  /** 생장조절제 처리(Phase 5) */
+  applyPgr(id: string, ppm: number, method: PgrMethod) {
+    this.addAction('phys/pgr', { id, ppm, method });
+  }
+  /** 생리장해 순찰(스카우팅) — 노동 시간이 든다 */
+  scoutPhys() {
+    this.addAction('phys/scout', null);
+  }
+  /** 노동력 설정(자가·고용·일용 자동 고용) */
+  setLabor(set: Partial<LaborSettings>) {
+    this.addAction('labor/set', set);
   }
   /** 관측 모드: 학습(모두 보임) / 현실(측정해야 보임). 화면 표시만 바꾸고 결과에는 영향이 없다(리포트에 기록). */
   setObservationMode(mode: ObservationMode) {

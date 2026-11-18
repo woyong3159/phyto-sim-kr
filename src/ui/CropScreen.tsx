@@ -6,6 +6,7 @@ import type { CropView } from '../sim/protocol';
 import { session, type SessionView } from '../sim/session';
 import { Chart } from './EnvScreen';
 import { Num, Select, Toggle } from './Num';
+import { DisorderPanel, LaborPanel, PgrPanel, symptomsOf, type Symptoms } from './PhysScreen';
 
 interface SystemUi { name: string; sowing: string; harvest: string; transplantMonth: number; transplantDay: number; benchYield: number }
 type Recommend = Record<string, number>;
@@ -23,8 +24,12 @@ export const SYSTEMS = CROPS.cucumber.systems;
 const CROP_NAME: Record<CropId, string> = { cucumber: '오이', strawberry: '딸기', wasabi: '와사비' };
 const varietyName = (crop: CropId, id: string) => (crop === 'strawberry' ? SB_VARIETIES[id]?.name : crop === 'wasabi' ? WS_VARIETIES[id]?.name : VARIETIES[id]?.name) ?? id;
 
-type Sub = 'now' | 'work' | 'graph';
-const SUBS: [Sub, string][] = [['now', '현황'], ['work', '작업'], ['graph', '생육 그래프']];
+type Sub = 'now' | 'work' | 'labor' | 'phys' | 'pgr' | 'graph';
+const SUBS: [Sub, string][] = [['now', '현황'], ['work', '작업'], ['labor', '일정·노동'], ['phys', '생리장해'], ['pgr', '생장조절제'], ['graph', '그래프']];
+const NO_SYM: Symptoms = { young: 0, upper: 0, old: 0, apex: 0 };
+/** 증상 테두리: 갈색(가장자리 마름)·노랑(황화)·흰색(데임). 강도 = 발생률 */
+const symStroke = (k: 'young' | 'upper' | 'old', v: number) => (v < 0.03 ? undefined : { stroke: k === 'old' ? 'var(--sun)' : k === 'upper' ? 'var(--text)' : 'var(--error)', strokeWidth: 1 + 3 * Math.min(1, v), strokeDasharray: k === 'upper' ? '2 2' : undefined, 'data-sym': k });
+const symClass = (i: number, n: number, age: number, expandDays: number): 'young' | 'upper' | 'old' | null => (age < expandDays * 1.5 ? 'young' : i >= n - Math.max(1, Math.round(n / 3)) ? 'upper' : i < Math.max(1, Math.round(n / 3)) ? 'old' : null);
 
 const f1 = (v: number) => v.toFixed(1);
 const f2 = (v: number) => v.toFixed(2);
@@ -159,7 +164,7 @@ function PlantForm() {
 }
 
 /** 와사비 그림: 긴 엽병 끝에 둥근 잎, 아래에 근경(굵기와 길이 = 무게), 뿌리. */
-function WasabiIcon({ crop }: { crop: CropView }) {
+function WasabiIcon({ crop, sym = NO_SYM }: { crop: CropView; sym?: Symptoms }) {
   const W = 240;
   const H = 260;
   const cx = W / 2;
@@ -179,7 +184,7 @@ function WasabiIcon({ crop }: { crop: CropView }) {
         return (
           <g key={i}>
             <line x1={cx} y1={top} x2={x} y2={y} stroke="var(--leaf)" strokeWidth={2.5} opacity={0.7} />
-            <circle cx={x} cy={y} r={r} fill={crop.dead ? 'var(--muted)' : l.age > 65 ? 'var(--sun)' : 'var(--leaf)'} opacity={0.75} />
+            <circle cx={x} cy={y} r={r} fill={crop.dead ? 'var(--muted)' : l.age > 65 ? 'var(--sun)' : 'var(--leaf)'} opacity={0.75} {...(() => { const k = symClass(i, n, l.age, 12); return k ? symStroke(k, sym[k]) : undefined; })()} />
           </g>
         );
       })}
@@ -193,7 +198,7 @@ function WasabiIcon({ crop }: { crop: CropView }) {
 }
 
 /** 딸기 그림: 관부에서 잎이 부채꼴로 나오고, 화방마다 과실(빨강 = 익음, 연두 = 비대 중, 흰 점 = 꽃)이 달린다. */
-function StrawberryIcon({ crop }: { crop: CropView }) {
+function StrawberryIcon({ crop, sym = NO_SYM }: { crop: CropView; sym?: Symptoms }) {
   const W = 240;
   const H = 240;
   const cx = W / 2;
@@ -213,7 +218,7 @@ function StrawberryIcon({ crop }: { crop: CropView }) {
         return (
           <g key={i}>
             <line x1={cx} y1={cy} x2={x} y2={y} stroke="var(--leaf)" strokeWidth={2} opacity={0.6} />
-            <circle cx={x} cy={y} r={r} fill={crop.dead ? 'var(--muted)' : l.age > 55 ? 'var(--sun)' : 'var(--leaf)'} opacity={0.7} />
+            <circle cx={x} cy={y} r={r} fill={crop.dead ? 'var(--muted)' : l.age > 55 ? 'var(--sun)' : 'var(--leaf)'} opacity={0.7} {...(() => { const k = symClass(i, n, l.age, 10); return k ? symStroke(k, sym[k]) : undefined; })()} />
           </g>
         );
       })}
@@ -229,7 +234,8 @@ function StrawberryIcon({ crop }: { crop: CropView }) {
               const y = cy + 50 + (i % 2) * 20;
               if (f.age < 0) return <circle key={i} cx={x} cy={y} r={3} fill="var(--surface)" stroke="var(--muted)" />;
               const ripe = f.age >= maturity;
-              return <circle key={i} cx={x} cy={y} r={4 + Math.min(8, Math.sqrt(f.fw) * 1.5)} fill={ripe ? 'var(--error)' : 'var(--leaf)'} stroke="var(--surface)" strokeWidth={1} opacity={0.5 + 0.5 * Math.min(1, f.n)} />;
+              // 장해·약해 노출이 있는 과실(기형·무름·착색 불량)은 검은 테두리
+              return <circle key={i} cx={x} cy={y} r={4 + Math.min(8, Math.sqrt(f.fw) * 1.5)} fill={ripe ? 'var(--error)' : 'var(--leaf)'} stroke={f.dis > 0.1 ? 'var(--text)' : 'var(--surface)'} strokeWidth={f.dis > 0.1 ? 2 : 1} strokeDasharray={f.dis > 0.1 ? '2 1' : undefined} data-sym={f.dis > 0.1 ? 'fruit' : undefined} opacity={0.5 + 0.5 * Math.min(1, f.n)} />;
             })}
           </g>
         );
@@ -239,7 +245,7 @@ function StrawberryIcon({ crop }: { crop: CropView }) {
 }
 
 /** 2D 작물 그림: 잎은 면적, 과실은 무게에 비례한다(숫자를 그대로 그린 것이며 꾸밈은 없다). */
-function PlantIcon({ crop }: { crop: CropView }) {
+function PlantIcon({ crop, sym = NO_SYM }: { crop: CropView; sym?: Symptoms }) {
   const main = crop.leaves.filter((l) => l.lat === 0);
   const lat = crop.leaves.filter((l) => l.lat === 1);
   const n = Math.max(main.length, 6);
@@ -257,7 +263,8 @@ function PlantIcon({ crop }: { crop: CropView }) {
         const r = leafR(l.area);
         const side = i % 2 === 0 ? -1 : 1;
         const old = l.age > 40;
-        return <ellipse key={i} cx={W / 2 + side * (r + 6)} cy={y(i)} rx={r} ry={r * 0.55} fill={crop.dead ? 'var(--muted)' : old ? 'var(--sun)' : 'var(--leaf)'} opacity={0.75} />;
+        const k = symClass(i, main.length, l.age, 12);
+        return <ellipse key={i} cx={W / 2 + side * (r + 6)} cy={y(i)} rx={r} ry={r * 0.55} fill={crop.dead ? 'var(--muted)' : old ? 'var(--sun)' : 'var(--leaf)'} opacity={0.75} {...(k ? symStroke(k, sym[k]) : undefined)} />;
       })}
       {lat.slice(0, 12).map((l, i) => {
         const r = leafR(l.area) * 0.7;
@@ -269,13 +276,19 @@ function PlantIcon({ crop }: { crop: CropView }) {
         if (idx < 0 || idx >= n) return null;
         const len = 6 + Math.min(40, Math.sqrt(f.fw) * 2.4);
         const side = idx % 2 === 0 ? 1 : -1;
-        return <rect key={`f${i}`} x={W / 2 + side * 10 - 4} y={y(idx) + 2} width={8} height={len} rx={4} fill="var(--accent)" stroke="var(--surface)" strokeWidth={1.5} opacity={0.45 + 0.55 * Math.min(1, f.n)} />;
+        return <rect key={`f${i}`} x={W / 2 + side * 10 - 4} y={y(idx) + 2} width={8} height={len} rx={4} fill="var(--accent)" stroke={f.dis > 0.1 ? 'var(--text)' : 'var(--surface)'} strokeWidth={1.5} strokeDasharray={f.dis > 0.1 ? '2 1' : undefined} data-sym={f.dis > 0.1 ? 'fruit' : undefined} opacity={0.45 + 0.55 * Math.min(1, f.n)} />;
       })}
       {flowers.map((f, i) => {
         const idx = f.node - firstNode - 1;
         if (idx < 0 || idx >= n) return null;
         return <circle key={`b${i}`} cx={W / 2 + (idx % 2 === 0 ? 9 : -9)} cy={y(idx)} r={4} fill="var(--sun)" opacity={0.4 + 0.6 * Math.min(1, f.n)} />;
       })}
+      {sym.apex > 0.05 && (
+        // 순멎이: 생장점에 암꽃·어린 과실이 몰려 붙는다
+        <g data-sym="apex" opacity={Math.min(1, 0.3 + sym.apex)}>
+          {[-8, 0, 8, -4, 4].map((dx, j) => <circle key={j} cx={W / 2 + dx} cy={y(main.length - 1) - 10 - (j > 2 ? 7 : 0)} r={4} fill="var(--sun)" stroke="var(--text)" strokeWidth={0.8} />)}
+        </g>
+      )}
     </svg>
   );
 }
@@ -287,7 +300,7 @@ const STRESS_LABEL: [keyof Stress, string][] = [
 
 const DEATH: Record<string, string> = { rot: '고온 근권으로 뿌리·근경이 상함', frost: '동해(얼어 죽음)', chill: '저온 장해', heat: '고온 장해', collapse: '잎이 모두 소실됨' };
 
-function Now({ crop, hour, area }: { crop: CropView; hour: number; area: number }) {
+function Now({ crop, hour, area, sym }: { crop: CropView; hour: number; area: number; sym: Symptoms }) {
   const o = crop.out;
   const isSb = crop.cropId === 'strawberry';
   const sb = o.sb;
@@ -309,7 +322,7 @@ function Now({ crop, hour, area }: { crop: CropView; hour: number; area: number 
         </div>
         {crop.dead && <p className="error">작물이 죽었습니다: {DEATH[crop.deathCause] ?? crop.deathCause}. "작업"에서 작기를 정리(철거)한 뒤 다시 심을 수 있습니다.</p>}
         <div className="crop-figure">
-          {isWs ? <WasabiIcon crop={crop} /> : isSb ? <StrawberryIcon crop={crop} /> : <PlantIcon crop={crop} />}
+          {isWs ? <WasabiIcon crop={crop} sym={sym} /> : isSb ? <StrawberryIcon crop={crop} sym={sym} /> : <PlantIcon crop={crop} sym={sym} />}
           <div className="metrics metrics-col">
             <div className="metric"><span className="muted small">엽면적지수(LAI)</span><span className="metric-value" data-testid="crop-lai">{f2(o.lai)}</span></div>
             {isWs && ws ? (
@@ -553,7 +566,7 @@ function Work({ crop }: { crop: CropView }) {
           ))}
           <div><dt>합계</dt><dd>{labor.reduce((a, [, h]) => a + h, 0).toFixed(0)} 시간</dd></div>
         </dl>
-        <p className="muted small">작업마다 노동 시간이 쌓입니다. 인건비와 일손 부족은 이후 Phase(작업·경제)에서 연결됩니다.</p>
+        <p className="muted small">작업마다 노동 시간이 쌓입니다. 하루 일손과 밀린 작업은 "일정·노동" 탭에서 봅니다. 인건비는 경제 Phase(7)에서 장부에 연결됩니다.</p>
       </section>
 
       <section className="card">
@@ -634,14 +647,14 @@ export function CropScreen({ view }: { view: SessionView }) {
         <h1>작물</h1>
         {crop && <span className="badge">{CROP_NAME[crop.cropId]} · {crop.density} 주/m²</span>}
       </header>
-      <div className="subtabs" role="tablist">
+      <div className="subtabs" role="tablist" data-n={SUBS.length}>
         {SUBS.map(([id, label]) => (
           <button key={id} type="button" role="tab" aria-selected={sub === id} data-sub={id} onClick={() => setSub(id)}>
             {label}
           </button>
         ))}
       </div>
-      {sub === 'graph' ? <Graphs view={view} /> : !crop ? <PlantForm /> : sub === 'now' ? <Now crop={crop} hour={view.hour} area={wx.gh.setup.area} /> : <Work crop={crop} />}
+      {sub === 'graph' ? <Graphs view={view} /> : sub === 'labor' ? <LaborPanel view={view} /> : !crop ? <PlantForm /> : sub === 'now' ? <Now crop={crop} hour={view.hour} area={wx.gh.setup.area} sym={symptomsOf(wx.phys, crop, view.save?.observationMode === 'realistic')} /> : sub === 'phys' ? <DisorderPanel view={view} /> : sub === 'pgr' ? <PgrPanel view={view} /> : <Work crop={crop} />}
     </>
   );
 }

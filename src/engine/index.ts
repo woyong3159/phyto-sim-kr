@@ -8,6 +8,8 @@ import { ENGINE_STATE_VERSION, type SimState, type UserAction } from './types';
 import { initWeather } from './weather';
 import { initGreenhouse } from './greenhouse';
 import { initRootzone } from './rootzone/model';
+import { initPhys } from './physiology';
+import { initLabor } from './labor';
 import type { World } from './world';
 
 export * from './types';
@@ -22,8 +24,12 @@ export * from './rootzone/types';
 export * from './rootzone/chem';
 export { buildRzParams, defaultRzConfig, designRecipe, rawWaters, rawAlkalinity, groundwaterProfile, recipeVec, fillTank, feedOf, solveMix, thetaCC, thetaAt, psiOf, ecTargetAt, isHydro, recipeKey, DEFAULT_FERTS, type RzConfig, type Feed } from './rootzone/setup';
 export { capacityOf, storage, emptyRzDay } from './rootzone/model';
+export { pgrQuote, disordersOf, NEUTRAL_FX } from './physiology';
+export * from './physiology/types';
+export { capacityOfLabor, defaultLabor } from './labor';
+export * from './labor/types';
 export { toDisplay, fromDisplay, optUp, PLANT_IONS, ELEM } from './rootzone/plant';
-export { defaultOrder, defaultPlan, defaultPlanSb, defaultPlanWs, inductionRate, cropCanopy, beta, canopyPhoto, leafEnv, diffuseFraction, trap, type CanopyView } from './crop';
+export { defaultOrder, defaultPlan, defaultPlanSb, defaultPlanWs, inductionRate, cropCanopy, taskList, type TaskItem, beta, canopyPhoto, leafEnv, diffuseFraction, trap, type CanopyView } from './crop';
 export { curtainSaving, contractKw, buildGhParams, type GhParams, type FacilityParams } from './greenhouse';
 export { installCost, type CostLine } from './greenhouse/cost';
 export { sunDay, MONTH_DAYS, type RegionInfo, type MonthlyNormals, type Climate } from './weather';
@@ -39,9 +45,12 @@ export function createInitialState(world: World): SimState {
     gh: initGreenhouse(world, init.weather.now.temp, init.weather.now.rh),
     crop: null,
     rz: null as unknown as SimState['rz'],
+    phys: initPhys(),
+    labor: null as unknown as SimState['labor'],
     events: init.events,
   };
   s.rz = initRootzone(world, s.gh.out.tSolution);
+  s.labor = initLabor(world, s);
   return s;
 }
 

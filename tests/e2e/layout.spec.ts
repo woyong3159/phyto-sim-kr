@@ -244,6 +244,12 @@ test('모든 탭이 열리고 넘치지 않는다 + 다크 모드', async ({ pag
     await page.locator(`[data-tab="${id}"]`).tap();
     await expect(page.locator(`[data-screen="${id}"]`)).toBeVisible();
     await noOverflow(page);
+    if (id === 'crop') {
+      for (const sub of ['labor', 'phys', 'pgr', 'work', 'graph', 'now']) {
+        await page.locator(`[data-sub="${sub}"]`).tap();
+        await noOverflow(page);
+      }
+    }
     if (id === 'rootzone') {
       for (const sub of ['irr', 'nut', 'measure', 'graph', 'now']) {
         await page.locator(`[data-sub="${sub}"]`).tap();
@@ -507,4 +513,66 @@ test('근권·양액 탭: 현황(엽분석·이온) → 관수 변경 확인 →
   await expect(page.getByTestId('chart-rz-ec')).toBeVisible();
   await noOverflow(page);
   await page.screenshot({ path: info.outputPath('34-rz-graph.png'), fullPage: true });
+});
+
+test('Phase 5: 일정·노동 → 생리장해 순찰 → 생장조절제(미등록 경고) → 증상 그림', async ({ page }, info) => {
+  await startGame(page, { region: 'buyeo', date: '2026-03-01', seed: 'e2e-phys' });
+  await advanceWeeks(page, 7);
+  await page.locator('[data-tab="crop"]').tap();
+  await expect(page.locator('.subtabs button')).toHaveCount(6);
+  for (const r of await page.locator('.subtabs button').evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((b) => ({ w: b.width, h: b.height })))) {
+    expect(r.w).toBeGreaterThanOrEqual(44);
+    expect(r.h).toBeGreaterThanOrEqual(44);
+  }
+  // 일정·노동: 오늘 할 일·가용 시간, 노동력 변경(확인 단계)
+  await page.locator('[data-sub="labor"]').tap();
+  await expect(page.getByTestId('labor-today')).toBeVisible();
+  await expect(page.getByTestId('labor-today')).toContainText('가용 시간');
+  const owners = page.getByTestId('labor-owners');
+  await owners.fill('1');
+  await owners.blur();
+  const oh = page.getByTestId('labor-owner-hours');
+  await oh.fill('3');
+  await oh.blur();
+  const auto = page.getByTestId('labor-auto');
+  await auto.fill('0');
+  await auto.blur();
+  await page.getByTestId('apply-labor').tap();
+  await page.getByTestId('confirm-labor').tap();
+  await expect(page.getByTestId('apply-labor')).toHaveCount(0);
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('50-labor.png'), fullPage: true });
+
+  // 생리장해: 카드 6개 이상, 순찰
+  await page.locator('[data-sub="phys"]').tap();
+  expect(await page.locator('[data-dis]').count()).toBeGreaterThanOrEqual(6);
+  await page.getByTestId('phys-scout').tap();
+  await page.locator('[data-turn="1"]').tap();
+  await expect(page.locator('[data-turn="1"]')).toBeEnabled();
+  if (await page.getByTestId('pause-banner').isVisible()) await page.getByTestId('pause-banner').getByRole('button').tap();
+  await expect(page.getByText('마지막 순찰')).toBeVisible();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('51-disorders.png'), fullPage: true });
+
+  // 생장조절제: 오이에 에테폰 = 미등록 → PLS 경고, 처리 확인 단계
+  await page.locator('[data-sub="pgr"]').tap();
+  await page.locator('[data-pgr="ethephon"]').tap();
+  await expect(page.getByTestId('pgr-reg')).toContainText('미등록');
+  await page.getByTestId('apply-pgr').tap();
+  await page.getByTestId('confirm-pgr').tap();
+  await page.locator('[data-turn="1"]').tap();
+  await expect(page.locator('[data-turn="1"]')).toBeEnabled();
+  if (await page.getByTestId('pause-banner').isVisible()) await page.getByTestId('pause-banner').getByRole('button').tap();
+  await expect(page.locator('[data-pgr-active="ethephon"]')).toBeVisible();
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath('52-pgr.png'), fullPage: true });
+
+  // 일손을 줄였으니 며칠 뒤 밀린 작업이 생긴다
+  await advanceWeeks(page, 1);
+  await page.locator('[data-sub="labor"]').tap();
+  await expect(page.locator('.task-list li[data-late="1"]').first()).toBeVisible();
+  await page.screenshot({ path: info.outputPath('53-labor-late.png'), fullPage: true });
+  await page.locator('[data-sub="now"]').tap();
+  await expect(page.getByTestId('plant-icon')).toBeVisible();
+  await page.screenshot({ path: info.outputPath('54-crop-symptoms.png'), fullPage: false });
 });

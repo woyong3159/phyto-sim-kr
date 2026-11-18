@@ -89,7 +89,7 @@ export interface StrawberryParams {
   fruit: {
     maturity: number; rankFactor: number[]; rankCount: number[]; receptive: number; pollSinkMin: number; abortWindow: number; abortMax: number; setSsr: Curve; ssrLag: number; growTemp: Curve;
     flowerFrost: number; flowerFrostRate: number; ssrRef: number; dmcSsr: number; dmcTemp: number; dmcTempRef: number; dmcLight: number; dmcMin: number; dmcMax: number; brixSlope: number; brixOffset: number;
-    acidTemp: number; firmTemp: number; shelf: number; topWeight: number; midWeight: number;
+    acidTemp: number; firmTemp: number; shelf: number; ripenSpread: number; topWeight: number; midWeight: number;
   };
   bees: { honey: BeeParams; bumble: BeeParams; self: number; pollenTemp: Curve; pollenRhCurve: Curve };
   damage: DamageParams;
@@ -249,6 +249,10 @@ export interface Fruit {
   rank?: number;
   poll?: number;
   tSum?: number;
+  /** 생리장해·약해 노출(키별, 수확 때 1 − e^−노출 만큼 등급이 내려간다) */
+  dis?: Record<string, number>;
+  /** 코호트 가운데 이미 딴 비율(원래 개수 기준, 딸기 숙기 분산) */
+  picked?: number;
 }
 
 export interface Tip {
@@ -408,6 +412,16 @@ export interface CropState {
   ws?: WsState;
   /** 수확 품질(상품+중품 무게 가중 누적합): 당도·산도·경도·과중 합계와 무게, 기형과 개수 */
   quality?: Quality;
+  /** 생리장해 피해 누적(키별: 잎 m² m⁻², 과실 kg m⁻², 마디 수 등) — Phase 5 원장 */
+  physLoss?: Record<string, number>;
+  /** 근경 장해 노출(와사비) */
+  rhz?: Record<string, number>;
+  /** 오늘 노동 부족으로 미룬 예정 작업, 마지막 수확에서 딴 비율 */
+  deferred?: WorkTask[];
+  harvestFrac?: number;
+  /** 오늘 자동으로 부른 일용 인력 수 */
+  hired?: number;
+  hiredDay?: number;
 }
 
 export interface SbState {

@@ -1,4 +1,4 @@
-import type { ControlSettings, CropDay, CropState, DayWx, DeviceId, EventType, GhDay, GhHour, GhSetup, HourWx, IrrSettings, Lab, NutSettings, PlantPools, RzDay, RzOut, RzSetup, RzTotal, SimConfig, SimEvent, SimState, StockTank, UserAction } from '../engine';
+import type { DisLedger, DisState, LaborDay, LaborSettings, LaborState, PgrActive, PgrApp, PgrMethod, PhysFx, ScoutResult, TaskItem, ControlSettings, CropDay, CropState, DayWx, DeviceId, EventType, GhDay, GhHour, GhSetup, HourWx, IrrSettings, Lab, NutSettings, PlantPools, RzDay, RzOut, RzSetup, RzTotal, SimConfig, SimEvent, SimState, StockTank, UserAction } from '../engine';
 
 /** 배속: 실제 1초당 게임 시간(h). 0 = 일시정지. */
 export const SPEEDS = [
@@ -32,7 +32,7 @@ export interface CropView extends Omit<CropState, 'nodes' | 'fruits' | 'tips' | 
   /** 잎(아래→위): 면적 m², 곁순 여부 */
   leaves: { area: number; lat: 0 | 1; age: number }[];
   /** 과실: 마디, 개수(분수), 생체중 g, 개화 후 생리일수 */
-  fruitList: { node: number; n: number; fw: number; age: number; rank: number }[];
+  fruitList: { node: number; n: number; fw: number; age: number; rank: number; dis: number }[];
   laterals: number;
 }
 
@@ -54,6 +54,41 @@ export interface RzView {
   plant: Pick<PlantPools, 'tipburn' | 'caRatio'> | null;
 }
 
+/** 화면에 보여줄 생리장해·생장조절제 현황. */
+export interface PhysView {
+  dis: Record<string, Omit<DisState, 'drvDay'>>;
+  arrest: number;
+  scout: ScoutResult | null;
+  /** 방금 순찰을 지시했는지(다음 스텝에 결과가 나온다) */
+  scoutPending: boolean;
+  pgr: Record<string, PgrActive>;
+  apps: PgrApp[];
+  pending: { id: string; ppm: number; method: PgrMethod }[];
+  fx: Omit<PhysFx, 'leaf' | 'fruitRisk' | 'rhizome' | 'grades'>;
+  tox: Record<string, number>;
+  pls: { kgRisk: number; events: number; residue: number };
+  log: DisLedger[];
+  won: number;
+  hours: number;
+}
+
+/** 화면에 보여줄 노동 현황. */
+export interface LaborView {
+  set: LaborSettings;
+  cap: number;
+  used: number;
+  left: number;
+  over: number;
+  lateSince: LaborState['lateSince'];
+  cum: LaborState['cum'];
+  hist: LaborDay[];
+  tasks: TaskItem[];
+  /** 오늘 미룬 작업, 수확한 비율, 자동 고용 인원 */
+  deferred: string[];
+  harvestFrac: number;
+  hired: number;
+}
+
 /** 화면에 보여줄 현재 외기·온실 요약. */
 export interface WxView {
   now: HourWx;
@@ -64,6 +99,8 @@ export interface WxView {
   gh: GhView;
   crop: CropView | null;
   rz: RzView;
+  phys: PhysView;
+  labor: LaborView;
 }
 
 /** 시간 단위 원장 한 줄(내부 vs 외부 그래프용). */

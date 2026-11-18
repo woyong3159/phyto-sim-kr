@@ -6,9 +6,9 @@
  *   (백그라운드에서 돌아온 직후 밀린 시간을 한꺼번에 계산하지 않기 위해).
  * - 사건이 생기면(자동 일시정지가 켜진 종류) 그 시각에서 멈춘다.
  */
-import { contractKw, createInitialState, createWorld, fingerprint, stepHour, type ControlSettings, type CropState, type EventType, type GhSetup, type IrrSettings, type Lab, type NutSettings, type RzSetup, type RzState, type SimEvent, type SimState, type StockTank, type UserAction, type WorkPlan, type World } from '../engine';
+import { contractKw, createInitialState, createWorld, fingerprint, stepHour, taskList, type LaborSettings, type PgrMethod, type ControlSettings, type CropState, type EventType, type GhSetup, type IrrSettings, type Lab, type NutSettings, type RzSetup, type RzState, type SimEvent, type SimState, type StockTank, type UserAction, type WorkPlan, type World } from '../engine';
 import { ENGINE_DATA } from '../data';
-import type { CropView, DayRow, FromWorker, HourRow, RzView, ToWorker, WxView } from './protocol';
+import type { CropView, DayRow, FromWorker, HourRow, LaborView, PhysView, RzView, ToWorker, WxView } from './protocol';
 
 const SNAPSHOT_INTERVAL_HOURS = 7 * 24;
 const LOOP_MS = 25;
@@ -42,7 +42,7 @@ function cropView(c: CropState | null, plan: WorkPlan | null): CropView | null {
     ...rest,
     plan: plan ?? c.plan,
     leaves: nodes.map((n) => ({ area: n.area, lat: n.lat, age: n.age })),
-    fruitList: fruits.map((f) => ({ node: f.node, n: f.n, fw: f.w / (dmc > 0.025 ? dmc : 0.025), age: f.age, rank: f.rank ?? 0 })),
+    fruitList: fruits.map((f) => ({ node: f.node, n: f.n, fw: f.w / (dmc > 0.025 ? dmc : 0.025), age: f.age, rank: f.rank ?? 0, dis: f.dis ? 1 - Object.values(f.dis).reduce((a, e) => a * Math.exp(-e), 1) : 0 })),
     laterals: tips.filter((t) => t.made >= 1).length,
   };
 }
@@ -68,6 +68,20 @@ function rzView(r: RzState, pend: { setup?: RzSetup; irr?: IrrSettings; nut?: Nu
   };
 }
 
+function physView(s: SimState, pending: { id: string; ppm: number; method: PgrMethod }[], scoutPending: boolean): PhysView {
+  const p = s.phys;
+  const dis: PhysView['dis'] = {};
+  for (const [k, { drvDay: _d, ...rest }] of Object.entries(p.dis)) dis[k] = rest;
+  const { leaf: _l, fruitRisk: _f, rhizome: _r, grades: _g, ...fx } = p.fx;
+  return { dis, arrest: p.arrest, scout: p.scout, scoutPending, pgr: p.pgr, apps: p.apps.slice(-20), pending, fx, tox: p.tox ?? {}, pls: p.pls, log: p.log.slice(-60), won: p.won, hours: p.hours };
+}
+
+function laborView(s: SimState, set: LaborSettings | null): LaborView {
+  const L = s.labor;
+  const c = s.crop;
+  return { set: set ?? L.set, cap: L.cap, used: L.used, left: L.left, over: L.over, lateSince: L.lateSince, cum: L.cum, hist: L.hist.slice(-14), tasks: taskList(s, world!), deferred: c?.deferred ?? [], harvestFrac: c?.harvestFrac ?? 1, hired: c && c.hiredDay === Math.floor(s.hour / 24) ? c.hired ?? 0 : 0 };
+}
+
 function view(): WxView {
   const s = state!;
   const sun = world!.clim.sun[s.weather.cur.di]!;
@@ -76,8 +90,14 @@ function view(): WxView {
   let settings = s.gh.settings;
   let plan: WorkPlan | null = null;
   const pend: { setup?: RzSetup; irr?: IrrSettings; nut?: NutSettings; labs?: Lab[] } = {};
+  const pgrPend: { id: string; ppm: number; method: PgrMethod }[] = [];
+  let scoutPend = false;
+  let laborSet: LaborSettings | null = null;
   for (const a of actions) {
     if (a.hour !== s.hour) continue;
+    if (a.type === 'phys/pgr') pgrPend.push(a.payload as { id: string; ppm: number; method: PgrMethod });
+    if (a.type === 'phys/scout') scoutPend = true;
+    if (a.type === 'labor/set') laborSet = { ...(laborSet ?? s.labor.set), ...(a.payload as Partial<LaborSettings>) };
     if (a.type === 'rz/setup') pend.setup = a.payload as RzSetup;
     if (a.type === 'rz/irrigation') pend.irr = a.payload as IrrSettings;
     if (a.type === 'rz/nutrition') pend.nut = a.payload as NutSettings;
@@ -98,6 +118,8 @@ function view(): WxView {
     gh: { out: g.out, today: g.today, total: g.total, setup, settings, failures: g.failures, breached: g.breached, destroyed: g.destroyed, dust: g.dust, roofSnow: g.roofSnow, contractKw: contractKw(world!, { ...g, setup }) },
     crop: cropView(s.crop, plan),
     rz: rzView(s.rz, pend),
+    phys: physView(s, pgrPend, scoutPend),
+    labor: laborView(s, laborSet),
   };
 }
 

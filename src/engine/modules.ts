@@ -9,13 +9,13 @@ import { weatherModule } from './weather';
 import { controlModule, greenhouseModule } from './greenhouse';
 import { cropModule } from './crop';
 import { rootzoneModule } from './rootzone';
+import { physiologyModule } from './physiology';
+import { laborModule } from './labor';
 
 export const eventsModule = stubModule('events', '뉴스·재해·시장 충격(기상 특보는 weather가 낸다)', 7);
 export { rootzoneModule };
-export { cropModule };
-export const physiologyModule = stubModule('physiology', '생리장해·생장조절제(PGR)', 5);
+export { cropModule, physiologyModule, laborModule };
 export const protectionModule = stubModule('protection', '병해·해충·바이러스·천적·농약·저항성·방역', 6);
-export const laborModule = stubModule('labor', '작업과 노동 시간', 5);
 export const marketModule = stubModule('market', '가격·등급·판매 채널', 7);
 export const economyModule = stubModule('economy', '자본·토지·시설비·운영비·금융', 7);
 export const ledgerModule = stubModule('ledger', '인과 원장(Causal Ledger)', 3);

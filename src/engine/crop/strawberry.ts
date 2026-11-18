@@ -11,6 +11,7 @@
 import { dexp, dlog, dpow } from '../dmath';
 import type { SimEvent } from '../types';
 import { trap, type CanopyView } from './canopy';
+import { addLoss, applyDefects, applyLeafLoss, exposeFruits, hoursOf, runScheduled, type Sched } from './phys';
 import { addLabor, beta, buildCanopy, clamp, emptyDay, emptyYield, feedback, noStress, shifted, type CanopySupply, type CropEnv } from './cucumber';
 import type { CoreParams, CropState, Curve, Fruit, LeafNode, PlantOrder, SbState, Stress, StrawberryParams, StrawberryVariety, WorkPlan, WorkTask } from './types';
 
@@ -137,7 +138,31 @@ export function canopyOfStrawberry(c: CropState, core: CoreParams, p: Strawberry
   return buildCanopy(c, core, p, v.pmaxFactor, 1, sup, c.sb ? c.sb.runnerW : 0, c.wStem + c.wRoot);
 }
 
-function doWork(c: CropState, w: WorkTask, p: StrawberryParams, v: StrawberryVariety, env: CropEnv, events: SimEvent[]) {
+/** 지금 익은 과실 무게(kg m⁻²) — 노동 시간 예상용 */
+export function readyKgSb(c: CropState, p: StrawberryParams, v: StrawberryVariety): number {
+  const m = c.density * c.alive;
+  let kg = 0;
+  for (const f of c.fruits) {
+    const s = pickShare(f, p);
+    if (s > 0) kg += (f.n * s * (f.w / dmcOf(p, v, f, c.dliAvg, c.sb?.nutQ ?? 1)) * m) / 1000;
+  }
+  return kg;
+}
+
+/** 숙기 분산: 코호트 가운데 지금까지 익은 비율(원래 개수 기준) */
+function ripeOf(f: Fruit, p: StrawberryParams): number {
+  const sp = p.fruit.ripenSpread;
+  if (sp <= 0) return f.age >= p.fruit.maturity ? 1 : 0;
+  return clamp((f.age - (p.fruit.maturity - sp / 2)) / sp, 0, 1);
+}
+/** 지금 딸 수 있는(익었는데 아직 안 딴) 비율 — 현재 남은 개수 기준 */
+function pickShare(f: Fruit, p: StrawberryParams): number {
+  const pk = f.picked ?? 0;
+  const r = ripeOf(f, p);
+  return r > pk + 1e-9 ? (r - pk) / (1 - pk) : 0;
+}
+
+function doWork(c: CropState, w: WorkTask, p: StrawberryParams, v: StrawberryVariety, env: CropEnv, events: SimEvent[], frac = 1) {
   const day = Math.floor(env.hour / 24);
   const m = c.density * c.alive;
   const sb = c.sb!;
@@ -187,36 +212,54 @@ function doWork(c: CropState, w: WorkTask, p: StrawberryParams, v: StrawberryVar
     const q = c.quality!;
     const keep: Fruit[] = [];
     for (const f of c.fruits) {
-      if (f.age < fr.maturity) {
+      const share = pickShare(f, p);
+      if (share <= 0) {
         keep.push(f);
         continue;
       }
       const dmc = dmcOf(p, v, f, c.dliAvg, c.sb?.nutQ ?? 1);
       const fw = f.w / dmc;
-      const kg = (f.n * fw * m) / 1000;
+      // 숙기 분산: 익은 몫만 딴다. 노동이 모자라면 그 가운데 frac만큼만 — 남은 익은 과실은 늙어서 과숙(비상품)으로 간다
+      const pk = f.picked ?? 0;
+      const ripe = ripeOf(f, p);
+      const nh = f.n * share * frac;
+      const pk2 = pk + (ripe - pk) * frac;
+      if (f.n - nh > 0.005 && pk2 < 0.999) keep.push({ ...f, n: f.n - nh, picked: pk2 });
+      const kgAll = (nh * fw * m) / 1000;
+      // 익은 지 유통 기한(shelf)을 넘긴 몫 = 과숙
+      const sp = fr.ripenSpread;
+      const overAll = sp > 0 ? clamp((f.age - fr.shelf - (fr.maturity - sp / 2)) / sp, 0, 1) : f.age > fr.maturity + fr.shelf ? 1 : 0;
+      const overShare = ripe > pk ? clamp((overAll - pk) / (ripe - pk), 0, 1) : 0;
+      got.cull += kgAll * overShare;
+      if (overShare > 0) addLoss(c, 'overripe', kgAll * overShare);
+      const kg = kgAll * (1 - overShare);
       const fert = 1 - dexp(-(f.poll ?? 0));
-      const bad = 1 - fert; // 기형과 비율
-      got.count += f.n * m;
-      if (f.age > fr.maturity + fr.shelf || fw < fr.midWeight) got.cull += kg;
+      const bad = 1 - fert; // 기형과 비율(수분 불량)
+      got.count += nh * m;
+      if (fw < fr.midWeight) got.cull += kg;
       else {
         const good = kg * (1 - bad);
-        if (fw >= fr.topWeight) {
-          got.top += good;
-          got.mid += kg * bad * (1 - bad);
-          got.cull += kg * bad * bad;
-        } else {
-          got.mid += good;
-          got.cull += kg * bad;
-        }
+        let part: { top: number; mid: number; cull: number };
+        if (fw >= fr.topWeight) part = { top: good, mid: kg * bad * (1 - bad), cull: kg * bad * bad };
+        else part = { top: 0, mid: good, cull: kg * bad };
+        addLoss(c, 'sb_malform', kg * bad);
+        const before = part.top + part.mid;
+        part = applyDefects(part, f, env.fx, c);
+        got.top += part.top;
+        got.mid += part.mid;
+        got.cull += part.cull;
+        // 품질 통계는 상품·중품으로 남은 과실만
+        const keepShare = before > 0 ? (part.top + part.mid) / before : 1;
         const tMean = f.dur > 0 ? (f.tSum ?? 0) / f.dur : fr.dmcTempRef;
-        q.kg += good;
-        q.brix += good * (fr.brixSlope * dmc * 100 + fr.brixOffset);
-        q.acid += good * v.acid * (1 + fr.acidTemp * (fr.dmcTempRef - tMean));
-        q.firm += good * v.firmness * clamp(1 - fr.firmTemp * (tMean - fr.dmcTempRef), 0.4, 1.4);
-        q.weight += good * fw;
+        const g = good * keepShare;
+        q.kg += g;
+        q.brix += g * (fr.brixSlope * dmc * 100 + fr.brixOffset);
+        q.acid += g * v.acid * (1 + fr.acidTemp * (fr.dmcTempRef - tMean));
+        q.firm += g * v.firmness * clamp(1 - fr.firmTemp * (tMean - fr.dmcTempRef), 0.4, 1.4);
+        q.weight += g * fw;
       }
-      q.count += f.n * m;
-      q.malformed += f.n * m * bad;
+      q.count += nh * m;
+      q.malformed += nh * m * (1 - (1 - bad) * dexp(-((f.dis?.sb_malform ?? 0) + (f.dis?.sb_malform_pgr ?? 0))));
     }
     c.fruits = keep;
     const kgAll = got.top + got.mid + got.cull;
@@ -264,12 +307,14 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
     if (sb.induction >= 1 && (sb.trusses === 0 || c.mainNodes - sb.leavesAtInduction >= p.crown.leavesBetween * sb.crowns)) pushTruss(c, p, v, 0);
     // 휴면
     const d = p.dormancy;
+    // 지베렐린: 휴면을 직접 덜어 낸다(휴면 타파)
+    if (env.fx.dorm > 0) sb.dorm -= (env.fx.dorm > 1 ? 1 : env.fx.dorm) * sb.dorm;
     const induce = down(d.photo, sb.photoperiod) * down(d.temp, c.t24);
     if (sb.chill >= v.chillReq && v.chillReq > 0) sb.dorm -= d.chillRelease * sb.dorm;
     else sb.dorm += d.rateIn * v.dormancy * induce * (1 - sb.dorm) - d.rateOut * (1 - induce) * sb.dorm;
     sb.dorm = clamp(sb.dorm, 0, 1);
     // 런너: 장일·고온에서 발생, 휴면 중에는 나오지 않는다
-    sb.runners += p.runner.rate * trap(p.runner.photo, sb.photoperiod) * trap(p.runner.temp, c.t24) * (1 - sb.dorm);
+    sb.runners += p.runner.rate * trap(p.runner.photo, sb.photoperiod) * trap(p.runner.temp, c.t24) * (1 - sb.dorm) * env.fx.runner;
     // 봉군
     const bee = c.plan.bees && c.plan.bees !== 'none' ? p.bees[c.plan.bees] : null;
     if (bee) sb.beeStrength *= 1 - bee.decay;
@@ -286,12 +331,20 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
   // ── 작업 ──
   for (const w of works) doWork(c, w, p, v, env, events);
   if (env.hod === p.labor.workHour) {
+    // 예정 작업: 수확 → 적엽 → 런너 → 적화 → 벌통 순서로, 오늘 남은 노동 시간 안에서만 한다(Phase 5)
     const pl = c.plan;
-    if (pl.deleafEvery > 0 && day - c.lastDeleaf >= pl.deleafEvery) doWork(c, 'deleaf', p, v, env, events);
-    if ((pl.runnerEvery ?? 0) > 0 && day - sb.lastRunner >= pl.runnerEvery!) doWork(c, 'runner', p, v, env, events);
-    if ((pl.flowersKeep ?? 0) > 0) doWork(c, 'thin', p, v, env, events);
-    if ((pl.beesEvery ?? 0) > 0 && day - sb.beeDay >= pl.beesEvery!) doWork(c, 'bees', p, v, env, events);
-    if (pl.harvestEvery > 0 && day - c.lastHarvest >= pl.harvestEvery) doWork(c, 'harvest', p, v, env, events);
+    const L = p.labor;
+    const A = env.area;
+    const list: Sched[] = [];
+    if (pl.harvestEvery > 0 && day - c.lastHarvest >= pl.harvestEvery) {
+      const kg = readyKgSb(c, p, v);
+      list.push({ task: 'harvest', est: hoursOf((kg > 0 ? L.harvestBase : 0) + L.harvestPerTon * kg, A), partialBase: hoursOf(kg > 0 ? L.harvestBase : 0, A), run: (fr) => doWork(c, 'harvest', p, v, env, events, fr) });
+    }
+    if (pl.deleafEvery > 0 && day - c.lastDeleaf >= pl.deleafEvery) list.push({ task: 'deleaf', est: hoursOf(L.deleaf, A), run: () => doWork(c, 'deleaf', p, v, env, events) });
+    if ((pl.runnerEvery ?? 0) > 0 && day - sb.lastRunner >= pl.runnerEvery!) list.push({ task: 'runner', est: sb.runners > 0 ? hoursOf(L.runner, A) : 0, run: () => doWork(c, 'runner', p, v, env, events) });
+    if ((pl.flowersKeep ?? 0) > 0) list.push({ task: 'thin', est: hoursOf(L.thin, A) * 0.2, run: () => doWork(c, 'thin', p, v, env, events) });
+    if ((pl.beesEvery ?? 0) > 0 && day - sb.beeDay >= pl.beesEvery!) list.push({ task: 'bees', est: L.bees, run: () => doWork(c, 'bees', p, v, env, events) });
+    runScheduled(c, env.laborLeft, list, env.laborAuto);
   }
 
   const m = c.density * c.alive;
@@ -340,7 +393,7 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
 
   // ── 새 잎 ──
   const sla = clamp(p.leaf.sla * dpow(p.leaf.slaDliRef / (c.dliAvg > 1 ? c.dliAvg : 1), p.leaf.slaLightExp) * (1 + p.leaf.slaTemp * (c.tAvg - p.leaf.slaTempRef)), p.leaf.slaMin, p.leaf.slaMax);
-  c.nodeFrac += p.leaf.rate * sb.crowns * dpd * (c.pd < p.seedling.shock ? p.seedling.shockFactor : 1) * (1 - p.dormancy.slow * sb.dorm);
+  c.nodeFrac += p.leaf.rate * sb.crowns * dpd * (c.pd < p.seedling.shock ? p.seedling.shockFactor : 1) * (1 - p.dormancy.slow * sb.dorm) * env.fx.node;
   while (c.nodeFrac >= 1) {
     c.nodeFrac -= 1;
     c.mainNodes++;
@@ -356,15 +409,17 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
     const n = c.nodes[i]!;
     if (n.age < 2 * p.leaf.expandDays && n.area < n.cap) {
       const s = 1 / (1 + dexp(-rExp * (n.age - p.leaf.expandDays / 2)));
-      let dA = n.cap * rExp * s * (1 - s) * dpd * sWaterExpand * env.rz.expand;
-      if (n.area + dA > n.cap) dA = n.cap - n.area;
+      const capX = n.cap * (env.fx.expand > 1 ? env.fx.expand : 1);
+      let dA = n.cap * rExp * s * (1 - s) * dpd * sWaterExpand * env.rz.expand * env.fx.expand;
+      if (n.area + dA > capX) dA = capX - n.area;
+      if (dA < 0) dA = 0;
       leafDA[i] = dA;
       leafDemand[i] = dA / sla;
       dLeaf += leafDemand[i]!;
     }
   }
   const dCrown = dLeaf * p.crown.ratio;
-  const dRoot = (dLeaf + dCrown) * p.crown.rootRatio;
+  const dRoot = (dLeaf + dCrown) * p.crown.rootRatio * env.fx.root;
   const dRunner = sb.runners * p.runner.grow * dpd * stress.expand;
   const fr = p.fruit;
   const kF = 8 / fr.maturity;
@@ -372,7 +427,7 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
   let dFruit = 0;
   for (let i = 0; i < c.fruits.length; i++) {
     const f = c.fruits[i]!;
-    if (f.age >= 0 && f.n > 0 && f.age < fr.maturity + fr.shelf) {
+    if (f.age >= 0 && f.n > 0 && f.age < fr.maturity + fr.ripenSpread / 2) {
       const fert = 1 - dexp(-(f.poll ?? 0));
       const wp = v.fruitW * fr.rankFactor[f.rank ?? 0]! * (fr.pollSinkMin + (1 - fr.pollSinkMin) * fert);
       const s = 1 / (1 + dexp(-kF * (f.age - fr.maturity / 2)));
@@ -429,7 +484,8 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
   t.supply += used;
 
   // ── 꽃·과실 발육: 수분 적산, 고차 과실 퇴화, 꽃 동해 ──
-  const abortRate = fr.abortMax * (1 - stress.set) * dpd;
+  const setFx = 1 - env.fx.set;
+  const abortRate = (fr.abortMax * (1 - stress.set) + (setFx > 1 ? (setFx - 1) * fr.abortMax : 0)) * (setFx < 1 ? setFx : 1) * dpd;
   const frostCut = env.tIn < fr.flowerFrost ? fr.flowerFrostRate : 0;
   let aborted = 0;
   for (const f of c.fruits) {
@@ -450,6 +506,8 @@ export function stepStrawberry(c0: CropState, core: CoreParams, p: StrawberryPar
     c.abortedTotal += aborted * m;
     t.aborted += aborted * m;
   }
+  exposeFruits(c, env.fx, dpd);
+  applyLeafLoss(c, env.fx, p.leaf.expandDays, m);
 
   // ── 잎 노화와 장해 ──
   const dmg = p.damage;

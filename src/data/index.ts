@@ -3,6 +3,8 @@
  * 엔진은 이 파일을 직접 import하지 않고, 실행기가 데이터를 인자로 넘겨준다(N6).
  */
 import { buildGhParams, buildRzParams, type EngineData } from '../engine';
+import { buildPhysParams } from '../engine/physiology';
+import { buildLaborParams } from '../engine/labor';
 import type { DataFile } from '../engine/params';
 
 const modules = import.meta.glob<DataFile>('../../data/*.json', { eager: true, import: 'default' });
@@ -21,6 +23,9 @@ export const ENGINE_DATA: EngineData = {
   rootzone: DATA.rootzone!.params,
   fertilizers: DATA.fertilizers!.params,
   water_sources: DATA.water_sources!.params,
+  pgr: DATA.pgr!.params,
+  disorders: DATA.disorders!.params,
+  labor: DATA.labor!.params,
 };
 
 /** 화면에서 시설·장비 정보를 보여줄 때 쓰는 값 묶음(지온은 지역마다 달라 여기서는 0으로 둔다). */
@@ -28,3 +33,7 @@ export const GH_PARAMS = buildGhParams(ENGINE_DATA.facilities, ENGINE_DATA.equip
 
 /** 근권 파라미터(원료·처방·배지·원수). 계산기와 역방향 도우미가 쓴다. */
 export const RZ_PARAMS = buildRzParams(ENGINE_DATA.rootzone, ENGINE_DATA.fertilizers, ENGINE_DATA.water_sources, ENGINE_DATA.crops);
+
+/** 생장조절제·생리장해·노동 파라미터(화면 표시용). */
+export const PHYS_PARAMS = buildPhysParams(ENGINE_DATA.pgr, ENGINE_DATA.disorders);
+export const LABOR_PARAMS = buildLaborParams(ENGINE_DATA.labor);

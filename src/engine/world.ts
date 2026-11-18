@@ -10,6 +10,10 @@ import type { CropData } from './crop/types';
 import type { IonVec } from './rootzone/chem';
 import type { RzParams } from './rootzone/types';
 import { buildRzParams, defaultRzConfig, rawWaters, type RzConfig } from './rootzone/setup';
+import { buildPhysParams } from './physiology';
+import type { PhysParams } from './physiology/types';
+import { buildLaborParams } from './labor';
+import type { LaborParams } from './labor/types';
 import { buildClimate, type Climate, type ClimateClass, type JangmaZone, type RegionInfo } from './weather/climate';
 
 interface P {
@@ -47,6 +51,9 @@ export interface EngineData {
   rootzone: unknown;
   fertilizers: unknown;
   water_sources: unknown;
+  pgr: unknown;
+  disorders: unknown;
+  labor: unknown;
 }
 
 export interface GenParams {
@@ -107,6 +114,10 @@ export interface World {
   raw: Record<'groundwater' | 'tap' | 'rain', IonVec>;
   /** 작기 시작 때의 근권 구성(설정에 없으면 작물 기본값) */
   rzConfig: RzConfig;
+  /** 생장조절제·생리장해(Phase 5) */
+  phys: PhysParams;
+  /** 노동(Phase 5) */
+  labor: LaborParams;
 }
 
 const num = (o: Record<string, unknown>, k: string): number => {
@@ -197,6 +208,8 @@ export function createWorld(config: SimConfig, data: EngineData): World {
     rzConfig,
     gh: buildGhParams(data.facilities, data.equipment, data.prices, annualMean),
     crops: buildCrops(data.crops, data.varieties),
+    phys: buildPhysParams(data.pgr, data.disorders),
+    labor: buildLaborParams(data.labor),
     gen: {
       tempSd: arr(g, 'tempSdMonthly').map((v) => v * classFactor),
       arFastPhi: num(g, 'arFastPhi'),

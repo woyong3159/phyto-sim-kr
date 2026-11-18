@@ -30,7 +30,7 @@ export const STRAWBERRY_SETTINGS: Partial<ControlSettings> = { heatDay: 10, heat
 export const WASABI_SETTINGS: Partial<ControlSettings> = { heatDay: 8, heatNight: 8, heatPreDawn: 8, ventTemp: 18, ventBand: 4, shadeOnW: 250, rhMax: 95, fogTemp: 22, fogRhMax: 90, coolTemp: 22, solutionMin: 12, solutionMax: 17 };
 export const WASABI_SETUP: Partial<GhSetup> = { shade: 's55', cooling: 'padfan', fog: true, solutionChiller: true, solutionHeater: true };
 
-export function runCrop(opts: { regionId?: string; startDate: string; seed?: string; days: number; plantDay?: number; setup?: Partial<GhSetup>; settings?: Partial<ControlSettings>; order?: Partial<PlantOrder>; plan?: Partial<WorkPlan>; actions?: UserAction[]; rz?: RzPatch }): CropRun {
+export function runCrop(opts: { regionId?: string; startDate: string; seed?: string; days: number; plantDay?: number; setup?: Partial<GhSetup>; settings?: Partial<ControlSettings>; order?: Partial<PlantOrder>; plan?: Partial<WorkPlan>; actions?: UserAction[]; rz?: RzPatch; probe?: (s: SimState) => void }): CropRun {
   const world0 = createWorld({ seed: 's', startDate: opts.startDate, regionId: opts.regionId ?? 'buyeo', setup: defaultSetup(), settings: defaultSettings() }, data);
   const base = defaultOrder(world0.crops, opts.order?.varietyId ?? 'cheongchun', opts.order?.system);
   const order: PlantOrder = { ...base, ...opts.order, plan: { ...base.plan, ...opts.plan } };
@@ -67,6 +67,7 @@ export function runCrop(opts: { regionId?: string; startDate: string; seed?: str
       if (e.type === 'equipment') repairs.push({ hour: s.hour, seq: 0, type: 'gh/repair', payload: { device: e.code } });
     }
     if (s.hour % 24 === 14 && s.crop) rzDays.push({ day: Math.floor(s.hour / 24), out: s.rz.out, tipburn: s.rz.plant?.tipburn ?? 0, vpd: s.gh.out.vpd, caRatio: s.rz.plant?.caRatio ?? 1 });
+    if (opts.probe) opts.probe(s);
     if (s.hour % 24 === 0 && s.crop) {
       const t = s.crop.today;
       const g = s.gh.today;

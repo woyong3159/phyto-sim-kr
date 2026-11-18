@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createInitialState, createWorld, defaultSettings, defaultSetup, stepHour, type ControlSettings, type EngineData, type GhHour, type GhSetup, type HourWx, type SimConfig, type SimState, type UserAction } from '../src/engine';
 
 const load = (f: string) => JSON.parse(readFileSync(new URL(`../data/${f}.json`, import.meta.url), 'utf8')).params;
-export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events'), facilities: load('facilities'), equipment: load('equipment'), prices: load('prices'), crops: load('crops'), varieties: load('varieties'), rootzone: load('rootzone'), fertilizers: load('fertilizers'), water_sources: load('water_sources') };
+export const data: EngineData = { regions: load('regions'), climate: load('climate'), events: load('events'), facilities: load('facilities'), equipment: load('equipment'), prices: load('prices'), crops: load('crops'), varieties: load('varieties'), rootzone: load('rootzone'), fertilizers: load('fertilizers'), water_sources: load('water_sources'), pgr: load('pgr'), disorders: load('disorders'), labor: load('labor') };
 
 export interface Run {
   hours: { hour: number; hod: number; out: HourWx; gh: GhHour; month: number; day: number }[];

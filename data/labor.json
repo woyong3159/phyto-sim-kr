@@ -1,0 +1,109 @@
+{
+ "_meta": {
+  "file": "labor",
+  "title": "노동",
+  "plannedPhase": 5,
+  "schemaVersion": 2
+ },
+ "params": {
+  "owners": {
+   "value": 2,
+   "unit": "명",
+   "range": [
+    0,
+    10
+   ],
+   "tag": "EST",
+   "source": "",
+   "note": "자가 노동 인원 기본값: 부부 2인 가족 경영(국내 시설채소 농가의 흔한 형태로 추정). 사용자에게 묻지 않고 기본값으로 둠(PROGRESS 기록)."
+  },
+  "ownerHours": {
+   "value": 8,
+   "unit": "h d⁻¹ 명⁻¹",
+   "range": [
+    0,
+    16
+   ],
+   "tag": "EST",
+   "source": "",
+   "note": "하루 작업 시간."
+  },
+  "workerHours": {
+   "value": 8,
+   "unit": "h d⁻¹ 명⁻¹",
+   "range": [
+    1,
+    12
+   ],
+   "tag": "EST",
+   "source": "",
+   "note": "고용 인력 하루 작업 시간."
+  },
+  "wage": {
+   "value": 130000,
+   "unit": "원 d⁻¹ 명⁻¹",
+   "range": [
+    60000,
+    300000
+   ],
+   "tag": "EST",
+   "source": "더팩트(2025-10-03) 농번기 일당 최대 19만원 보도; 2026 최저임금 10,320원/h × 8h = 82,560원(학습 지식)",
+   "note": "시설채소 일용 고용 일당의 통상 수준 추정. Phase 7에서 농진청 소득자료 고용노임으로 교체 예정."
+  },
+  "autoHire": {
+   "value": 2,
+   "unit": "명 d⁻¹",
+   "range": [
+    0,
+    20
+   ],
+   "tag": "EST",
+   "source": "",
+   "note": "일이 밀리는 날 자동으로 부르는 일용 인력 최대 인원 기본값(인력사무소·이웃 품앗이 관행을 단순화). 0이면 자가 노동만으로 버틴다."
+  },
+  "skill": {
+   "novice": {
+    "value": 0.7,
+    "unit": "배",
+    "range": [
+     0.3,
+     1.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "초보 일용: 숙련자 대비 작업 속도."
+   },
+   "normal": {
+    "value": 1,
+    "unit": "배",
+    "range": [
+     0.3,
+     1.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "숙련."
+   },
+   "expert": {
+    "value": 1.2,
+    "unit": "배",
+    "range": [
+     0.3,
+     1.5
+    ],
+    "tag": "EST",
+    "source": "",
+    "note": "숙련 장기 근로자."
+   }
+  },
+  "priority": [
+   "harvest",
+   "train",
+   "deleaf",
+   "thin",
+   "runner",
+   "pinch",
+   "bees"
+  ]
+ }
+}

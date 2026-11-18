@@ -9,6 +9,7 @@
 import { dexp, dpow } from '../dmath';
 import type { SimEvent } from '../types';
 import { trap, type CanopyView } from './canopy';
+import { addLoss, applyLeafLoss, hoursOf, runScheduled, type Sched } from './phys';
 import { addLabor, beta, buildCanopy, clamp, emptyDay, emptyYield, feedback, noStress, type CanopySupply, type CropEnv } from './cucumber';
 import type { CoreParams, CropState, LeafNode, PlantOrder, Stress, WasabiParams, WasabiVariety, WorkPlan, WorkTask, WsState } from './types';
 
@@ -122,6 +123,15 @@ function doWork(c: CropState, w: WorkTask, p: WasabiParams, v: WasabiVariety, en
     const market = shareAbove(fresh, p.rhizome.market, p.rhizome.cv);
     const premium = shareAbove(fresh, p.rhizome.premium, p.rhizome.cv);
     const got = { top: kg * premium, mid: kg * (market - premium), cull: kg * (1 - market), count: m };
+    // 근경 장해(속 갈변·부패) 노출: 1 − e^−노출 만큼은 상품성이 없다 — 캐 봐야 드러난다
+    const inj = 1 - dexp(-(c.rhz?.ws_rot ?? 0));
+    if (inj > 0) {
+      const moved = (got.top + got.mid) * inj;
+      got.top *= 1 - inj;
+      got.mid *= 1 - inj;
+      got.cull += moved;
+      addLoss(c, 'ws_rot', moved);
+    }
     for (const k of ['top', 'mid', 'cull', 'count'] as const) {
       c.total[k] += got[k];
       c.today.harvest[k] += got[k];
@@ -157,6 +167,8 @@ export function stepWasabi(c0: CropState, core: CoreParams, p: WasabiParams, v: 
     const b = p.bolting;
     if (ws.boltLeft <= 0) {
       if (c.t24 < b.vernTemp) ws.vern += 1;
+      // 지베렐린은 저온 요구를 일부 대신한다(춘화 대체)
+      ws.vern += env.fx.bolt;
       if (ws.vern >= b.vernDays + v.boltDays && c.t24 >= b.startTemp) {
         ws.boltLeft = b.duration;
         ws.vern = 0;
@@ -181,11 +193,17 @@ export function stepWasabi(c0: CropState, core: CoreParams, p: WasabiParams, v: 
     return { crop: c, events };
   }
   if (env.hod === p.labor.workHour) {
+    // 예정 작업: 적엽 → 분얼 정리 → 꽃대 수확, 오늘 남은 노동 시간 안에서만(Phase 5)
     const pl = c.plan;
-    if (pl.deleafEvery > 0 && day - c.lastDeleaf >= pl.deleafEvery) doWork(c, 'deleaf', p, v, env, events);
-    if ((pl.runnerEvery ?? 0) > 0 && day - ws.lastOffshoot >= pl.runnerEvery!) doWork(c, 'runner', p, v, env, events);
-    if ((pl.stalkEvery ?? 0) > 0 && day - ws.lastStalk >= pl.stalkEvery!) doWork(c, 'thin', p, v, env, events);
+    const L = p.labor;
+    const list: Sched[] = [];
+    if (pl.deleafEvery > 0 && day - c.lastDeleaf >= pl.deleafEvery) list.push({ task: 'deleaf', est: hoursOf(L.deleaf, env.area), run: () => doWork(c, 'deleaf', p, v, env, events) });
+    if ((pl.runnerEvery ?? 0) > 0 && day - ws.lastOffshoot >= pl.runnerEvery!) list.push({ task: 'runner', est: hoursOf(L.runner, env.area), run: () => doWork(c, 'runner', p, v, env, events) });
+    if ((pl.stalkEvery ?? 0) > 0 && day - ws.lastStalk >= pl.stalkEvery!) list.push({ task: 'thin', est: hoursOf(L.thin, env.area), run: () => doWork(c, 'thin', p, v, env, events) });
+    runScheduled(c, env.laborLeft, list, env.laborAuto);
   }
+  // 근경 장해 노출(일당 → 시간당)
+  for (const [k, r] of Object.entries(env.fx.rhizome)) if (r > 0) c.rhz = { ...(c.rhz ?? {}), [k]: (c.rhz?.[k] ?? 0) + r / 24 };
 
   const m = c.density * c.alive;
   const fT = beta(env.tIn, p.dev.tBase, p.dev.tOpt, p.dev.tMax + v.heatTol);
@@ -233,14 +251,16 @@ export function stepWasabi(c0: CropState, core: CoreParams, p: WasabiParams, v: 
     const n = c.nodes[i]!;
     if (n.age < 2 * p.leaf.expandDays && n.area < n.cap) {
       const s = 1 / (1 + dexp(-rExp * (n.age - p.leaf.expandDays / 2)));
-      let dA = n.cap * rExp * s * (1 - s) * dpd * stress.expand;
-      if (n.area + dA > n.cap) dA = n.cap - n.area;
+      const capX = n.cap * (env.fx.expand > 1 ? env.fx.expand : 1);
+      let dA = n.cap * rExp * s * (1 - s) * dpd * stress.expand * env.fx.expand;
+      if (n.area + dA > capX) dA = capX - n.area;
+      if (dA < 0) dA = 0;
       leafDA[i] = dA;
       leafDemand[i] = dA / sla;
       dLeaf += leafDemand[i]!;
     }
   }
-  const dRoot = dLeaf * p.rhizome.rootRatio;
+  const dRoot = dLeaf * p.rhizome.rootRatio * env.fx.root;
   // 근경·분얼·꽃대는 잎과 뿌리를 키우고 남는 당으로 자란다(저장기관은 우선순위가 낮다): 최근 공급/수요 비에 비례해 수요를 줄인다
   const low = clamp(c.ssrAvg, 0, 1);
   const dRhiz = p.rhizome.rate * v.rhizome * (c.pd / (c.pd + p.rhizome.half)) * dpd * stress.fruit * low;
@@ -310,8 +330,10 @@ export function stepWasabi(c0: CropState, core: CoreParams, p: WasabiParams, v: 
   const rot = ws.rootT > dmg.rotTemp ? dmg.rotRate * (ws.rootT - dmg.rotTemp) : 0;
   if (rot > 0) c.alive *= 1 - rot;
   if (loss > 1) loss = 1;
+  const scorchShare = loss > 0 ? (p.light.scorch * (1 - fLight)) / loss : 0;
   let area = 0;
   for (const n of c.nodes) area += n.area;
+  const area0 = area;
   const kdf = clamp(p.photo.kDiffuse - p.photo.kLaiSlope * area * m, p.photo.kMin, 2);
   let below = 0;
   let oldest = true;
@@ -338,6 +360,8 @@ export function stepWasabi(c0: CropState, core: CoreParams, p: WasabiParams, v: 
 
   let liveArea = 0;
   for (const n of c.nodes) liveArea += n.area;
+  if (scorchShare > 0) addLoss(c, 'ws_scorch', area0 * m * scorchShare * loss);
+  applyLeafLoss(c, env.fx, p.leaf.expandDays, m);
   if (c.alive < 0.02 || (liveArea * m < 0.002 && c.pd > p.seedling.shock)) {
     c.dead = true;
     c.deathCause = frost ? 'frost' : rot > 0 ? 'rot' : ws.heatLoad > 0.01 ? 'heat' : env.tIn < dmg.chillTemp ? 'chill' : 'collapse';

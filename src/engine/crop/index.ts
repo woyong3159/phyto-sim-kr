@@ -6,9 +6,10 @@
 import type { EngineModule, SimEvent, SimState } from '../types';
 import type { World } from '../world';
 import type { CanopyView } from './canopy';
-import { canopyOfCucumber, defaultPlan, NEUTRAL_SUPPLY, plantCucumber, stepCucumber, type CropEnv } from './cucumber';
+import { canopyOfCucumber, defaultPlan, NEUTRAL_SUPPLY, plantCucumber, readyKgCu, stepCucumber, type CropEnv } from './cucumber';
 import type { RzSupply } from '../rootzone/types';
-import { canopyOfStrawberry, defaultPlanSb, plantStrawberry, stepStrawberry, type Nursery } from './strawberry';
+import { NEUTRAL_FX } from '../physiology/types';
+import { canopyOfStrawberry, defaultPlanSb, plantStrawberry, readyKgSb, stepStrawberry, type Nursery } from './strawberry';
 import { canopyOfWasabi, defaultPlanWs, plantWasabi, stepWasabi } from './wasabi';
 import type { CropData, CropId, CropState, PlantOrder, WorkPlan, WorkTask } from './types';
 
@@ -54,7 +55,7 @@ export function defaultOrder(d: CropData, varietyId = 'cheongchun', system?: str
 function envOf(state: SimState, world: World): CropEnv {
   const o = state.gh.out;
   const rz = rootzoneSupply(state);
-  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, rh: o.rhIn, tSol: o.tSolution, lamp: o.light, solar: state.weather.now.solarW, area: state.gh.setup.area, water: rz.water, rz };
+  return { hour: state.hour, hod: state.hour % 24, tIn: o.tIn, tLeaf: o.tLeaf, ppfd: o.ppfd, gross: o.cGross, maint: o.cMaint, starve: o.cStarve, daylength: world.clim.sun[state.weather.cur.di]!.daylength, rh: o.rhIn, tSol: o.tSolution, lamp: o.light, solar: state.weather.now.solarW, area: state.gh.setup.area, water: rz.water, rz, fx: state.phys?.fx ?? NEUTRAL_FX, laborLeft: state.labor ? state.labor.left : Infinity, laborAuto: state.labor && state.labor.set.autoHire > 0 ? { hours: state.labor.set.autoHire * state.labor.set.workerHours * (world.labor.skill[state.labor.set.skill] ?? 1), per: state.labor.set.workerHours * (world.labor.skill[state.labor.set.skill] ?? 1) } : undefined };
 }
 
 function plant(state: SimState, world: World, order: PlantOrder): CropState | null {
@@ -111,3 +112,52 @@ export const cropModule: EngineModule = {
     return { ...state, crop, events: events.length ? [...state.events, ...events] : state.events };
   },
 };
+
+export interface TaskItem {
+  task: WorkTask;
+  /** 주기(일), 마지막으로 한 날, 오늘 할 차례인지, 늦어진 날수, 예상 시간(h, 온실 전체) */
+  every: number;
+  last: number;
+  due: boolean;
+  late: number;
+  est: number;
+}
+
+/** 작업 일정표: 예정 작업과 예상 시간(노동 시간 계산과 같은 식). */
+export function taskList(state: SimState, world: World): TaskItem[] {
+  const c = state.crop;
+  if (!c || c.dead) return [];
+  const day = Math.floor(state.hour / 24);
+  const A = state.gh.setup.area;
+  const d = world.crops;
+  const h = (x: number) => (x * A) / 1000;
+  const out: TaskItem[] = [];
+  const add = (task: WorkTask, every: number | undefined, last: number, est: number) => {
+    if (!every || every <= 0) return;
+    const due = day - last >= every;
+    out.push({ task, every, last, due, late: due ? day - last - every : 0, est });
+  };
+  const pl = c.plan;
+  if (c.cropId === 'cucumber') {
+    const L = d.cucumber.labor;
+    const v = d.varieties.cucumber[c.varietyId]!;
+    add('harvest', pl.harvestEvery, c.lastHarvest, h(L.harvestBase + L.harvestPerTon * readyKgCu(c, d.cucumber, v)));
+    add('train', pl.trainEvery, c.lastTrain, h(L.train + (pl.removeBelowNode > 0 || pl.maxFruit > 0 ? L.thin : 0)));
+    add('deleaf', pl.deleafEvery, c.lastDeleaf, h(L.deleaf));
+  } else if (c.cropId === 'strawberry' && c.sb) {
+    const L = d.strawberry.labor;
+    const v = d.varieties.strawberry[c.varietyId]!;
+    const kg = readyKgSb(c, d.strawberry, v);
+    add('harvest', pl.harvestEvery, c.lastHarvest, h((kg > 0 ? L.harvestBase : 0) + L.harvestPerTon * kg));
+    add('deleaf', pl.deleafEvery, c.lastDeleaf, h(L.deleaf));
+    add('runner', pl.runnerEvery, c.sb.lastRunner, c.sb.runners > 0 ? h(L.runner) : 0);
+    if ((pl.flowersKeep ?? 0) > 0) out.push({ task: 'thin', every: 1, last: day - 1, due: true, late: 0, est: h(L.thin) * 0.2 });
+    add('bees', pl.beesEvery, c.sb.beeDay, L.bees);
+  } else if (c.cropId === 'wasabi' && c.ws && !c.ws.harvested) {
+    const L = d.wasabi.labor;
+    add('deleaf', pl.deleafEvery, c.lastDeleaf, h(L.deleaf));
+    add('runner', pl.runnerEvery, c.ws.lastOffshoot, h(L.runner));
+    add('thin', pl.stalkEvery, c.ws.lastStalk, h(L.thin));
+  }
+  return out;
+}

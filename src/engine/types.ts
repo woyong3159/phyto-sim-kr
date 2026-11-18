@@ -6,9 +6,11 @@ import type { World } from './world';
 import type { CropState, PlantOrder } from './crop/types';
 import type { RzState } from './rootzone/types';
 import type { RzConfig } from './rootzone/setup';
+import type { PhysState } from './physiology/types';
+import type { LaborState, LaborSettings } from './labor/types';
 
 /** 엔진 상태 구조 버전. 상태 구조가 바뀌면 올린다(옛 스냅샷은 버리고 조치 로그로 다시 계산). */
-export const ENGINE_STATE_VERSION = 7;
+export const ENGINE_STATE_VERSION = 8;
 
 /** 내부 계산 스텝: 1시간(헌법 6항). */
 export const HOURS_PER_DAY = 24;
@@ -35,6 +37,8 @@ export interface SimConfig {
   crop?: { day: number; order: PlantOrder } | null;
   /** 근권 구성(재배 방식·배액·원수·관수·양액). 없으면 작물 기본값. */
   rz?: RzConfig;
+  /** 노동력(자가·고용). 없으면 기본값 */
+  labor?: LaborSettings;
 }
 
 /** 하루치 외기(생성기가 만든 일 단위 값). */
@@ -116,7 +120,7 @@ export interface WeatherState {
 }
 
 /** 자동 일시정지 대상이 되는 사건 종류. Phase 1은 기상 사건만 실제로 발생한다. */
-export const EVENT_TYPES = ['heatwave', 'coldwave', 'jangma', 'typhoon', 'heavyRain', 'heavySnow', 'hail', 'structure', 'equipment', 'disease', 'news', 'stock', 'crop', 'rootzone'] as const;
+export const EVENT_TYPES = ['heatwave', 'coldwave', 'jangma', 'typhoon', 'heavyRain', 'heavySnow', 'hail', 'structure', 'equipment', 'disease', 'news', 'stock', 'crop', 'rootzone', 'physiology', 'labor'] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 
 export interface SimEvent {
@@ -142,6 +146,10 @@ export interface SimState {
   crop: CropState | null;
   /** 근권(배지·양액·관수) */
   rz: RzState;
+  /** 생장조절제·생리장해(Phase 5) */
+  phys: PhysState;
+  /** 노동(Phase 5) */
+  labor: LaborState;
   /** 직전 스텝에서 새로 생긴 사건(스텝마다 비워진다). */
   events: SimEvent[];
 }
